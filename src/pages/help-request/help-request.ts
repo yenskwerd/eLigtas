@@ -22,4 +22,15 @@ export class HelpRequestPage {
     console.log('ionViewDidLoad HelpRequestPage');
   }
 
+  PushReportEventPage(){
+    this.navCtrl.push('EventReportPage');
+  }
+
+  PushCallForHelpPage(){
+    this.navCtrl.push('HcfMappingPage');
+  }
+
+  PushCheckOnPage(){
+    this.navCtrl.push('HcfMappingPage');
+  }
 }

@@ -14,9 +14,11 @@
 
 
 <ion-content padding>
-  <ion-tabs>
-    <ion-tab [root]="Report Event"></ion-tab>
-    <ion-tab [root]="Call for Help"></ion-tab>
-    <ion-tab [root]="Please Check On"></ion-tab>
-  </ion-tabs>
+  hi
 </ion-content>
+
+<ion-footer text-center>
+  <button ion-button class="reportBtn" (click)="PushReportEventPage()">Report Event</button>
+  <button ion-button class="reportBtn" (click)="PushCallForHelpPage()">Call for Help</button>
+  <button ion-button class="reportBtn" (click)="PushCheckOnPage()">Please Check On</button>
+</ion-footer>

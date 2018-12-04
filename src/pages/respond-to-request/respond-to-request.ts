@@ -22,4 +22,8 @@ export class RespondToRequestPage {
     console.log('ionViewDidLoad RespondToRequestPage');
   }
 
+  pushRequestVisualizationPage(){
+    this.navCtrl.push('RequestVisualizationPage');
+  }
+
 }

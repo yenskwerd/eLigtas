@@ -25,5 +25,13 @@ export class RespondToRequestPage {
   }
 
   isReadonly() {return true;}
+  pushRequestVisualizationPage(){
+    this.navCtrl.push('RequestVisualizationPage');
+  }
+
+  pushCallForBackupPage(){
+    this.navCtrl.push('CallForBackupPage');
+  }
+  
 
 }

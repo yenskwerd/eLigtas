@@ -21,8 +21,17 @@ export class LoginPage {
   ionViewDidLoad() {
     console.log('ionViewDidLoad LoginPage');
   }
-
+  /**********************************
+   * Citizen Login                  *
+   *********************************/
   pushCitizenHomePage(){
     this.navCtrl.push('HcfMappingPage');
+  }
+
+  /**********************************
+  * Responder Login                 *
+  **********************************/
+  pushResponderHomePage(){
+    this.navCtrl.push('RequestVisualizationPage');
   }
 }

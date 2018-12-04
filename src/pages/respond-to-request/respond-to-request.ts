@@ -14,12 +14,16 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
   templateUrl: 'respond-to-request.html',
 })
 export class RespondToRequestPage {
+  event: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
+    this.event = "Fire";
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad RespondToRequestPage');
   }
+
+  isReadonly() {return true;}
 
 }

@@ -15,11 +15,21 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class SignupPage {
 
+  options: any;
+  options2: any;
+
   constructor(public navCtrl: NavController, public navParams: NavParams) {
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad SignupPage');
+  }
+
+  optionfilter() {
+    console.log(this.options);
+  }
+  optionfilter2() {
+    console.log(this.options2);
   }
 
 }

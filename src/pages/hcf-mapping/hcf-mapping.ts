@@ -22,4 +22,16 @@ export class HcfMappingPage {
     console.log('ionViewDidLoad HcfMappingPage');
   }
 
+  PushReportEventPage(){
+    this.navCtrl.push('EventReportPage');
+  }
+
+  PushCallForHelpPage(){
+    this.navCtrl.push('HelpRequestPage');
+  }
+
+  PushCheckOnPage(){
+    this.navCtrl.push('CheckPersonPage');
+  }
+
 }

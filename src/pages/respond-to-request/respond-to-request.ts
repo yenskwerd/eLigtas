@@ -26,4 +26,9 @@ export class RespondToRequestPage {
     this.navCtrl.push('RequestVisualizationPage');
   }
 
+  pushCallForBackupPage(){
+    this.navCtrl.push('CallForBackupPage');
+  }
+  
+
 }

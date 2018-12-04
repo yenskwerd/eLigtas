@@ -22,4 +22,7 @@ export class CallForBackupPage {
     console.log('ionViewDidLoad CallForBackupPage');
   }
 
+  pushRescueInformationPage(){
+    this.navCtrl.push('RescueInformationPage');
+  }
 }

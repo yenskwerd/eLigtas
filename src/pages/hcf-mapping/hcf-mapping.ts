@@ -23,7 +23,11 @@ export class HcfMappingPage {
    ionViewDidLoad() {
     console.log('ionViewDidLoad HcfMappingPage');
   }
-    ionViewDidEnter(){
+  ionViewDidEnter(){
+    if(this.map != null){
+      this.map.remove();
+      console.log("Entered != null");
+    }
     this.loadmap();
   }
 

@@ -24,7 +24,11 @@ export class RequestVisualizationPage {
   ionViewDidLoad() {
     console.log('ionViewDidLoad visualization');
   }
-    ionViewDidEnter(){
+  ionViewDidEnter(){
+    if(this.map != null){
+      this.map.remove();
+      console.log("Entered != null");
+    }
     this.loadmap();
   }
 

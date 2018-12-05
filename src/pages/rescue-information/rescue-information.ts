@@ -22,4 +22,7 @@ export class RescueInformationPage {
     console.log('ionViewDidLoad RescueInformationPage');
   }
 
+  pushRescueInformationPage(){
+    this.navCtrl.push('RescueInformationPage');
+  }
 }

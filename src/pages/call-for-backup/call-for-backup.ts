@@ -15,8 +15,8 @@ import leaflet from 'leaflet';
   templateUrl: 'call-for-backup.html',
 })
 export class CallForBackupPage {
-  @ViewChild('map') mapContainer:ElementRef;
-  map:any;
+  @ViewChild('map2') mapContainer:ElementRef;
+  map2:any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
   }
@@ -24,7 +24,11 @@ export class CallForBackupPage {
   ionViewDidLoad() {
     console.log('ionViewDidLoad HcfMappingPage');
   }
-    ionViewDidEnter(){
+  ionViewDidEnter(){
+    if(this.map2 !=  null){
+      console.log("Entered != null");
+      this.map2.remove();
+    }
     this.loadmap();
   }
 
@@ -40,12 +44,12 @@ export class CallForBackupPage {
     // }).on('locationfound', (e) => {
     //   console.log('found you');
     //   })
-    this.map = leaflet.map("map").fitWorld();
+    this.map2 = leaflet.map("map2").fitWorld();
     leaflet.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
       maxZoom: 18
-    }).addTo(this.map);
-    this.map.locate({
+    }).addTo(this.map2);
+    this.map2.locate({
       setView: true,
       maxZoom: 10
     }).on('locationfound', (e) => {
@@ -54,10 +58,14 @@ export class CallForBackupPage {
         alert('Marker clicked');
       })
       markerGroup.addLayer(marker);
-      this.map.addLayer(markerGroup);
+      this.map2.addLayer(markerGroup);
       }).on('locationerror', (err) => {
         alert(err.message);
     })
+  }
+
+  pushRescueInformationPage(){
+    this.navCtrl.push('RescueInformationPage');
   }
 
 }

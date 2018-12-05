@@ -6,19 +6,20 @@
 -->
 <ion-header>
 
-  <ion-navbar>
-    <ion-title>Request Visualization</ion-title>
+  <ion-navbar color="primary">
+    <ion-title text-center>Request Visualization</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content>
-  <div id="map" style="width:100%; height: 100%;">
-
+  <div id="map" style="width:100%; height: 90%;">
   </div>
-  <button ion-button type="submit" class="btmButton" (click)="pushRespondToRequest()" block>View Request Details</button>
-</ion-content>
+  <div class="bottomBotton">
+    <button ion-button type="submit" class="btmButton" (click)="pushRespondToRequest()" block>View Request Details</button>
+  </div>
+  </ion-content>
 
 <ion-footer text-center>
   <h1>//ADS//</h1>

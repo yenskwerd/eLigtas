@@ -17,6 +17,8 @@ import 'leaflet-routing-machine';
 export class RequestVisualizationPage {
   @ViewChild('map') mapContainer:ElementRef;
   map:any;
+  nj:any;
+  elijah:any;
   // marker: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl : AlertController) {
@@ -58,8 +60,17 @@ export class RequestVisualizationPage {
       setView: true,
       maxZoom: 15
     }).on('locationfound', (e) => {
+      this.nj= e.latitude;
+      this.elijah= e.longitude;
       let markerGroup = leaflet.featureGroup();
-      let marker: any = leaflet.marker([e.latitude, e.longitude]).on('click', () => {
+      let marker: any = leaflet.marker([e.latitude, e.longitude])
+      // leaflet.Routing.control({
+      //   waypoints: [
+      //     leaflet.latLng(10.3502881, 123.8988732),
+      //     leaflet.latLng(this.nj, this.elijah)
+      //   ]
+      // }).addTo(this.map)
+      .on('click', () => {
         alert('Marker clicked');
       })
       markerGroup.addLayer(marker);
@@ -73,6 +84,7 @@ export class RequestVisualizationPage {
     this.navCtrl.push('RespondToRequestPage');
   }
   change(){
+    
     var a=10.3502881;
     var b=123.8988732;
     var greenIcon = new leaflet.Icon({
@@ -84,16 +96,28 @@ export class RequestVisualizationPage {
       shadowSize: [41, 41]
     });
     console.log("nj gwapo");
+    // leaflet.Routing.control({
+    //   waypoints: [
+    //     leaflet.latLng(10.3502881, 123.8988732),
+    //     leaflet.latLng(this.nj, this.elijah)
+    //   ]
+    // }).addTo(this.map)
     leaflet.marker([a,b], {icon: greenIcon}).addTo(this.map).on('click', () => {
       //alert('Hospital x');
       this.presentConfirm();
-    }).bindPopup("Need help");
+    }).bindPopup("Need help")
     leaflet.Routing.control({
       waypoints: [
-        leaflet.latLng(a, b),
-        leaflet.latLng(57.6792, 11.949)
+        leaflet.latLng(10.3502881, 123.8988732),
+        leaflet.latLng(this.nj, this.elijah)
       ]
-    }).addTo(this.map);
+    }).addTo(this.map)
+    // leaflet.Routing.control({
+    //   waypoints: [
+    //     leaflet.latLng(a, b),
+    //     leaflet.latLng(57.6792, 11.949)
+    //   ]
+    // }).addTo(this.map);
   }
   change1(){
     var greenIcon = new leaflet.Icon({

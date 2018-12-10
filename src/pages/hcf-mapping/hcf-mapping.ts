@@ -75,9 +75,10 @@ export class HcfMappingPage {
         console.log(e.latitude,e.longitude);
       }).addTo(this.map);
       leaflet.marker([10.361011,123.9070701]).on('click', () => {
-        alert('NJ');
+        //alert('NJ');
         console.log(e.latitude,e.longitude);
-      }).addTo(this.map);
+      }).bindPopup(  "NJ"  ) 
+      .addTo(this.map);
       }).on('locationerror', (err) => {
         alert(err.message);
     })

@@ -1,6 +1,7 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import leaflet from 'leaflet';
+import { LoginPage } from '../login/login';
 /**
  * Generated class for the HcfMappingPage page.
  *
@@ -23,7 +24,11 @@ export class HcfMappingPage {
    ionViewDidLoad() {
     console.log('ionViewDidLoad HcfMappingPage');
   }
-    ionViewDidEnter(){
+  ionViewDidEnter(){
+    if(this.map != null){
+      this.map.remove();
+      console.log("Entered != null");
+    }
     this.loadmap();
   }
 
@@ -46,18 +51,35 @@ export class HcfMappingPage {
     }).addTo(this.map);
     this.map.locate({
       setView: true,
-      maxZoom: 10
+      maxZoom: 15
     }).on('locationfound', (e) => {
       let markerGroup = leaflet.featureGroup();
       let marker: any = leaflet.marker([e.latitude, e.longitude]).on('click', () => {
-        alert('Marker clicked');
-      })
+        
+        console.log(e.latitude,e.longitude);
+      }).bindPopup("You are here xd")
       markerGroup.addLayer(marker);
       this.map.addLayer(markerGroup);
+      var circle = leaflet.circle([e.latitude, e.longitude], {
+        color: 'Green',
+            fillColor: '#81C784',
+          fillOpacity: 0.5,
+          radius: 2000
+      }).addTo(this.map);
+      // leaflet.marker([10.3502881,123.8988732]).on('click', () => {
+      //   alert('Hospital x');
+      //   console.log(e.latitude,e.longitude);
+      // }).addTo(this.map);
+      // leaflet.marker([10.361011,123.9070701]).on('click', () => {
+      //   alert('Evacuation Center');
+      //   console.log(e.latitude,e.longitude);
+      // }).addTo(this.map);
       }).on('locationerror', (err) => {
         alert(err.message);
     })
   }
+  // 10.3502881,123.8988732
+  // 10.361011,123.9070701
 
   PushReportEventPage(){
     this.navCtrl.push('EventReportPage');

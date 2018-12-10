@@ -6,8 +6,8 @@
 -->
 <ion-header>
 
-  <ion-navbar>
-    <ion-title>Respond to Request</ion-title>
+  <ion-navbar color="primary">
+    <ion-title text-center>Respond to Request</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -15,23 +15,22 @@
 
 <ion-content padding>
 
-  <form (ngSubmit)="helpRequestForm()">
+  <form>
     <ion-label stacked>Event</ion-label>
     <ion-item>
-      <ion-label>{{event}}</ion-label>
-      <ion-input [readonly]="isReadonly"></ion-input>
+      <ion-input [readonly]="isReadonly" value="Fire"></ion-input>
     </ion-item>
     <ion-label stacked>Persons Injured</ion-label>
     <ion-item>
-      <ion-input type="number" name="injured"></ion-input>
+      <ion-input type="number" name="injured" [readonly]="isReadonly" value="10"></ion-input>
     </ion-item>
     <ion-label stacked>Persons Trapped</ion-label>
     <ion-item>
-      <ion-input type="number" name="trapped"></ion-input>
+      <ion-input type="number" name="trapped" [readonly]="isReadonly" value="3"></ion-input>
     </ion-item>
     <ion-label stacked>Other info</ion-label>
     <ion-item>
-      <ion-textarea name="other"></ion-textarea>
+      <ion-textarea name="other" [readonly]="isReadonly" value="Lorem ipsum dolor sit amet"></ion-textarea>
     </ion-item>
     <ion-list>
 
@@ -57,32 +56,13 @@
       </ion-item>
     
     </ion-list>
-    <button ion-button type="submit" block>Drop Pin</button>
+    <!-- <button ion-button type="submit" block>Drop Pin</button> -->
   </form>
-    <form>
-        <ion-item>
-          <ion-label stacked>Event</ion-label>
-          <ion-input type="text" name="event" readonly="true" value="Fire"></ion-input>
-        </ion-item>
-        <ion-item>
-            <ion-label stacked>Persons Injured</ion-label>
-            <ion-input type="text" name="personsinjured" readonly="true"></ion-input>
-          </ion-item>
-        <ion-item>
-          <ion-label stacked>Persons Trapped</ion-label>
-          <ion-input type="text" name="personstrapped" readonly="true"></ion-input>
-        </ion-item>
-        <ion-item>
-            <ion-label stacked>Other Information</ion-label>
-            <ion-input type="textarea" name="otherinfo" readonly="true"></ion-input>
-        </ion-item>
-        <ion-item>
-            <ion-label stacked>Special Needs</ion-label>
-            <ion-input type="text" name="specialneeds" readonly="true"></ion-input>
-          </ion-item>
-      </form>
-  <button ion-button class="reportBtn" (click)="pushCallForBackupPage()">Respond Now</button>
-  <button ion-button class="reportBtn" (click)="pushRequestVisualizationPage()">Back to Map</button>
+  <div text-center>
+    <button ion-button class="reportBtn" (click)="pushCallForBackupPage()">Respond Now</button>
+    <!-- <button ion-button class="reportBtn" (click)="pushRequestVisualizationPage()">Back to Map</button> -->
+  </div>
+  
 </ion-content>
 
 <ion-footer text-center>

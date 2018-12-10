@@ -1,6 +1,6 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
-import leaflet from 'leaflet';
+import leaflet, { Draggable } from 'leaflet';
 import 'leaflet-routing-machine';
 /**
  * Generated class for the RequestVisualizationPage page.
@@ -103,6 +103,7 @@ export class RequestVisualizationPage {
     //   ]
     // }).addTo(this.map)
     leaflet.marker([a,b], {icon: greenIcon}).addTo(this.map).on('click', () => {
+      Draggable : false;
       //alert('Hospital x');
       this.presentConfirm();
     }).bindPopup("Need help")
@@ -111,6 +112,7 @@ export class RequestVisualizationPage {
         leaflet.latLng(10.3502881, 123.8988732),
         leaflet.latLng(this.nj, this.elijah)
       ]
+      
     }).addTo(this.map)
     // leaflet.Routing.control({
     //   waypoints: [

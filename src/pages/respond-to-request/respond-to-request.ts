@@ -27,11 +27,11 @@ export class RespondToRequestPage {
   isReadonly() {return true;}
   
   pushRequestVisualizationPage(){
-    this.navCtrl.push('RequestVisualizationPage');
+    this.navCtrl.setRoot('RequestVisualizationPage');
   }
 
   pushCallForBackupPage(){
-    this.navCtrl.push('CallForBackupPage');
+    this.navCtrl.setRoot('RequestVisualizationPage');
   }
   
   load() : void

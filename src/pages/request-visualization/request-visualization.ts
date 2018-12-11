@@ -138,8 +138,10 @@ export class RequestVisualizationPage {
       //   this.presentConfirm(data);
       // }).bindPopup("Need help").addTo(this.map);
     } else if(data.request_status_id==1){
+      this.rout(data);
       leaflet.marker([data.request_lat,data.request_long], {icon: yellowIcon}).addTo(this.map).on('click', () => {
         this.presentConfirm(data);
+        
       }).bindPopup("Need help").addTo(this.map);
     } else if(data.request_status_id==2){
       leaflet.marker([data.request_lat,data.request_long], {icon: grayIcon}).addTo(this.map);
@@ -174,11 +176,11 @@ export class RequestVisualizationPage {
     }).bindPopup("Need help")
    
   }
-  rout(){
+  rout(data){
   
     leaflet.Routing.control({
       waypoints: [
-        leaflet.latLng(10.3502881, 123.8988732),
+        leaflet.latLng(data.request_lat, data.request_long),
         leaflet.latLng(this.nj, this.elijah)
       ],routeWhileDragging:false
       
@@ -218,8 +220,9 @@ export class RequestVisualizationPage {
           handler: () => {
             console.log('Buy clicked');
             this.change();
-            this.pushRespondToRequest();
             this.navCtrl.push('RespondToRequestPage', {
+              request_id : data.request_id,
+              request_status_id : data.request_status_id,
               person_to_check: data.person_to_check,
               event: data.event,
               persons_injured: data.persons_injured,

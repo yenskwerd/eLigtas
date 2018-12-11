@@ -88,12 +88,12 @@ export class RequestVisualizationPage {
       //alert('Hospital x');
       this.presentConfirm();
     }).bindPopup("Need help");
-    leaflet.Routing.control({
-      waypoints: [
-        leaflet.latLng(a, b),
-        leaflet.latLng(57.6792, 11.949)
-      ]
-    }).addTo(this.map);
+    // leaflet.Routing.control({
+    //   waypoints: [
+    //     leaflet.latLng(a, b),
+    //     leaflet.latLng(57.6792, 11.949)
+    //   ]
+    // }).addTo(this.map);
   }
   change1(){
     var greenIcon = new leaflet.Icon({

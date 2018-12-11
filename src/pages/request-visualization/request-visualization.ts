@@ -1,6 +1,6 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
-import leaflet from 'leaflet';
+import leaflet, { Draggable, marker } from 'leaflet';
 import 'leaflet-routing-machine';
 /**
  * Generated class for the RequestVisualizationPage page.
@@ -20,6 +20,7 @@ export class RequestVisualizationPage {
   nj:any;
   elijah:any;
   // marker: any;
+  marker: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl : AlertController) {
   }
@@ -52,7 +53,7 @@ export class RequestVisualizationPage {
       attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
       maxZoom: 18
     }).addTo(this.map);
-    leaflet.marker([10.3502881,123.8988732]).on('click', () => {
+    leaflet.marker([10.3502881,123.8988732],{draggable:false}).on('click', () => {
         //alert('Hospital x');
         this.presentConfirm();
       }).bindPopup("Need Help!").addTo(this.map);
@@ -63,18 +64,12 @@ export class RequestVisualizationPage {
       this.nj= e.latitude;
       this.elijah= e.longitude;
       let markerGroup = leaflet.featureGroup();
-      let marker: any = leaflet.marker([e.latitude, e.longitude])
-      // leaflet.Routing.control({
-      //   waypoints: [
-      //     leaflet.latLng(10.3502881, 123.8988732),
-      //     leaflet.latLng(this.nj, this.elijah)
-      //   ]
-      // }).addTo(this.map)
+      this.marker= leaflet.marker([e.latitude, e.longitude],{draggable:false})
       .on('click', () => {
         alert('Marker clicked');
       })
-      markerGroup.addLayer(marker);
-      this.map.addLayer(markerGroup);
+      markerGroup.addLayer(this.marker);
+      this.map.addLayer(this.marker);
       }).on('locationerror', (err) => {
         alert(err.message);
     })
@@ -84,7 +79,8 @@ export class RequestVisualizationPage {
     this.navCtrl.push('RespondToRequestPage');
   }
   change(){
-    
+    this.map.removeLayer(this.marker)
+
     var a=10.3502881;
     var b=123.8988732;
     var greenIcon = new leaflet.Icon({
@@ -102,11 +98,12 @@ export class RequestVisualizationPage {
     //     leaflet.latLng(this.nj, this.elijah)
     //   ]
     // }).addTo(this.map)
-    leaflet.marker([a,b], {icon: greenIcon}).addTo(this.map).on('click', () => {
-      // Draggable : false;
+    leaflet.marker([a,b], {icon: greenIcon, draggable:false}).addTo(this.map).on('click', () => {
+    
       //alert('Hospital x');
       this.presentConfirm();
     }).bindPopup("Need help")
+    // this.map.addLayer(this.marker);
     // leaflet.Routing.control({
     //   waypoints: [
     //     leaflet.latLng(10.3502881, 123.8988732),
@@ -114,12 +111,16 @@ export class RequestVisualizationPage {
     //   ]
       
     // }).addTo(this.map)
-    // leaflet.Routing.control({
-    //   waypoints: [
-    //     leaflet.latLng(a, b),
-    //     leaflet.latLng(57.6792, 11.949)
-    //   ]
-    // }).addTo(this.map);
+  }
+  rout(){
+  
+    leaflet.Routing.control({
+      waypoints: [
+        leaflet.latLng(10.3502881, 123.8988732),
+        leaflet.latLng(this.nj, this.elijah)
+      ],routeWhileDragging:false
+      
+    }).addTo(this.map)
   }
   change1(){
     var greenIcon = new leaflet.Icon({
@@ -131,7 +132,7 @@ export class RequestVisualizationPage {
       shadowSize: [41, 41]
     });
     console.log("nj gwapo");
-    leaflet.marker([10.3502881,123.8988732], {icon: greenIcon}).addTo(this.map).on('click', () => {
+    leaflet.marker([10.3502881,123.8988732], {icon: greenIcon,draggable:false,}).addTo(this.map).on('click', () => {
       //alert('Hospital x');
       this.presentConfirm();
     }).bindPopup("Cancel aid?");
@@ -154,6 +155,7 @@ export class RequestVisualizationPage {
           handler: () => {
             console.log('Buy clicked');
             this.change();
+            this.rout();
             // var greenIcon = new leaflet.Icon({
             //   iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
             //   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',

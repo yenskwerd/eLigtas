@@ -37,7 +37,7 @@ export class RespondToRequestPage {
   load() : void
   {
      this.http
-     .get('http://localhost/eligtas/respondtorequest.php')
+     .get('http://localhost/eligtas/retrieve-request.php')
      .subscribe((data : any) =>
      {
         console.dir(data);

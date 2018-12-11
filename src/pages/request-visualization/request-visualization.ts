@@ -1,5 +1,6 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
+import { HttpClient } from '@angular/common/http';  
 import leaflet, { Draggable, marker } from 'leaflet';
 import 'leaflet-routing-machine';
 /**
@@ -22,7 +23,7 @@ export class RequestVisualizationPage {
   // marker: any;
   marker: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl : AlertController) {
+  constructor(public navCtrl: NavController, public http : HttpClient, public navParams: NavParams, public alertCtrl : AlertController) {
   }
 
   ionViewDidLoad() {
@@ -230,6 +231,22 @@ export class RequestVisualizationPage {
       ]
     });
     alert.present();
+  }
+
+  load() : void
+  {
+     this.http
+     .get('http://localhost/eligtas/retrieve-request.php')
+     .subscribe((data : any) =>
+     {
+        console.dir(data);
+        this.request = data;
+        // this.generateParish(data);
+     },
+     (error : any) =>
+     {
+        console.dir(error);
+     });   
   }
 }
 

@@ -89,8 +89,7 @@ export class EventReportPage {
            // If the request was successful notify the user
            console.log(data);
            let alert = this.alertCtrl.create({
-            title:"CONGRATS",
-            subTitle: "You successfully changed your password!",
+            message: "Report sent successfully!",
             buttons: ['OK']
             }); 
             this.navCtrl.setRoot('HcfMappingPage');

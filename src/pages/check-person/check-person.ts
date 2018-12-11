@@ -88,8 +88,7 @@ export class CheckPersonPage {
            // If the request was successful notify the user
            console.log(data);
            let alert = this.alertCtrl.create({
-            title:"CONGRATS",
-            subTitle: "You successfully changed your password!",
+            message: "Request sent successfully!",
             buttons: ['OK']
             }); 
             this.navCtrl.setRoot('HcfMappingPage');

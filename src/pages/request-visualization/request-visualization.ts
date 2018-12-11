@@ -238,6 +238,7 @@ export class RequestVisualizationPage {
           role: 'cancel',
           handler: () => {
             console.log('Cancel clicked');
+            this.navCtrl.push('RespondToRequestPage');
             this.change1();
           }
         },
@@ -247,6 +248,9 @@ export class RequestVisualizationPage {
             console.log('Buy clicked');
             this.change();
             this.pushRespondToRequest();
+            this.navCtrl.push('RespondToRequestPage');
+            //this.change();
+            //this.rout();
             // var greenIcon = new leaflet.Icon({
             //   iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
             //   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',

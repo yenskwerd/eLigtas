@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { HttpClient } from '@angular/common/http';  
 
 /**
  * Generated class for the RespondToRequestPage page.
@@ -14,8 +15,9 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
   templateUrl: 'respond-to-request.html',
 })
 export class RespondToRequestPage {
+  request: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public http   : HttpClient) {
   }
 
   ionViewDidLoad() {
@@ -32,5 +34,20 @@ export class RespondToRequestPage {
     this.navCtrl.push('CallForBackupPage');
   }
   
+  load() : void
+  {
+     this.http
+     .get('http://localhost/eligtas/retrieve-request.php')
+     .subscribe((data : any) =>
+     {
+        console.dir(data);
+        this.request = data;
+        // this.generateParish(data);
+     },
+     (error : any) =>
+     {
+        console.dir(error);
+     });   
+  }
 
 }

@@ -1,5 +1,6 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
+import { HttpClient } from '@angular/common/http';  
 import leaflet, { Draggable, marker } from 'leaflet';
 import 'leaflet-routing-machine';
 /**
@@ -22,7 +23,7 @@ export class RequestVisualizationPage {
   // marker: any;
   marker: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl : AlertController) {
+  constructor(public navCtrl: NavController, public http : HttpClient, public navParams: NavParams, public alertCtrl : AlertController) {
   }
 
   ionViewDidLoad() {
@@ -73,6 +74,65 @@ export class RequestVisualizationPage {
       }).on('locationerror', (err) => {
         alert(err.message);
     })
+    leaflet.marker([10.3502881,123.8988732]).on('click', () => {
+      leaflet.marker([10.3502881,123.8988732], {icon: greenIcon}).addTo(this.map);
+      if(this.responseConfirm()==false){
+      console.log(this.ret);
+      leaflet.marker([10.3502881,123.8988732], {icon: blueIcon}).addTo(this.map);
+    }
+    }).bindPopup("Need help").addTo(this.map);
+    var greenIcon = new leaflet.Icon({
+      iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      shadowSize: [41, 41]
+    });
+    var blueIcon = new leaflet.Icon({
+      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png',
+      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      shadowSize: [41, 41]
+    });
+
+    
+    
+    
+  }
+  
+  ret:any;
+  responseConfirm(): boolean {
+    
+    let alert = this.alertCtrl.create({
+
+      title: 'Confirm response',
+      message: 'Do you want help this person?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+            this.ret = false;
+            console.log(this.ret);
+          }
+        },
+        {
+          text: 'Help',
+          handler: () => {
+            console.log('Please hurry!');
+            this.ret = true;
+          }
+        }
+      ]
+    });
+    console.log(this.ret);
+    alert.present();
+    return this.ret;
+  
   }
   
   pushRespondToRequest(){
@@ -174,4 +234,22 @@ export class RequestVisualizationPage {
     });
     alert.present();
   }
+
+  load() : void
+  {
+     this.http
+     .get('http://localhost/eligtas/retrieve-request.php')
+     .subscribe((data : any) =>
+     {
+        console.dir(data);
+        this.request = data;
+        // this.generateParish(data);
+     },
+     (error : any) =>
+     {
+        console.dir(error);
+     });   
+  }
 }
+
+

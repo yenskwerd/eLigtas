@@ -18,14 +18,15 @@
   <form text-center>
       <ion-item>
         <ion-label stacked>Username</ion-label>
-        <ion-input type="text" name="username"></ion-input>
+        <ion-input type="text" name="username" #username></ion-input>
       </ion-item>
       <ion-item>
         <ion-label stacked>Password</ion-label>
-        <ion-input type="password" name="password"></ion-input>
+        <ion-input type="password" name="password" #password></ion-input>
       </ion-item>
-      <button ion-button type="submit" (click)="pushCitizenHomePage()">Login User</button>
-      <button ion-button type="submit" (click)="pushResponderHomePage()">Login Responder</button>
+      <button ion-button type="submit" (click)="logIn()" block>Login</button>
+      <!-- <button ion-button type="submit" (click)="pushCitizenHomePage()">Login User</button>
+      <button ion-button type="submit" (click)="pushResponderHomePage()">Login Responder</button> -->
     </form>
     <div text-center>
       <a href="">Forgot Password</a>

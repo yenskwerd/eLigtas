@@ -1,6 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, LoadingController, AlertController, NavParams } from 'ionic-angular';
 import {Http, Headers, RequestOptions}  from '@angular/http';
+import { LoginServiceProvider } from '../../providers/login-service/login-service';
 import 'rxjs/add/operator/map';
 
 /**
@@ -17,7 +18,8 @@ import 'rxjs/add/operator/map';
 })
 export class LoginPage {
 
-  constructor(public navCtrl: NavController, public loading:LoadingController, private http: Http, public alertCtrl: AlertController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, public loading:LoadingController, private http: Http, public alertCtrl: AlertController, public navParams: NavParams,
+    public loginService: LoginServiceProvider) {
   }
 
   @ViewChild('username') username;
@@ -91,8 +93,8 @@ export class LoginPage {
             loader.dismiss()
             console.log(res)
         
-          if(res == "Login Success!"){
-            // this.loginService.loginState = 1;
+          if(res != "Your username or password is invalid!"){
+            this.loginService.loginState = res;
             // this.events.publish('user:sidebar');
             let alert = this.alertCtrl.create({
             subTitle: "You successfully logged in!",
@@ -110,7 +112,12 @@ export class LoginPage {
             // });
             
             alert.present();
-            this.navCtrl.setRoot('HomePage');
+            if(this.loginService.loginState == 1){
+              this.navCtrl.setRoot('HcfMappingPage');
+            }else{
+              this.navCtrl.push('RequestVisualizationPage');
+            }
+            
           }else{
             let alert = this.alertCtrl.create({
             subTitle:"Your Pilgrim ID or Password is invalid",

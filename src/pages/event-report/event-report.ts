@@ -17,8 +17,12 @@ import { elementProperty } from '@angular/core/src/render3/instructions';
   templateUrl: 'event-report.html',
 })
 export class EventReportPage {
+  lat: any;
+  long: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl:AlertController,private http: Http) {
+    this.lat = navParams.data.lat;
+    this.long = navParams.data.long;
   }
 
   @ViewChild('event') event;
@@ -28,6 +32,7 @@ export class EventReportPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad EventReportPage');
+    console.log(this.lat, this.long);
   }
 
   report(){
@@ -68,7 +73,9 @@ export class EventReportPage {
           event: null,
           persons_injured: this.persons_injured.value,
           persons_trapped: this.persons_trapped.value,
-          other_info: this.other_info.value
+          other_info: this.other_info.value,
+          request_lat: this.lat,
+          request_long: this.long
         }
         console.log(data);
         this.http.post('http://localhost/eligtas/report.php', data, options)
@@ -82,7 +89,7 @@ export class EventReportPage {
             subTitle: "You successfully changed your password!",
             buttons: ['OK']
             }); 
-
+            this.navCtrl.setRoot('HcfMappingPage');
             alert.present();
             //this.navCtrl.setRoot('PilgrimProfilePage'); 
         },

@@ -17,6 +17,8 @@ import { LoginPage } from '../login/login';
 export class HcfMappingPage {
   @ViewChild('map') mapContainer:ElementRef;
   map:any;
+  lat: any;
+  long: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
   }
@@ -55,8 +57,7 @@ export class HcfMappingPage {
     }).on('locationfound', (e) => {
       let markerGroup = leaflet.featureGroup();
       let marker: any = leaflet.marker([e.latitude, e.longitude]).on('click', () => {
-        
-        console.log(e.latitude,e.longitude);
+        console.log(this.lat,this.long);
       }).bindPopup("You are here xd")
       markerGroup.addLayer(marker);
       this.map.addLayer(markerGroup);
@@ -66,6 +67,8 @@ export class HcfMappingPage {
           fillOpacity: 0.5,
           radius: 2000
       }).addTo(this.map);
+      this.lat = e.latitude;
+      this.long = e.longitude;
       // leaflet.marker([10.3502881,123.8988732]).on('click', () => {
       //   alert('Hospital x');
       //   console.log(e.latitude,e.longitude);
@@ -82,15 +85,24 @@ export class HcfMappingPage {
   // 10.361011,123.9070701
 
   PushReportEventPage(){
-    this.navCtrl.push('EventReportPage');
+    this.navCtrl.push('EventReportPage', {
+      lat: this.lat,
+      long: this.long
+    });
   }
 
   PushCallForHelpPage(){
-    this.navCtrl.push('HelpRequestPage');
+    this.navCtrl.push('HelpRequestPage', {
+      lat: this.lat,
+      long: this.long
+    });
   }
 
   PushCheckOnPage(){
-    this.navCtrl.push('CheckPersonPage');
+    this.navCtrl.push('CheckPersonPage', {
+      lat: this.lat,
+      long: this.long
+    });
   }
 
 }

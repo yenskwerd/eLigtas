@@ -115,7 +115,7 @@ export class LoginPage {
             if(this.loginService.loginState == 1){
               this.navCtrl.setRoot('HcfMappingPage');
             }else{
-              this.navCtrl.push('RequestVisualizationPage');
+              this.navCtrl.setRoot('RequestVisualizationPage');
             }
             
           }else{

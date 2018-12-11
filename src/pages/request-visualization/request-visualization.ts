@@ -22,6 +22,7 @@ export class RequestVisualizationPage {
   elijah:any;
   // marker: any;
   marker: any;
+  request: any;
 
   constructor(public navCtrl: NavController, public http : HttpClient, public navParams: NavParams, public alertCtrl : AlertController) {
   }

@@ -15,22 +15,22 @@
 
 <ion-content padding>
 
-  <form>
+  <form *ngFor="let item of request">
     <ion-label stacked>Event</ion-label>
     <ion-item>
-      <ion-input [readonly]="isReadonly" value="Fire"></ion-input>
+      <ion-input [readonly]="isReadonly" value="{{item.event}}"></ion-input>
     </ion-item>
     <ion-label stacked>Persons Injured</ion-label>
     <ion-item>
-      <ion-input type="number" name="injured" [readonly]="isReadonly" value="10"></ion-input>
+      <ion-input type="number" name="injured" [readonly]="isReadonly" value="{{item.injured}}"></ion-input>
     </ion-item>
     <ion-label stacked>Persons Trapped</ion-label>
     <ion-item>
-      <ion-input type="number" name="trapped" [readonly]="isReadonly" value="3"></ion-input>
+      <ion-input type="number" name="trapped" [readonly]="isReadonly" value="{{item.trapped}}"></ion-input>
     </ion-item>
     <ion-label stacked>Other info</ion-label>
     <ion-item>
-      <ion-textarea name="other" [readonly]="isReadonly" value="Lorem ipsum dolor sit amet"></ion-textarea>
+      <ion-textarea name="other" [readonly]="isReadonly" value="{{item.other}}"></ion-textarea>
     </ion-item>
     <ion-label stacked>Rescuees special needs</ion-label>
     <ion-item>

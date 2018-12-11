@@ -23,6 +23,7 @@ export class RequestVisualizationPage {
   // marker: any;
   marker: any;
   request: any;
+  index: any;
 
   constructor(public navCtrl: NavController, public http : HttpClient, public navParams: NavParams, public alertCtrl : AlertController) {
   }
@@ -44,26 +45,19 @@ export class RequestVisualizationPage {
     this.map.remove();
   }
   loadmap(){
-    // this.map = leaflet.map("map").fitWorld();
-    // leaflet.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    //   attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
-    //   maxZoom: 18
-    // }).addTo(this.map);
-    // this.map.locate({
-    //   setView: true,
-    //   maxZoom: 10
-    // }).on('locationfound', (e) => {
-    //   console.log('found you');
-    //   })
+    var redIcon = new leaflet.Icon({
+      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      shadowSize: [41, 41]
+    });  
     this.map = leaflet.map("map").fitWorld();
     leaflet.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
       maxZoom: 18
     }).addTo(this.map);
-    // leaflet.marker([10.3502881,123.8988732],{draggable:false}).on('click', () => {
-    //     //alert('Hospital x');
-    //     this.presentConfirm();
-    //   }).bindPopup("Need Help!").addTo(this.map);
     this.map.locate({
       setView: true,
       maxZoom: 15
@@ -71,7 +65,8 @@ export class RequestVisualizationPage {
       this.nj= e.latitude;
       this.elijah= e.longitude;
       let markerGroup = leaflet.featureGroup();
-      this.marker= leaflet.marker([e.latitude, e.longitude],{draggable:false})
+      //this.marker= leaflet.marker([e.latitude, e.longitude],{draggable:false})
+      this.marker=leaflet.marker([e.latitude,e.longitude], {icon: redIcon,draggable:false}).addTo(this.map)
       .on('click', () => {
         alert('You are here!');
       })
@@ -80,13 +75,6 @@ export class RequestVisualizationPage {
       }).on('locationerror', (err) => {
         alert(err.message);
     })
-    // leaflet.marker([10.3502881,123.8988732]).on('click', () => {
-    //   leaflet.marker([10.3502881,123.8988732], {icon: greenIcon}).addTo(this.map);
-    //   if(this.responseConfirm()==false){
-    //   console.log(this.ret);
-    //   leaflet.marker([10.3502881,123.8988732], {icon: blueIcon}).addTo(this.map);
-    // }
-    // }).bindPopup("Need help").addTo(this.map);
     this.http
      .get('http://localhost/eligtas/retrieve-request.php')
      .subscribe((data : any) =>
@@ -95,7 +83,7 @@ export class RequestVisualizationPage {
         this.request = data;
         // this.generateParish(data);
         for(let i=0; i<data.length; i++){
-          this.createMarker(data[i].request_lat, data[i].request_long);
+          this.createMarker(data[i]);
           console.log('lolol')
         }
      },
@@ -109,63 +97,58 @@ export class RequestVisualizationPage {
     
   }
 
-  createMarker(lat:any, long:any){
-    var greenIcon = new leaflet.Icon({
-      iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+  createMarker(data:any){
+    var purpleIcon = new leaflet.Icon({
+      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-violet.png',
       shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
       iconSize: [25, 41],
       iconAnchor: [12, 41],
       popupAnchor: [1, -34],
       shadowSize: [41, 41]
     });
-    var blueIcon = new leaflet.Icon({
-      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png',
+    var yellowIcon = new leaflet.Icon({
+      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-yellow.png',
       shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
       iconSize: [25, 41],
       iconAnchor: [12, 41],
       popupAnchor: [1, -34],
       shadowSize: [41, 41]
     });  
-    leaflet.marker([lat,long]).on('click', () => {
-      leaflet.marker([lat,long], {icon: greenIcon}).addTo(this.map);
-      this.presentConfirm();
-      console.log(this.ret);
-      leaflet.marker([10.3502881,123.8988732], {icon: blueIcon}).addTo(this.map);
+    var grayIcon = new leaflet.Icon({
+      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-grey.png',
+      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      shadowSize: [41, 41]
+    });  
+    var blackIcon = new leaflet.Icon({
+      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-black.png',
+      shadowUrl:'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      shadowSize: [41, 41]
+    });  
+    if(data.request_status_id==0){
+      leaflet.marker([data.request_lat,data.request_long], {icon: purpleIcon}).addTo(this.map).on('click', () => {
+        this.presentConfirm(data);
+      }).bindPopup("Need help").addTo(this.map);
+      // leaflet.marker([data.request_lat,data.request_long]).on('click', () => {
+      //   this.presentConfirm(data);
+      // }).bindPopup("Need help").addTo(this.map);
+    } else if(data.request_status_id==1){
+      leaflet.marker([data.request_lat,data.request_long], {icon: yellowIcon}).addTo(this.map).on('click', () => {
+        this.presentConfirm(data);
+      }).bindPopup("Need help").addTo(this.map);
+    } else if(data.request_status_id==2){
+      leaflet.marker([data.request_lat,data.request_long], {icon: grayIcon}).addTo(this.map);
+    }
     
-    }).bindPopup("Need help").addTo(this.map);
   }
   
   ret:any;
-  responseConfirm(): boolean {
-    
-    let alert = this.alertCtrl.create({
-
-      title: 'Confirm response',
-      message: 'Do you want help this person?',
-      buttons: [
-        {
-          text: 'Cancel',
-          role: 'cancel',
-          handler: () => {
-            console.log('Cancel clicked');
-            this.ret = false;
-            console.log(this.ret);
-          }
-        },
-        {
-          text: 'Help',
-          handler: () => {
-            console.log('Please hurry!');
-            
-          }
-        }
-      ]
-    });
-    console.log(this.ret);
-    alert.present();
-    return this.ret;
-  
-  }
+ 
   
   pushRespondToRequest(){
     this.navCtrl.push('RespondToRequestPage');
@@ -184,25 +167,12 @@ export class RequestVisualizationPage {
       shadowSize: [41, 41]
     });
     console.log("nj gwapo");
-    // leaflet.Routing.control({
-    //   waypoints: [
-    //     leaflet.latLng(10.3502881, 123.8988732),
-    //     leaflet.latLng(this.nj, this.elijah)
-    //   ]
-    // }).addTo(this.map)
     leaflet.marker([a,b], {icon: greenIcon, draggable:false}).addTo(this.map).on('click', () => {
     
       //alert('Hospital x');
-      this.presentConfirm();
+      // this.presentConfirm();
     }).bindPopup("Need help")
-    // this.map.addLayer(this.marker);
-    // leaflet.Routing.control({
-    //   waypoints: [
-    //     leaflet.latLng(10.3502881, 123.8988732),
-    //     leaflet.latLng(this.nj, this.elijah)
-    //   ]
-      
-    // }).addTo(this.map)
+   
   }
   rout(){
   
@@ -222,14 +192,14 @@ export class RequestVisualizationPage {
       iconAnchor: [12, 41],
       popupAnchor: [1, -34],
       shadowSize: [41, 41]
-    });
+    }); 
     console.log("nj gwapo");
     leaflet.marker([10.3502881,123.8988732], {icon: greenIcon,draggable:false,}).addTo(this.map).on('click', () => {
       //alert('Hospital x');
-      this.presentConfirm();
+      // this.presentConfirm();
     }).bindPopup("Cancel aid?");
   }
-  presentConfirm() {
+  presentConfirm(data) {
     let alert = this.alertCtrl.create({
       title: 'Response',
       message: 'Do you want to respond?',
@@ -239,7 +209,7 @@ export class RequestVisualizationPage {
           role: 'cancel',
           handler: () => {
             console.log('Cancel clicked');
-            this.navCtrl.push('RespondToRequestPage');
+            // this.navCtrl.push('RespondToRequestPage');
             this.change1();
           }
         },
@@ -249,19 +219,17 @@ export class RequestVisualizationPage {
             console.log('Buy clicked');
             this.change();
             this.pushRespondToRequest();
-            this.navCtrl.push('RespondToRequestPage');
-            //this.change();
-            //this.rout();
-            // var greenIcon = new leaflet.Icon({
-            //   iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
-            //   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-            //   iconSize: [25, 41],
-            //   iconAnchor: [12, 41],
-            //   popupAnchor: [1, -34],
-            //   shadowSize: [41, 41]
-            // });
-            // console.log("nj gwapo");
-            // leaflet.marker([51.5, -0.09], {icon: greenIcon}).addTo(this.map);
+            this.navCtrl.push('RespondToRequestPage', {
+              person_to_check: data.person_to_check,
+              event: data.event,
+              persons_injured: data.persons_injured,
+              persons_trapped: data.persons_trapped,
+              other_info: data.other_info,
+              request_lat: data.request_lat,
+              request_long: data.request_long
+            });
+            console.log(data.request_id);
+            console.log(data.event);
           }
         }
       ]

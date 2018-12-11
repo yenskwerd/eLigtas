@@ -32,4 +32,8 @@ export class SignupPage {
     console.log(this.options2);
   }
 
+  signUp(){
+    
+  }
+
 }

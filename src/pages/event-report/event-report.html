@@ -15,7 +15,7 @@
 
 <ion-content padding>
 
-  <form (ngSubmit)="helpRequestForm()">
+  <form>
     <ion-item>
       <ion-label stacked>Event</ion-label>
       <ion-select #C interface="popover" (ionChange)="eventfilter(event);" [(ngModel)]="event" name="event">
@@ -26,15 +26,15 @@
     </ion-item>
     <ion-item>
       <ion-label stacked>Persons Injured</ion-label>
-      <ion-input type="number" name="injured"></ion-input>
+      <ion-input type="number" name="injured" #persons_injured></ion-input>
     </ion-item>
     <ion-item>
       <ion-label stacked>Persons Trapped</ion-label>
-      <ion-input type="number" name="trapped"></ion-input>
+      <ion-input type="number" name="trapped" #persons_trapped></ion-input>
     </ion-item>
     <ion-item>
       <ion-label stacked>Other info</ion-label>
-      <ion-textarea name="other"></ion-textarea>
+      <ion-textarea name="other" #other_info></ion-textarea>
     </ion-item>
     <ion-list>
 
@@ -60,7 +60,7 @@
       </ion-item>
     
     </ion-list>
-    <button ion-button type="submit" block>Drop Pin</button>
+    <button ion-button type="submit" (click)="report()" block>Drop Pin</button>
   </form>
 </ion-content>
 <ion-footer text-center>

@@ -33,7 +33,7 @@ export class SignupPage {
   }
 
   signUp(){
-    console.log("signUp");
+    
   }
 
 }

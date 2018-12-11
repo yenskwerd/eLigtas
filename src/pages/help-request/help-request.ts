@@ -17,19 +17,23 @@ import 'rxjs/add/operator/map';
 export class HelpRequestPage {
   lat: any;
   long: any;
+  event: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl:AlertController,private http: Http) {
     this.lat = navParams.data.lat;
     this.long = navParams.data.long;
   }
 
-  @ViewChild('event') event;
   @ViewChild('persons_injured') persons_injured;
   @ViewChild('persons_trapped') persons_trapped;
   @ViewChild('other_info') other_info;
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad HelpRequestPage');
+  }
+
+  eventfilter(){
+    console.log(this.event)
   }
 
   report(){
@@ -67,7 +71,7 @@ export class HelpRequestPage {
         let data = {
           request_type_id : 2,
           person_to_check : null,
-          event: null,
+          event: this.event,
           persons_injured: this.persons_injured.value,
           persons_trapped: this.persons_trapped.value,
           other_info: this.other_info.value,

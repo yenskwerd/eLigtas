@@ -38,12 +38,15 @@ export class RequestVisualizationPage {
     // }
     this.loadmap();
   }
-  ionViewCanLeave(){
+
+  onPageWillLeave() {
     // this.map = null;
     //leaflet.map("map").fitWorld = null;
     // document.getElementById('map').outerHTML = "";
+    console.log("left");
     this.map.remove();
   }
+
   loadmap(){
     var redIcon = new leaflet.Icon({
       iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
@@ -220,7 +223,7 @@ export class RequestVisualizationPage {
           handler: () => {
             console.log('Buy clicked');
             this.change();
-            this.navCtrl.push('RespondToRequestPage', {
+            this.navCtrl.setRoot('RespondToRequestPage', {
               request_id : data.request_id,
               request_status_id : data.request_status_id,
               person_to_check: data.person_to_check,

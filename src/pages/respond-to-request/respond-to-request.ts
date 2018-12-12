@@ -73,7 +73,7 @@ export class RespondToRequestPage {
           console.log(res)
           });
     this.navCtrl.setRoot('RequestVisualizationPage');
-    //location.reload();
+    //  location.reload();
         });
   }
  

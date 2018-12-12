@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Dec 11, 2018 at 01:51 PM
+-- Generation Time: Dec 12, 2018 at 01:16 PM
 -- Server version: 5.6.21
 -- PHP Version: 5.5.19
 
@@ -56,16 +56,14 @@ CREATE TABLE IF NOT EXISTS `request` (
   `request_lat` double NOT NULL,
   `request_long` double NOT NULL,
   `request_status_id` int(1) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `request`
 --
 
 INSERT INTO `request` (`request_id`, `request_type_id`, `person_to_check`, `event`, `persons_injured`, `persons_trapped`, `other_info`, `special_needs_id`, `request_lat`, `request_long`, `request_status_id`) VALUES
-(1, 1, 'yenyen', 'fire', 10, 10, 'lolol', NULL, 10.3502881, 123.8988732, 1),
-(3, 3, 'nj ', 'earthquake', 10, 10, 'asdjfhaskjdfhkjh', NULL, 10.320476, 123.9092109, 2),
-(7, 1, 'jessa', 'fire', 10, 10, 'alksjfdlkasdjf', NULL, 10.3512881, 123.8988932, 0);
+(30, 1, '', 'Crime', 2, 2, 'helppir', NULL, 10.3379919, 123.8659716, 0);
 
 -- --------------------------------------------------------
 
@@ -76,7 +74,7 @@ INSERT INTO `request` (`request_id`, `request_type_id`, `person_to_check`, `even
 CREATE TABLE IF NOT EXISTS `request_status` (
 `request_status_id` int(1) NOT NULL,
   `request_status` varchar(100) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `request_status`
@@ -156,7 +154,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `specUser_id` int(1) DEFAULT NULL,
   `user_delete` int(1) NOT NULL DEFAULT '0',
   `request_id` int(1) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `user`
@@ -164,7 +162,19 @@ CREATE TABLE IF NOT EXISTS `user` (
 
 INSERT INTO `user` (`user_id`, `user_name`, `user_password`, `user_email`, `regUser_id`, `specUser_id`, `user_delete`, `request_id`) VALUES
 (1, 'elijah', 'elijah321', 'ronelijahruiz@gmail.com', 1, 1, 0, 0),
-(2, 'elijah1', 'elijah321', 'asdfasdfasdf@gmail.com', 1, 2, 0, 0);
+(2, 'elijah1', 'elijah321', 'asdfasdfasdf@gmail.com', 1, 2, 0, 0),
+(23, '', '', '', 1, 1, 0, NULL),
+(24, 'asd', 'asd', 'sad', 1, 1, 0, NULL),
+(25, '', '', '', 1, 1, 0, NULL),
+(26, 'asd', 'asd', 'asd', 1, 1, 0, NULL),
+(27, '', '', '', 1, 1, 0, NULL),
+(28, 'qwerty', '123', 'jessap', 1, 1, 0, NULL),
+(30, 'jesmrie', '1234', 'jtorrepedrola@gmail.com', 1, 2, 0, NULL),
+(32, 'nj18', 'njnj', 'njomp@gmail.com', 1, 1, 0, NULL),
+(34, 'sirgran', 'sirgran', 'gran@gmail.com', 1, 1, 0, NULL),
+(36, 'granix', '12345', 'g@gmail.com', 1, 1, 0, NULL),
+(38, 'granix', '1234', 'gg@gmail.com', 1, 1, 0, NULL),
+(40, 'granito', '1234', 'gg@gmail.com', 1, 1, 0, NULL);
 
 --
 -- Indexes for dumped tables
@@ -225,12 +235,12 @@ MODIFY `regUser_id` int(1) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 -- AUTO_INCREMENT for table `request`
 --
 ALTER TABLE `request`
-MODIFY `request_id` int(8) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=8;
+MODIFY `request_id` int(8) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=31;
 --
 -- AUTO_INCREMENT for table `request_status`
 --
 ALTER TABLE `request_status`
-MODIFY `request_status_id` int(1) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
+MODIFY `request_status_id` int(1) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `request_type`
 --
@@ -250,7 +260,7 @@ MODIFY `specUser_id` int(1) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-MODIFY `user_id` int(8) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
+MODIFY `user_id` int(8) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=41;
 --
 -- Constraints for dumped tables
 --

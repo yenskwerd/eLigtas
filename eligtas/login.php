@@ -16,7 +16,7 @@
 
 
   require 'dbconnect.php';
-
+  
     $data = file_get_contents("php://input");
 
     if (isset($data)) {

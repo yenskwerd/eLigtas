@@ -32,13 +32,13 @@ export class RequestVisualizationPage {
   
   }
   ionViewDidEnter(){
-    if(this.map != null){
-      this.map.remove();
-      console.log("Entered != null");
-    }
+    // if(this.map != null){
+ //      this.map.remove();
+    //   console.log("Entered != null");
+    // }
     this.loadmap();
   }
-  ioniViewCanLeave(){
+  ionViewCanLeave(){
     // this.map = null;
     //leaflet.map("map").fitWorld = null;
     // document.getElementById('map').outerHTML = "";

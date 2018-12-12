@@ -40,6 +40,8 @@ export class EventReportPage {
   }
 
   report(){
+    console.log(this.lat);
+    console.log(this.report);
     if(this.persons_injured.value==""){
         
           let alert = this.alertCtrl.create({

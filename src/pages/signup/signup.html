@@ -17,28 +17,27 @@
     <form>
         <ion-item>
           <ion-label stacked>Email</ion-label>
-          <ion-input type="email" name="email"></ion-input>
+          <ion-input type="email" name="email" #user_email></ion-input>
         </ion-item>
         <ion-item>
             <ion-label stacked>Username</ion-label>
-            <ion-input type="text" name="username"></ion-input>
+            <ion-input type="text" name="username" #user_name></ion-input>
           </ion-item>
         <ion-item>
           <ion-label stacked>Password</ion-label>
-          <ion-input type="password" name="password"></ion-input>
+          <ion-input type="password" name="password" #user_password></ion-input>
         </ion-item>
         <ion-item>
           <ion-label stacked>I am a</ion-label>
           <ion-select #C interface="popover" (ionChange)="optionfilter(options);" [(ngModel)]="options" name="options">
-            <ion-option value="Regular User">Regular User</ion-option>
+            <ion-option value="1">Regular User</ion-option>
           </ion-select>
         </ion-item>
         <ion-item>
           <ion-label stacked>and a</ion-label>
           <ion-select #C interface="popover" (ionChange)="optionfilter2(options2);" [(ngModel)]="options2" name="options2">
-            <ion-option value="First Responder">First Responder *</ion-option>
-            <ion-option value="PDCAT User">PDCAT User *</ion-option>
-            <ion-option value="Administrator">Administrator *</ion-option>
+            <ion-option value="1">First Responder *</ion-option>
+            <ion-option value="2">PDCAT User *</ion-option>
           </ion-select>
         </ion-item>
         
@@ -58,6 +57,6 @@
           </ion-item>
         </ion-list> -->
         
-        <button ion-button type="submit" block (click)="signUp()">Sign Up</button>
+        <button ion-button type="submit" (click)="signUp()" block>Sign Up</button>
       </form>
 </ion-content>

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
 import {Http, Headers, RequestOptions}  from '@angular/http';
-
+import 'rxjs/add/operator/map';
 /**
  * Generated class for the RespondToRequestPage page.
  *
@@ -73,6 +73,7 @@ export class RespondToRequestPage {
           console.log(res)
           });
     this.navCtrl.setRoot('RequestVisualizationPage');
+    //location.reload();
         });
   }
  

@@ -79,7 +79,7 @@ export class RequestVisualizationPage {
         alert(err.message);
     })
     this.http
-     .get('http://localhost/eligtas/retrieve-request.php')
+     .get('http://172.16.30.37/eligtas/retrieve-request.php')
      .subscribe((data : any) =>
      {
         console.log(data);

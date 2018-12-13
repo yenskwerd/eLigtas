@@ -86,7 +86,7 @@ export class LoginPage {
       });
     
       loader.present().then(() => {
-        this.http.post('http://localhost/eligtas/login.php',data,options)
+        this.http.post('http://172.16.30.37/eligtas/login.php',data,options)
         .map(res=> res.json())
           .subscribe(
             res => {
@@ -120,7 +120,7 @@ export class LoginPage {
             
           }else{
             let alert = this.alertCtrl.create({
-            subTitle:"Your Pilgrim ID or Password is invalid",
+            subTitle:"Your Username or Password is invalid",
             buttons: ['OK']
             });
             

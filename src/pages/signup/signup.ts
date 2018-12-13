@@ -78,7 +78,7 @@ export class SignupPage {
           specUser_id: this.options2
         }
         console.log(data);
-        this.http.post('http://localhost/eligtas/signup.php', data, options)
+        this.http.post('http://172.16.30.37/eligtas/signup.php', data, options)
         .map(res=> res.json())
         .subscribe((data: any) =>
         {

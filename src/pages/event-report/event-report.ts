@@ -84,7 +84,7 @@ export class EventReportPage {
           request_long: this.long
         }
         console.log(data);
-        this.http.post('http://localhost/eligtas/report.php', data, options)
+        this.http.post('http://172.16.30.37/eligtas/report.php', data, options)
         .map(res=> res.json())
         .subscribe((data: any) =>
         {

@@ -65,7 +65,7 @@ export class RespondToRequestPage {
     });
   
     loader.present().then(() => {
-      this.http.post('http://localhost/eligtas/update-rescue.php',data,options)
+      this.http.post('http://172.16.30.37/eligtas/update-rescue.php',data,options)
       .map(res=> res.json())
         .subscribe(
           res => {
@@ -94,7 +94,7 @@ export class RespondToRequestPage {
   load() : void
   {
      this.http
-     .get('http://localhost/eligtas/retrieve-request.php')
+     .get('http://172.16.30.37/eligtas/retrieve-request.php')
      .subscribe((data : any) =>
      {
         console.dir(data);

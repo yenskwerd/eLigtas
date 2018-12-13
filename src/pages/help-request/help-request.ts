@@ -18,10 +18,55 @@ export class HelpRequestPage {
   lat: any;
   long: any;
   event: any;
+  visual: any;
+  hear: any;
+  walk: any;
+  mental: any;
+  others: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl:AlertController,private http: Http) {
     this.lat = navParams.data.lat;
     this.long = navParams.data.long;
+  }
+
+  visualchanged(e:any, name){
+    // console.log(e.checked);
+    if(e.checked) {
+      this.visual = name;
+    } else {
+      this.visual = null;
+    }
+    console.log(this.visual);
+  }
+
+  hearchanged(e:any, name){
+    // console.log(e.checked);
+    if(e.checked) {
+      this.hear = name;
+    } else {
+      this.hear = null;
+    }
+    console.log(this.hear);
+  }
+
+  walkchanged(e:any, name){
+    // console.log(e.checked);
+    if(e.checked) {
+      this.walk = name;
+    } else {
+      this.walk = null;
+    }
+    console.log(this.walk);
+  }
+
+  mentalchanged(e:any, name){
+    // console.log(e.checked);
+    if(e.checked) {
+      this.mental = name;
+    } else {
+      this.mental = null;
+    }
+    console.log(this.mental);
   }
 
   @ViewChild('persons_injured') persons_injured;
@@ -37,6 +82,23 @@ export class HelpRequestPage {
   }
 
   report(){
+
+    if(this.visual!=null) {
+      this.others = this.visual + ", "
+    } else {
+      this.others = "";
+    }
+    if(this.hear!=null) {
+      this.others = this.others + this.hear + ", "
+    } 
+    if(this.walk!=null) {
+      this.others = this.others + this.walk + ", "
+    } 
+    if(this.mental!=null) {
+      this.others = this.others + this.mental
+    }
+    console.log(this.others);
+    
     if(this.persons_injured.value==""){
         
           let alert = this.alertCtrl.create({
@@ -76,7 +138,8 @@ export class HelpRequestPage {
           persons_trapped: this.persons_trapped.value,
           other_info: this.other_info.value,
           request_lat: this.lat,
-          request_long: this.long
+          request_long: this.long,
+          special_needs: this.others
         }
         console.log(data);
         this.http.post('http://172.16.30.37/eligtas/report.php', data, options)

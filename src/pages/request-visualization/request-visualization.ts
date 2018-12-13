@@ -71,7 +71,7 @@ export class RequestVisualizationPage {
     }
     console.log(data);
 
-   this.http2.post('http://localhost/eligtas/retrieve-user-request.php',data,options)
+   this.http2.post('http://172.16.30.37/eligtas/retrieve-user-request.php',data,options)
    .map(res=> res.json())
      .subscribe(
        res => {
@@ -95,7 +95,7 @@ export class RequestVisualizationPage {
     }
     console.log(data);
 
-   this.http2.post('http://localhost/eligtas/retrieve-user-request.php',data,options)
+   this.http2.post('http://172.16.30.37/eligtas/retrieve-user-request.php',data,options)
    .map(res=> res.json())
      .subscribe(
        res => {
@@ -135,7 +135,7 @@ export class RequestVisualizationPage {
       })
   
       this.http
-       .get('http://localhost/eligtas/retrieve-request.php')
+       .get('http://172.16.30.37/eligtas/retrieve-request.php')
        .subscribe((data : any) =>
        {
           console.log(data);

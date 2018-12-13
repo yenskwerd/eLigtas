@@ -41,22 +41,22 @@
       <ion-label stacked>Are there rescuees with special needs?</ion-label>
       <ion-item>
         <ion-label stacked>visually impaired</ion-label>
-        <ion-checkbox [(ngModel)]="pepperoni" name="special"></ion-checkbox>
+        <ion-checkbox (ionChange)="visualchanged($event, 'visually impaired')"></ion-checkbox>
       </ion-item>
     
       <ion-item>
         <ion-label stacked>cannot hear well</ion-label>
-        <ion-checkbox [(ngModel)]="sausage" name="special"></ion-checkbox>
+        <ion-checkbox (ionChange)="hearchanged($event, 'cannot hear well')"></ion-checkbox>
       </ion-item>
     
       <ion-item>
         <ion-label stacked>unable to walk</ion-label>
-        <ion-checkbox [(ngModel)]="mushrooms" name="special"></ion-checkbox>
+        <ion-checkbox (ionChange)="walkchanged($event, 'unable to walk')"></ion-checkbox>
       </ion-item>
 
       <ion-item>
         <ion-label stacked>with mental health issues</ion-label>
-        <ion-checkbox [(ngModel)]="mushrooms" name="special"></ion-checkbox>
+        <ion-checkbox (ionChange)="mentalchanged($event, 'with mental health issues')"></ion-checkbox>
       </ion-item>
     
     </ion-list>

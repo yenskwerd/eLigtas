@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
 import {Http, Headers, RequestOptions}  from '@angular/http';
+import { LoginServiceProvider } from '../../providers/login-service/login-service';
 import 'rxjs/add/operator/map';
 /**
  * Generated class for the RespondToRequestPage page.
@@ -25,7 +26,7 @@ export class RespondToRequestPage {
   request_id;
 
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public http   : Http, public loading:LoadingController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public http   : Http, public loading:LoadingController, public loginService: LoginServiceProvider) {
     this.event = navParams.data.event;
     this.injured = navParams.data.persons_injured;
     this.trapped = navParams.data.persons_trapped;
@@ -38,6 +39,32 @@ export class RespondToRequestPage {
     console.log('ionViewDidLoad RespondToRequestPage');
     this.load();
   }
+
+  // ionViewDidLeave() {
+  //   var headers = new Headers();
+      
+  //   headers.append("Accept", 'application/json');
+  //   headers.append('Content-Type', 'application/x-www-form-urlencoded');
+  //   headers.append('Access-Control-Allow-Origin' , '*');
+  //   headers.append('Access-Control-Allow-Headers' , 'Content-Type');
+  //   headers.append('Access-Control-Allow-Methods', 'POST, GET, OPTIONS, PUT');
+    
+  //   let options = new RequestOptions({ headers: headers });
+  //   let data = {
+  //     user_id: this.loginService.logged_in_user_id
+  //   }
+  //   console.log(data);
+
+  //  this.http.post('http://localhost/eligtas/retrieve-user-request.php',data,options)
+  //  .map(res=> res.json())
+  //    .subscribe(
+  //      res => {
+  //      console.log(res.request_id);
+  //      this.loginService.logged_in_user_request_id = res.request_id;
+  //  }); 
+
+  //  console.log("Responded: " + this.loginService.logged_in_user_request_id);
+  // }
 
   isReadonly() {return true;}
   
@@ -56,7 +83,7 @@ export class RespondToRequestPage {
     
     let options = new RequestOptions({ headers: headers });
     let data = {
-    
+    user_id: this.loginService.logged_in_user_id,
     request_status_id: this.request_status_id,
     request_id: this.request_id
   
@@ -72,6 +99,12 @@ export class RespondToRequestPage {
           loader.dismiss()
           console.log(res)
           });
+          //gets user data
+          let data2 = {
+            user_id: this.loginService.logged_in_user_id
+          }
+          console.log(data);
+
     this.navCtrl.setRoot('RequestVisualizationPage');
     //  location.reload();
         });

@@ -10,6 +10,8 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class LoginServiceProvider {
   public loginState: any; //1 if user 2 if responder
+  public logged_in_user_id:any;
+  public logged_in_user_request_id:any;
   constructor(public http: HttpClient) {
     console.log('Hello LoginServiceProvider Provider');
   }

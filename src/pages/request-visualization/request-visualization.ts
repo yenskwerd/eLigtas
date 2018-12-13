@@ -1,8 +1,11 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { HttpClient } from '@angular/common/http';  
+import {Http, Headers, RequestOptions}  from '@angular/http';
 import leaflet, { Draggable, marker } from 'leaflet';
+import { LoginServiceProvider } from '../../providers/login-service/login-service';
 import 'leaflet-routing-machine';
+import 'rxjs/add/operator/map';
 /**
  * Generated class for the RequestVisualizationPage page.
  *
@@ -18,18 +21,23 @@ import 'leaflet-routing-machine';
 export class RequestVisualizationPage {
   @ViewChild('map') mapContainer:ElementRef;
   map:any;
-  nj:any;
-  elijah:any;
+  currLat:any;
+  currLong:any;
   // marker: any;
   marker: any;
   request: any;
   index: any;
+  user_request_id: any;
 
-  constructor(public navCtrl: NavController, public http : HttpClient, public navParams: NavParams, public alertCtrl : AlertController) {
+  constructor(public navCtrl: NavController, public http : HttpClient, public http2 : Http, public navParams: NavParams, public alertCtrl : AlertController,
+    public loginService: LoginServiceProvider) {
   }
 
   ionViewDidLoad() {
-  
+    console.log("loaded");
+    //this.getUserRequest();
+  }
+  ionViewWillEnter(){
   }
   ionViewDidEnter(){
     // if(this.map != null){
@@ -39,7 +47,7 @@ export class RequestVisualizationPage {
     this.loadmap();
   }
 
-  onPageWillLeave() {
+  ionViewDidLeave() {
     // this.map = null;
     //leaflet.map("map").fitWorld = null;
     // document.getElementById('map').outerHTML = "";
@@ -47,55 +55,102 @@ export class RequestVisualizationPage {
     this.map.remove();
   }
 
-  loadmap(){
-    var redIcon = new leaflet.Icon({
-      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
-      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-      iconSize: [25, 41],
-      iconAnchor: [12, 41],
-      popupAnchor: [1, -34],
-      shadowSize: [41, 41]
-    });  
-    this.map = leaflet.map("map").fitWorld();
-    leaflet.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
-      maxZoom: 18
-    }).addTo(this.map);
-    this.map.locate({
-      setView: true,
-      maxZoom: 15
-    }).on('locationfound', (e) => {
-      this.nj= e.latitude;
-      this.elijah= e.longitude;
-      let markerGroup = leaflet.featureGroup();
-      //this.marker= leaflet.marker([e.latitude, e.longitude],{draggable:false})
-      this.marker=leaflet.marker([e.latitude,e.longitude], {icon: redIcon,draggable:false}).addTo(this.map)
-      .on('click', () => {
-        alert('You are here!');
-      })
-      markerGroup.addLayer(this.marker);
-      this.map.addLayer(this.marker);
-      }).on('locationerror', (err) => {
-        alert(err.message);
-    })
-    this.http
-     .get('http://172.16.30.37/eligtas/retrieve-request.php')
-     .subscribe((data : any) =>
-     {
-        console.log(data);
-        this.request = data;
-        // this.generateParish(data);
-        for(let i=0; i<data.length; i++){
-          this.createMarker(data[i]);
-          console.log('lolol')
-        }
-     },
-     (error : any) =>
-     {
-        console.dir(error);
-     });   
-  
+  getUserRequest(){
+    //gets user data
+    var headers = new Headers();
+      
+    headers.append("Accept", 'application/json');
+    headers.append('Content-Type', 'application/x-www-form-urlencoded');
+    headers.append('Access-Control-Allow-Origin' , '*');
+    headers.append('Access-Control-Allow-Headers' , 'Content-Type');
+    headers.append('Access-Control-Allow-Methods', 'POST, GET, OPTIONS, PUT');
     
+    let options = new RequestOptions({ headers: headers });
+    let data = {
+      user_id: this.loginService.logged_in_user_id
+    }
+    console.log(data);
+
+   this.http2.post('http://localhost/eligtas/retrieve-user-request.php',data,options)
+   .map(res=> res.json())
+     .subscribe(
+       res => {
+       console.log(res.request_id);
+       this.user_request_id = res.request_id;
+   }); 
+  }
+
+  loadmap(){
+    var headers = new Headers();
+      
+    headers.append("Accept", 'application/json');
+    headers.append('Content-Type', 'application/x-www-form-urlencoded');
+    headers.append('Access-Control-Allow-Origin' , '*');
+    headers.append('Access-Control-Allow-Headers' , 'Content-Type');
+    headers.append('Access-Control-Allow-Methods', 'POST, GET, OPTIONS, PUT');
+    
+    let options = new RequestOptions({ headers: headers });
+    let data = {
+      user_id: this.loginService.logged_in_user_id
+    }
+    console.log(data);
+
+   this.http2.post('http://localhost/eligtas/retrieve-user-request.php',data,options)
+   .map(res=> res.json())
+     .subscribe(
+       res => {
+       console.log(res.request_id);
+       this.user_request_id = res.request_id;
+
+
+       var redIcon = new leaflet.Icon({
+        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+      });  
+      this.map = leaflet.map("map").fitWorld();
+      leaflet.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+        maxZoom: 18
+      }).addTo(this.map);
+      this.map.locate({
+        setView: true,
+        maxZoom: 15
+      }).on('locationfound', (e) => {
+        this.currLat= e.latitude;
+        this.currLong= e.longitude;
+        let markerGroup = leaflet.featureGroup();
+        //this.marker= leaflet.marker([e.latitude, e.longitude],{draggable:false})
+        this.marker=leaflet.marker([e.latitude,e.longitude], {icon: redIcon,draggable:false}).addTo(this.map)
+        .on('click', () => {
+          alert('You are here!');
+        })
+        markerGroup.addLayer(this.marker);
+        this.map.addLayer(this.marker);
+        }).on('locationerror', (err) => {
+          alert(err.message);
+      })
+  
+      this.http
+       .get('http://localhost/eligtas/retrieve-request.php')
+       .subscribe((data : any) =>
+       {
+          console.log(data);
+          this.request = data;
+          // this.generateParish(data);
+          for(let i=0; i<data.length; i++){
+            this.createMarker(data[i]);
+            console.log('lolol')
+          }
+       },
+       (error : any) =>
+       {
+          console.dir(error);
+       });   
+   }); 
     
     
   }
@@ -140,14 +195,20 @@ export class RequestVisualizationPage {
       // leaflet.marker([data.request_lat,data.request_long]).on('click', () => {
       //   this.presentConfirm(data);
       // }).bindPopup("Need help").addTo(this.map);
-    } else if(data.request_status_id==1){
+    } else if(data.request_status_id==1 && data.request_id == this.user_request_id){
       this.rout(data);
-      leaflet.marker([data.request_lat,data.request_long], {icon: yellowIcon}).addTo(this.map).on('click', () => {
-        this.presentConfirm(data);
+      leaflet.marker([data.request_lat,data.request_long], {icon: yellowIcon}).addTo(this.map);
+      
+      // .on('click', () => {
+      //   this.presentConfirm(data);
         
-      }).bindPopup("Need help").addTo(this.map);
+      // }).bindPopup("Need help").addTo(this.map);
     } else if(data.request_status_id==2){
       leaflet.marker([data.request_lat,data.request_long], {icon: grayIcon}).addTo(this.map);
+    }else{
+      leaflet.marker([data.request_lat,data.request_long], {icon: purpleIcon}).addTo(this.map).on('click', () => {
+        this.presentConfirm(data);
+      }).bindPopup("Need help").addTo(this.map);
     }
     
   }
@@ -184,11 +245,13 @@ export class RequestVisualizationPage {
     leaflet.Routing.control({
       waypoints: [
         leaflet.latLng(data.request_lat, data.request_long),
-        leaflet.latLng(this.nj, this.elijah)
-      ],routeWhileDragging:false
+        leaflet.latLng(this.currLat, this.currLong)
+      ],routeWhileDragging:false,
+      
       
     }).addTo(this.map)
   }
+
   change1(){
     var greenIcon = new leaflet.Icon({
       iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
@@ -198,7 +261,6 @@ export class RequestVisualizationPage {
       popupAnchor: [1, -34],
       shadowSize: [41, 41]
     }); 
-    console.log("nj gwapo");
     leaflet.marker([10.3502881,123.8988732], {icon: greenIcon,draggable:false,}).addTo(this.map).on('click', () => {
       //alert('Hospital x');
       // this.presentConfirm();
@@ -219,7 +281,7 @@ export class RequestVisualizationPage {
           }
         },
         {
-          text: 'Help',
+          text: 'See',
           handler: () => {
             console.log('Buy clicked');
             this.change();
@@ -234,6 +296,7 @@ export class RequestVisualizationPage {
               request_lat: data.request_lat,
               request_long: data.request_long
             });
+            console.log("request id: ");
             console.log(data.request_id);
             console.log(data.event);
           }

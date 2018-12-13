@@ -94,7 +94,9 @@ export class LoginPage {
             console.log(res)
         
           if(res != "Your username or password is invalid!"){
-            this.loginService.loginState = res;
+            this.loginService.loginState = res.specUser_id;
+            this.loginService.logged_in_user_id = res.user_id;
+            this.loginService.logged_in_user_request_id = res.request_id
             // this.events.publish('user:sidebar');
             let alert = this.alertCtrl.create({
             subTitle: "You successfully logged in!",

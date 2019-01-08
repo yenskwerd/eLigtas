@@ -293,6 +293,7 @@ export class RequestVisualizationPage {
               persons_injured: data.persons_injured,
               persons_trapped: data.persons_trapped,
               other_info: data.other_info,
+              special_needs: data.special_needs,
               request_lat: data.request_lat,
               request_long: data.request_long
             });

@@ -22,6 +22,7 @@ export class RespondToRequestPage {
   injured: any;
   trapped: any;
   other: any;
+  special: any;
   request_status_id;
   request_id;
 
@@ -31,6 +32,7 @@ export class RespondToRequestPage {
     this.injured = navParams.data.persons_injured;
     this.trapped = navParams.data.persons_trapped;
     this.other = navParams.data.other_info;
+    this.special = navParams.data.special_needs;
     this.request_status_id=navParams.data.request_status_id;
     this.request_id=navParams.data.request_id;
   }

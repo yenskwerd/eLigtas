@@ -122,7 +122,7 @@ export class LoginPage {
             
           }else{
             let alert = this.alertCtrl.create({
-            subTitle:"Your Pilgrim ID or Password is invalid",
+            subTitle:"Your Username or Password is invalid",
             buttons: ['OK']
             });
             

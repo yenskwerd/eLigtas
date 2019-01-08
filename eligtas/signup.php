@@ -20,24 +20,21 @@
    $data = array();
    $data2 = file_get_contents("php://input");
    if(isset($data2)){
-      $request = json_decode($data2);
-      $event = $request->event;
-      $request_type_id = $request->request_type_id;
-      $person_to_check = $request->person_to_check;
-      $persons_injured = $request->persons_injured;
-      $persons_trapped = $request->persons_trapped;
-      $other_info = $request->other_info;
-      $request_lat = $request->request_lat;
-      $request_long = $request->request_long;
-      $special_needs = $request->special_needs;
+      $user = json_decode($data2);
+      $user_name = $user->user_name;
+      $user_email = $user->user_email;
+      $user_password = $user->user_password;
+      $regUser_id = $user->regUser_id;
+      $specUser_id = $user->specUser_id;
    }
    
 
       
    // Attempt to query database table and retrieve data
    try {
-      $stmt= $pdo->query('INSERT INTO request (request_type_id, person_to_check, event, persons_injured, persons_trapped, other_info, request_lat, request_long, special_needs) VALUES("'.$request_type_id.'","'.$person_to_check.'","'.$event.'","'.$persons_injured.'","'.$persons_trapped.'","'.$other_info.'","'.$request_lat.'","'.$request_long.'","'.$special_needs.'")');
-
+      $stmt= $pdo->query('INSERT INTO user (user_email, user_name, user_password, regUser_id, specUser_id) VALUES("'.$user_email.'","'.$user_name.'","'.$user_password.'","'.$regUser_id.'","'.$specUser_id.'")');
+      // $stmt= $pdo->query('INSERT INTO user (user_email, user_name, user_password, regUser_id, specUser_id) VALUES("'.$user_email.'","'.$user_name.'","'.$user_password.'","1","1")');
+      
       while($row  = $stmt->fetch(PDO::FETCH_OBJ))
       {
          // Assign each row of data to associative array

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Dec 12, 2018 at 01:16 PM
+-- Generation Time: Jan 09, 2019 at 12:23 AM
 -- Server version: 5.6.21
 -- PHP Version: 5.5.19
 
@@ -19,6 +19,28 @@ SET time_zone = "+00:00";
 --
 -- Database: `eligtas`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `emergencies`
+--
+
+CREATE TABLE IF NOT EXISTS `emergencies` (
+  `name` varchar(100) NOT NULL,
+  `request_lat` double NOT NULL,
+  `request_long` double NOT NULL,
+  `request_status_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `emergencies`
+--
+
+INSERT INTO `emergencies` (`name`, `request_lat`, `request_long`, `request_status_id`) VALUES
+('Cebu North General Hospital ', 10.3581812, 123.8933534, 0),
+('Cebu North General Hospital', 10.3577435, 123.9095322, 1),
+('Tipolo Fire Station', 10.357827, 123.9094464, 2);
 
 -- --------------------------------------------------------
 
@@ -52,18 +74,24 @@ CREATE TABLE IF NOT EXISTS `request` (
   `persons_injured` int(5) DEFAULT NULL,
   `persons_trapped` int(5) DEFAULT NULL,
   `other_info` text NOT NULL,
-  `special_needs_id` int(8) DEFAULT NULL,
+  `special_needs` text NOT NULL,
   `request_lat` double NOT NULL,
   `request_long` double NOT NULL,
   `request_status_id` int(1) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `request`
 --
 
-INSERT INTO `request` (`request_id`, `request_type_id`, `person_to_check`, `event`, `persons_injured`, `persons_trapped`, `other_info`, `special_needs_id`, `request_lat`, `request_long`, `request_status_id`) VALUES
-(30, 1, '', 'Crime', 2, 2, 'helppir', NULL, 10.3379919, 123.8659716, 0);
+INSERT INTO `request` (`request_id`, `request_type_id`, `person_to_check`, `event`, `persons_injured`, `persons_trapped`, `other_info`, `special_needs`, `request_lat`, `request_long`, `request_status_id`) VALUES
+(30, 1, '', 'Crime', 2, 2, 'helppir', '', 10.3379919, 123.8659716, 1),
+(32, 1, '', 'Fire', 5, 2, 'xxx', '', 14.6150913, 120.9867719, 1),
+(38, 1, NULL, 'Earthquake', NULL, NULL, 'dada', '', 10.3478719, 123.8835039, 1),
+(40, 3, 'jesmrie', 'Crime', 1, 0, 'none', 'visually impaired, with mental health issues', 0, 0, 0),
+(42, 3, 'jesmrie', 'Crime', 1, 0, 'none', 'visually impaired, with mental health issues', 10.3522406, 123.9129879, 1),
+(44, 1, '', 'Earthquake', 1, 2, '', 'visually impaired, cannot hear well, ', 10.3419826, 123.9116389, 1),
+(46, 1, '', 'Fire', 4, 2, 'pregnant women', '', 14.5889849, 120.9814035, 1);
 
 -- --------------------------------------------------------
 
@@ -108,20 +136,6 @@ INSERT INTO `request_type` (`request_type_id`, `name`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `specialneeds`
---
-
-CREATE TABLE IF NOT EXISTS `specialneeds` (
-`specialneeds_id` int(8) NOT NULL,
-  `visually_impaired` tinyint(1) NOT NULL DEFAULT '0',
-  `cannot_hear_well` tinyint(1) NOT NULL DEFAULT '0',
-  `unable_to_walk` tinyint(1) NOT NULL DEFAULT '0',
-  `with_mental_health_issue` tinyint(1) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `specuser`
 --
 
@@ -154,7 +168,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `specUser_id` int(1) DEFAULT NULL,
   `user_delete` int(1) NOT NULL DEFAULT '0',
   `request_id` int(1) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `user`
@@ -162,7 +176,7 @@ CREATE TABLE IF NOT EXISTS `user` (
 
 INSERT INTO `user` (`user_id`, `user_name`, `user_password`, `user_email`, `regUser_id`, `specUser_id`, `user_delete`, `request_id`) VALUES
 (1, 'elijah', 'elijah321', 'ronelijahruiz@gmail.com', 1, 1, 0, 0),
-(2, 'elijah1', 'elijah321', 'asdfasdfasdf@gmail.com', 1, 2, 0, 0),
+(2, 'elijah1', 'elijah321', 'asdfasdfasdf@gmail.com', 1, 2, 0, 32),
 (23, '', '', '', 1, 1, 0, NULL),
 (24, 'asd', 'asd', 'sad', 1, 1, 0, NULL),
 (25, '', '', '', 1, 1, 0, NULL),
@@ -174,7 +188,12 @@ INSERT INTO `user` (`user_id`, `user_name`, `user_password`, `user_email`, `regU
 (34, 'sirgran', 'sirgran', 'gran@gmail.com', 1, 1, 0, NULL),
 (36, 'granix', '12345', 'g@gmail.com', 1, 1, 0, NULL),
 (38, 'granix', '1234', 'gg@gmail.com', 1, 1, 0, NULL),
-(40, 'granito', '1234', 'gg@gmail.com', 1, 1, 0, NULL);
+(40, 'granito', '1234', 'gg@gmail.com', 1, 1, 0, NULL),
+(42, 'yen', 'yen', 'yen', 1, 2, 0, NULL),
+(44, 'jesmrie', '12345', 'jtorrepedrola@gmail.com', 1, 2, 0, NULL),
+(46, 'jesmrie', '123', 'jtorrepedrola@gmail.com', 1, 2, 0, NULL),
+(48, 'yenskwerd', '', 'yen', 1, 2, 0, NULL),
+(50, 'jessa', '123', 'jtorrepedrola@gmail.com', 1, 2, 0, 32);
 
 --
 -- Indexes for dumped tables
@@ -190,7 +209,7 @@ ALTER TABLE `reguser`
 -- Indexes for table `request`
 --
 ALTER TABLE `request`
- ADD PRIMARY KEY (`request_id`), ADD KEY `request_type_id` (`request_type_id`), ADD KEY `special_needs_id` (`special_needs_id`), ADD KEY `request_status_id` (`request_status_id`);
+ ADD PRIMARY KEY (`request_id`), ADD KEY `request_type_id` (`request_type_id`), ADD KEY `request_status_id` (`request_status_id`);
 
 --
 -- Indexes for table `request_status`
@@ -203,12 +222,6 @@ ALTER TABLE `request_status`
 --
 ALTER TABLE `request_type`
  ADD PRIMARY KEY (`request_type_id`);
-
---
--- Indexes for table `specialneeds`
---
-ALTER TABLE `specialneeds`
- ADD PRIMARY KEY (`specialneeds_id`);
 
 --
 -- Indexes for table `specuser`
@@ -235,7 +248,7 @@ MODIFY `regUser_id` int(1) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 -- AUTO_INCREMENT for table `request`
 --
 ALTER TABLE `request`
-MODIFY `request_id` int(8) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=31;
+MODIFY `request_id` int(8) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=47;
 --
 -- AUTO_INCREMENT for table `request_status`
 --
@@ -247,11 +260,6 @@ MODIFY `request_status_id` int(1) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
 ALTER TABLE `request_type`
 MODIFY `request_type_id` int(1) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
 --
--- AUTO_INCREMENT for table `specialneeds`
---
-ALTER TABLE `specialneeds`
-MODIFY `specialneeds_id` int(8) NOT NULL AUTO_INCREMENT;
---
 -- AUTO_INCREMENT for table `specuser`
 --
 ALTER TABLE `specuser`
@@ -260,7 +268,7 @@ MODIFY `specUser_id` int(1) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-MODIFY `user_id` int(8) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=41;
+MODIFY `user_id` int(8) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=51;
 --
 -- Constraints for dumped tables
 --
@@ -270,7 +278,6 @@ MODIFY `user_id` int(8) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=41;
 --
 ALTER TABLE `request`
 ADD CONSTRAINT `request_ibfk_1` FOREIGN KEY (`request_type_id`) REFERENCES `request_type` (`request_type_id`),
-ADD CONSTRAINT `request_ibfk_2` FOREIGN KEY (`special_needs_id`) REFERENCES `specialneeds` (`specialneeds_id`),
 ADD CONSTRAINT `request_ibfk_3` FOREIGN KEY (`request_status_id`) REFERENCES `request_status` (`request_status_id`);
 
 --

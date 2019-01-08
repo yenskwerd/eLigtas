@@ -1,6 +1,6 @@
 <?php
 
-	//  define('HOST','192.168.254.113');
+	 // define('HOST','192.168.254.113');
 	 define('HOST','localhost');
 	define('USER','root');
 	define('PASS', '');

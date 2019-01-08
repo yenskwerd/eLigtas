@@ -16,7 +16,7 @@
 
 
   require 'dbconnect.php';
-  
+
     $data = file_get_contents("php://input");
 
     if (isset($data)) {
@@ -40,7 +40,7 @@
       if($count > 0) {
         while ($row = mysqli_fetch_assoc($result))
          {
-            $response = $row['specUser_id'];
+            $response = $row;
          }
       }else {
         $response= "Your username or password is invalid!";         

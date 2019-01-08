@@ -22,6 +22,7 @@ export class RespondToRequestPage {
   injured: any;
   trapped: any;
   other: any;
+  special: any;
   request_status_id;
   request_id;
 
@@ -31,6 +32,7 @@ export class RespondToRequestPage {
     this.injured = navParams.data.persons_injured;
     this.trapped = navParams.data.persons_trapped;
     this.other = navParams.data.other_info;
+    this.special = navParams.data.special_needs;
     this.request_status_id=navParams.data.request_status_id;
     this.request_id=navParams.data.request_id;
   }
@@ -92,7 +94,7 @@ export class RespondToRequestPage {
     });
   
     loader.present().then(() => {
-      this.http.post('http://172.16.30.37/eligtas/update-rescue.php',data,options)
+      this.http.post('http://localhost/eligtas/update-rescue.php',data,options)
       .map(res=> res.json())
         .subscribe(
           res => {
@@ -127,7 +129,7 @@ export class RespondToRequestPage {
   load() : void
   {
      this.http
-     .get('http://172.16.30.37/eligtas/retrieve-request.php')
+     .get('http://localhost/eligtas/retrieve-request.php')
      .subscribe((data : any) =>
      {
         console.dir(data);

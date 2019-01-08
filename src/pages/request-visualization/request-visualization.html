@@ -14,12 +14,18 @@
 
 
 <ion-content>
+  
+  <ion-item>
+    <ion-label>Show Hospitals, etc.</ion-label>
+    <ion-toggle [(ngModel)]="status" (ionChange)="onChange()"></ion-toggle>
+  </ion-item>
+
   <div id="map" style="width:100%; height: 90%;">
   </div>
   <div class="bottomBotton">
     <button ion-button type="submit" class="btmButton" (click)="pushRespondToRequest()" block>View Request Details</button>
   </div>
-  </ion-content>
+</ion-content>
 
 <ion-footer text-center>
   <h1>//ADS//</h1>

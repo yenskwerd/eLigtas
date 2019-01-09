@@ -112,6 +112,7 @@ export class LoginPage {
             //     console.log(val);
             //   });
             // });
+            console.log(res.user_id);
             
             alert.present();
             if(this.loginService.loginState == 1){

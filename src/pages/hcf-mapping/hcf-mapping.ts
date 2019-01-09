@@ -1,7 +1,9 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import leaflet from 'leaflet';
+import { HttpClient } from '@angular/common/http';  
 import { LoginPage } from '../login/login';
+import { dateValueRange } from 'ionic-angular/umd/util/datetime-util';
 /**
  * Generated class for the HcfMappingPage page.
  *
@@ -17,10 +19,16 @@ import { LoginPage } from '../login/login';
 export class HcfMappingPage {
   @ViewChild('map') mapContainer:ElementRef;
   map:any;
+  currLat:any;
+  currLong:any;
   lat: any;
   long: any;
+  hcfshow: any;
+  request: any;
+  hcfMarkers: any[];
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, public http : HttpClient, public navParams: NavParams) {
+    this.hcfMarkers = [];
   }
 
    ionViewDidLoad() {
@@ -104,5 +112,113 @@ export class HcfMappingPage {
       long: this.long
     });
   }
+
+  showHCF(){
+    this.http
+       .get('http://localhost/eligtas/retrieve-emergencies.php')
+       .subscribe((data : any) =>
+       {
+          console.log(data);
+          this.request = data;
+          if(this.hcfshow == true){
+            for(let i=0; i<data.length; i++){
+              this.createMarker(data[i], i);
+            }
+            console.log("true");
+          }else{
+            for(let i=0; i<this.hcfMarkers.length; i++){
+              this.deleteMarker(i);
+            }
+            console.log("false");
+          }
+          
+       },
+       (error : any) =>
+       {
+          console.dir(error);
+       });  
+  }
+
+  createMarker(data:any, i:any){
+    var purpleIcon = new leaflet.Icon({
+      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-violet.png',
+      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      shadowSize: [41, 41]
+    });
+    var yellowIcon = new leaflet.Icon({
+      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-yellow.png',
+      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      shadowSize: [41, 41]
+    });  
+    var grayIcon = new leaflet.Icon({
+      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-grey.png',
+      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      shadowSize: [41, 41]
+    });  
+    var blackIcon = new leaflet.Icon({
+      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-black.png',
+      shadowUrl:'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      shadowSize: [41, 41]
+    });  
+
+    if(data.type=="Hospital"){
+      this.hcfMarkers[i] = leaflet.marker([data.request_lat,data.request_long], {icon: purpleIcon}).bindTooltip(data.name, 
+      {
+          permanent: true, 
+          direction: 'bottom'
+      }
+  ).addTo(this.map);
+    }else if(data.type=="Fire Station"){
+      this.hcfMarkers[i] = leaflet.marker([data.request_lat,data.request_long], {icon: yellowIcon}).bindTooltip(data.name, 
+        {
+            permanent: true, 
+            direction: 'bottom'
+        }
+    ).addTo(this.map);
+    }else if(data.type=="Police Station"){
+      this.hcfMarkers[i] = leaflet.marker([data.request_lat,data.request_long], {icon: grayIcon}).bindTooltip(data.name, 
+        {
+            permanent: true, 
+            direction: 'bottom'
+        }
+    ).addTo(this.map);
+    }else{
+      this.hcfMarkers[i] = leaflet.marker([data.request_lat,data.request_long], {icon: blackIcon}).bindTooltip(data.name, 
+        {
+            permanent: true, 
+            direction: 'bottom'
+        }
+    ).addTo(this.map);
+    }
+    
+  }
+
+  deleteMarker(i:any){
+    this.map.removeLayer(this.hcfMarkers[i]);
+  }
+
+  // rout(data){
+  
+  //   leaflet.Routing.control({
+  //     waypoints: [
+  //       leaflet.latLng(data.request_lat, data.request_long),
+  //       leaflet.latLng(this.currLat, this.currLong)
+  //     ],routeWhileDragging:false,
+      
+      
+  //   }).addTo(this.map)
+  // }
 
 }

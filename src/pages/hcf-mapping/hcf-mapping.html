@@ -14,7 +14,13 @@
 
 
 <ion-content>
-  <div id="map" style="width:100%; height: 100%;">
+    <div style="width:100%; height: 10%;">
+      <ion-item>
+        <ion-label>Show Health Care Facilities</ion-label>
+        <ion-toggle [(ngModel)]="hcfshow" (ngModelChange)="showHCF($event)" ></ion-toggle>
+      </ion-item>
+    </div>
+  <div id="map" style="width:100%; height: 90%;">
   </div>
 </ion-content>
 

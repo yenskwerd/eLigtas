@@ -41,6 +41,10 @@ export class EventReportPage {
     console.log(this.visual);
   }
 
+  pushChangePin(){
+    this.navCtrl.push('ChangePinPage');
+  }
+
   hearchanged(e:any, name){
     // console.log(e.checked);
     if(e.checked) {

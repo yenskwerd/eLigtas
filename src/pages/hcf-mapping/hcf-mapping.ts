@@ -139,6 +139,7 @@ export class HcfMappingPage {
        });  
   }
 
+  /********** SHOW MARKERS ************/
   createMarker(data:any, i:any){
     var purpleIcon = new leaflet.Icon({
       iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-violet.png',
@@ -173,7 +174,8 @@ export class HcfMappingPage {
       shadowSize: [41, 41]
     });  
 
-    if(data.type=="Hospital"){
+    //in db, there is a column "type" which contains the type of emergency facility
+    if(data.type == "Hospital"){
       this.hcfMarkers[i] = leaflet.marker([data.request_lat,data.request_long], {icon: purpleIcon}).bindTooltip(data.name, 
       {
           permanent: true, 
@@ -204,21 +206,12 @@ export class HcfMappingPage {
     }
     
   }
+  /******** END SHOW MARKERS **********/
 
+  /********** UNSHOW MARKERS ************/
   deleteMarker(i:any){
     this.map.removeLayer(this.hcfMarkers[i]);
   }
-
-  // rout(data){
-  
-  //   leaflet.Routing.control({
-  //     waypoints: [
-  //       leaflet.latLng(data.request_lat, data.request_long),
-  //       leaflet.latLng(this.currLat, this.currLong)
-  //     ],routeWhileDragging:false,
-      
-      
-  //   }).addTo(this.map)
-  // }
+  /******** END UNSHOW MARKERS **********/
 
 }

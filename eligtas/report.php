@@ -27,16 +27,16 @@
       $persons_injured = $request->persons_injured;
       $persons_trapped = $request->persons_trapped;
       $other_info = $request->other_info;
+      $special_needs = $request->special_needs;
       $request_lat = $request->request_lat;
       $request_long = $request->request_long;
-      $special_needs = $request->special_needs;
    }
    
 
       
    // Attempt to query database table and retrieve data
    try {
-      $stmt= $pdo->query('INSERT INTO request (request_type_id, person_to_check, event, persons_injured, persons_trapped, other_info, request_lat, request_long, special_needs) VALUES("'.$request_type_id.'","'.$person_to_check.'","'.$event.'","'.$persons_injured.'","'.$persons_trapped.'","'.$other_info.'","'.$request_lat.'","'.$request_long.'","'.$special_needs.'")');
+      $stmt= $pdo->query('INSERT INTO request (request_type_id, person_to_check, event, persons_injured, persons_trapped, other_info, special_needs, request_lat, request_long) VALUES("'.$request_type_id.'","'.$person_to_check.'","'.$event.'","'.$persons_injured.'","'.$persons_trapped.'","'.$other_info.'","'.$special_needs.'","'.$request_lat.'","'.$request_long.'")');
 
       while($row  = $stmt->fetch(PDO::FETCH_OBJ))
       {

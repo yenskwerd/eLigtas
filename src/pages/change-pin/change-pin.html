@@ -15,16 +15,19 @@
 <ion-content>
   <div>
       <!-- Add Search Function in .ts for Changing Pin -->
-      <ion-searchbar        
+      <!-- <ion-searchbar        
       [(ngModel)]="myInput"
       [showCancelButton]="shouldShowCancel"
       (ionInput)="onInput($event)"
       (ionCancel)="onCancel($event)"
       >
-    </ion-searchbar>
+    </ion-searchbar> -->
     <!-- End Search -->
     
   </div>
   <div id="map" style="width:100%; height: 90%;">
+  </div>
+  <div text-center>
+    <button ion-button class="reportBtn" (click)="pushPinLocation()" block>Pin Location</button>
   </div>
 </ion-content>

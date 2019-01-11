@@ -39,7 +39,6 @@ export class RequestVisualizationPage {
   markerGroup2 = leaflet.featureGroup();
   constructor(public navCtrl: NavController, public http : HttpClient, public http2 : Http, public navParams: NavParams, public alertCtrl : AlertController,
     public loginService: LoginServiceProvider) {
-      this.requestMarkers = [];
   }
 
   ionViewDidLoad() {

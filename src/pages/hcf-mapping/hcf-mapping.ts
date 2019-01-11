@@ -31,9 +31,10 @@ export class HcfMappingPage {
     this.hcfMarkers = [];
   }
 
-   ionViewDidLoad() {
+  ionViewDidLoad() {
     console.log('ionViewDidLoad HcfMappingPage');
   }
+
   ionViewDidEnter(){
     if(this.map != null){
       this.map.remove();
@@ -41,6 +42,16 @@ export class HcfMappingPage {
     }
     this.loadmap();
   }
+  
+  ionViewDidLeave() {
+    // this.map = null;
+    //leaflet.map("map").fitWorld = null;
+    // document.getElementById('map').outerHTML = "";
+    console.log("left");
+
+  }
+
+
 
   loadmap(){
     // this.map = leaflet.map("map").fitWorld();
@@ -54,6 +65,7 @@ export class HcfMappingPage {
     // }).on('locationfound', (e) => {
     //   console.log('found you');
     //   })
+   
     this.map = leaflet.map("map").fitWorld();
     leaflet.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
@@ -88,6 +100,7 @@ export class HcfMappingPage {
       }).on('locationerror', (err) => {
         alert(err.message);
     })
+    console.log(this.map);
   }
   // 10.3502881,123.8988732
   // 10.361011,123.9070701

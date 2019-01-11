@@ -110,6 +110,27 @@ export class RespondToRequestPage {
     this.navCtrl.setRoot('RequestVisualizationPage');
     //  location.reload();
         });
+
+    //////// LOG  //
+        
+    let data2 = {
+      user_id: this.loginService.logged_in_user_id,
+      action: "Respond",
+      action_datetime: new Date()
+    }
+    
+    this.http.post('http://localhost/eligtas/log.php', data2, options)
+    
+    .map(res=> res.json())
+    .subscribe((data2: any) =>
+    {
+       console.log(data2);
+    },
+    (error : any) =>
+    {
+      console.log(error);
+    });
+    /////// END OF LOG //
   }
  
 

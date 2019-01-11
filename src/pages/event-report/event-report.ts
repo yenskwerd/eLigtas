@@ -45,7 +45,11 @@ export class EventReportPage {
   }
 
   pushChangePin(){
-    this.navCtrl.push('ChangePinPage');
+    this.navCtrl.setRoot('ChangePinPage', {
+      lat: this.lat,
+      long: this.long,
+      request: "EventReportPage"
+    });
   }
 
   hearchanged(e:any, name){
@@ -185,10 +189,12 @@ export class EventReportPage {
         
         let data2 = {
           user_id: this.loginService.logged_in_user_id,
-          action: "Reported a/an " + this.event,
-          // action_datetime: new Date()
+          action: "Report",
+          action_done: this.event.value,
+          // action_datetime: null
+          action_datetime: new Date()
         }
-
+        
         this.http.post('http://localhost/eligtas/log.php', data2, options)
         
         .map(res=> res.json())

@@ -15,11 +15,14 @@
 
 <ion-content>
   
-  <!-- <ion-item>
-    <ion-label>Show Hospitals, etc.</ion-label>
-    <ion-toggle [(ngModel)]="status" (ionChange)="onChange()"></ion-toggle>
-    <ion-toggle [(ngModel)]="status"></ion-toggle>
-  </ion-item> -->
+    <!--Show Health Care Facilities Toggle-->
+    <div style="width:100%; height: 10%;">
+      <ion-item>
+        <ion-label>Show Health Care Facilities</ion-label>
+        <ion-toggle [(ngModel)]="requestshow" (ngModelChange)="showRequest($event)" ></ion-toggle>
+      </ion-item>
+    </div>
+    <!--End Show Health Care Facilities Toggle-->
 
   <div id="map" style="width:100%; height: 90%;">
   </div>

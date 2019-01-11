@@ -23,6 +23,8 @@ import { getOrCreateNodeInjectorForNode } from '@angular/core/src/render3/di';
 })
 export class RequestVisualizationPage {
   @ViewChild('map') mapContainer:ElementRef;
+  requestshow: any;
+  requestMarkers: any;
   map:any;
   currLat:any;
   currLong:any;
@@ -160,7 +162,7 @@ requestMarker(){
         for(let i=0; i<data.length; i++){
           // this.markerGroup.clearLayers();
           
-          this.createMarker(data[i]);
+          this.createMarker2(data[i]);
           // this.markerGroup.clearLayers();
           //console.log('lolol')
 
@@ -183,7 +185,7 @@ requestMarker(){
     
   
 
-  createMarker(data:any){
+  createMarker2(data:any){
     //this.map.removeLayer(this.markerGroup);
     //this.markerGroup.clearLayers();
       // this.map.removeLayer(this.markerGroup2);
@@ -372,6 +374,107 @@ requestMarker(){
     alert.present();
   }
 
+
+  showRequest(){
+    this.http
+       .get('http://localhost/eligtas/retrieve-emergencies.php')
+       .subscribe((data : any) =>
+       {
+          console.log(data);
+          this.request = data;
+          if(this.requestshow == true){
+            for(let i=0; i<data.length; i++){
+              this.createMarker(data[i], i);
+            }
+            console.log("true");
+          }else{
+            for(let i=0; i<this.requestMarkers.length; i++){
+              this.deleteMarker(i);
+            }
+            console.log("false");
+          }
+          
+       },
+       (error : any) =>
+       {
+          console.dir(error);
+       });  
+  }
+
+  /********** SHOW MARKERS ************/
+  createMarker(data:any, i:any){
+    var purpleIcon = new leaflet.Icon({
+      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-violet.png',
+      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      shadowSize: [41, 41]
+    });
+    var yellowIcon = new leaflet.Icon({
+      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-yellow.png',
+      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      shadowSize: [41, 41]
+    });  
+    var grayIcon = new leaflet.Icon({
+      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-grey.png',
+      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      shadowSize: [41, 41]
+    });  
+    var blackIcon = new leaflet.Icon({
+      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-black.png',
+      shadowUrl:'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      shadowSize: [41, 41]
+    });  
+
+    //in db, there is a column "type" which contains the type of emergency facility
+    if(data.type == "Hospital"){
+      this.requestMarkers[i] = leaflet.marker([data.request_lat,data.request_long], {icon: purpleIcon}).bindTooltip(data.name, 
+      {
+          permanent: true, 
+          direction: 'bottom'
+      }
+  ).addTo(this.map);
+    }else if(data.type=="Fire Station"){
+      this.requestMarkers[i] = leaflet.marker([data.request_lat,data.request_long], {icon: yellowIcon}).bindTooltip(data.name, 
+        {
+            permanent: true, 
+            direction: 'bottom'
+        }
+    ).addTo(this.map);
+    }else if(data.type=="Police Station"){
+      this.requestMarkers[i] = leaflet.marker([data.request_lat,data.request_long], {icon: grayIcon}).bindTooltip(data.name, 
+        {
+            permanent: true, 
+            direction: 'bottom'
+        }
+    ).addTo(this.map);
+    }else{
+      this.requestMarkers[i] = leaflet.marker([data.request_lat,data.request_long], {icon: blackIcon}).bindTooltip(data.name, 
+        {
+            permanent: true, 
+            direction: 'bottom'
+        }
+    ).addTo(this.map);
+    }
+    
+  }
+  /******** END SHOW MARKERS **********/
+
+  /********** UNSHOW MARKERS ************/
+  deleteMarker(i:any){
+    this.map.removeLayer(this.requestMarkers[i]);
+  }
+  /******** END UNSHOW MARKERS **********/
   
 }
 

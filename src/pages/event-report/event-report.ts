@@ -3,6 +3,8 @@ import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angu
 import {Http, Headers, RequestOptions}  from '@angular/http';
 import 'rxjs/add/operator/map';
 import { elementProperty } from '@angular/core/src/render3/instructions';
+import { LoginServiceProvider } from '../../providers/login-service/login-service';
+import { asTextData } from '@angular/core/src/view';
 
 /**
  * Generated class for the EventReportPage page.
@@ -17,6 +19,7 @@ import { elementProperty } from '@angular/core/src/render3/instructions';
   templateUrl: 'event-report.html',
 })
 export class EventReportPage {
+  today: number = Date.now();
   event: any;
   lat: any;
   long: any;
@@ -26,7 +29,7 @@ export class EventReportPage {
   mental: any;
   others: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl:AlertController,private http: Http) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl:AlertController,private http: Http, public loginService: LoginServiceProvider) {
     this.lat = navParams.data.lat;
     this.long = navParams.data.long;
   }
@@ -128,7 +131,7 @@ export class EventReportPage {
           
           alert.present();
          
-      }else {
+      } else {
         var headers = new Headers();
       
         headers.append("Accept", 'application/json');
@@ -152,6 +155,7 @@ export class EventReportPage {
         }
         console.log(data);
         this.http.post('http://localhost/eligtas/report.php', data, options)
+        
         .map(res=> res.json())
         .subscribe((data: any) =>
         {
@@ -177,7 +181,30 @@ export class EventReportPage {
         alert2.present();
         });
 
+        //////// LOG  //
+        
+        let data2 = {
+          user_id: this.loginService.logged_in_user_id,
+          action: "Reported a/an " + this.event,
+          // action_datetime: new Date()
+        }
+
+        this.http.post('http://localhost/eligtas/log.php', data2, options)
+        
+        .map(res=> res.json())
+        .subscribe((data2: any) =>
+        {
+           console.log(data2);
+        },
+        (error : any) =>
+        {
+          console.log(error);
+        });
+        /////// END OF LOG //
+
+
       }
+
   }
 
 }

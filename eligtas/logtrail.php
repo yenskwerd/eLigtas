@@ -21,22 +21,16 @@
    $data2 = file_get_contents("php://input");
    if(isset($data2)){
       $request = json_decode($data2);
-      $event = $request->event;
-      $request_type_id = $request->request_type_id;
-      $person_to_check = $request->person_to_check;
-      $persons_injured = $request->persons_injured;
-      $persons_trapped = $request->persons_trapped;
-      $other_info = $request->other_info;
-      $request_lat = $request->request_lat;
-      $request_long = $request->request_long;
-      $special_needs = $request->special_needs;
+      $user_id = $request->user_id;
+      $action = $request->action;
+      $action_datetime = $request->action_datetime;
    }
    
 
       
    // Attempt to query database table and retrieve data
    try {
-      $stmt= $pdo->query('INSERT INTO request (request_type_id, person_to_check, event, persons_injured, persons_trapped, other_info, request_lat, request_long, special_needs) VALUES("'.$request_type_id.'","'.$person_to_check.'","'.$event.'","'.$persons_injured.'","'.$persons_trapped.'","'.$other_info.'","'.$request_lat.'","'.$request_long.'","'.$special_needs.'")');
+      $stmt= $pdo->query('INSERT INTO logtrail (action, action_datetime, user_id) VALUES("'.$action.'","'.$action_datetime.'","'.$user_id.'")');
 
       while($row  = $stmt->fetch(PDO::FETCH_OBJ))
       {
@@ -45,7 +39,7 @@
       }
 
       // Return data as JSON
-      echo json_encode("test");
+      echo json_encode("logtrail");
    }
    catch(PDOException $e)
    {

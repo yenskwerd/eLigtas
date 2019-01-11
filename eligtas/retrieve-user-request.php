@@ -30,7 +30,7 @@
       while($row  = $stmt->fetch(PDO::FETCH_OBJ))
       {
          // Assign each row of data to associative array
-         $data[] = $row;
+         $data = $row;
       }
 
       // Return data as JSON

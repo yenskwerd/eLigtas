@@ -127,7 +127,9 @@ export class RequestVisualizationPage {
       }).addTo(this.map);
       this.map.locate({
         setView: true,
-        maxZoom: 15
+        maxZoom: 15,
+        watch: true,
+        enableHighAccuracy: true
       }).on('locationfound', (e) => {
         this.currLat= e.latitude;
         this.currLong= e.longitude;

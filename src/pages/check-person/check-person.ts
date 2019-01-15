@@ -1,6 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import {Http, Headers, RequestOptions}  from '@angular/http';
+import { LoginServiceProvider } from '../../providers/login-service/login-service';
 import 'rxjs/add/operator/map';
 /**
  * Generated class for the CheckPersonPage page.
@@ -24,9 +25,17 @@ export class CheckPersonPage {
   mental: any;
   others: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl:AlertController,private http: Http) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl:AlertController,private http: Http, public loginService: LoginServiceProvider) {
     this.lat = navParams.data.lat;
     this.long = navParams.data.long;
+  }
+
+  pushChangePin(){
+    this.navCtrl.setRoot('ChangePinPage', {
+      lat: this.lat,
+      long: this.long,
+      request: "EventReportPage"
+    });
   }
 
   visualchanged(e:any, name){
@@ -141,7 +150,13 @@ export class CheckPersonPage {
           other_info: this.other_info.value,
           request_lat: this.lat,
           request_long: this.long,
-          special_needs: this.others
+          special_needs: this.others,
+
+          /********** LOG **********/
+          user_id: this.loginService.logged_in_user_id,
+          action: "Check Person",
+          action_done: this.event,
+          action_datetime: new Date()
         }
         console.log(data);
         this.http.post('http://localhost/eligtas/report.php', data, options)

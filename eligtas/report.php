@@ -30,6 +30,9 @@
       $request_lat = $request->request_lat;
       $request_long = $request->request_long;
       $special_needs = $request->special_needs;
+      $user_id = $request->user_id;
+      $action = $request->action;
+      $action_datetime = $request->action_datetime;
    }
    
 
@@ -37,8 +40,10 @@
    // Attempt to query database table and retrieve data
    try {
       $stmt= $pdo->query('INSERT INTO request (request_type_id, person_to_check, event, persons_injured, persons_trapped, other_info, request_lat, request_long, special_needs) VALUES("'.$request_type_id.'","'.$person_to_check.'","'.$event.'","'.$persons_injured.'","'.$persons_trapped.'","'.$other_info.'","'.$request_lat.'","'.$request_long.'","'.$special_needs.'")');
+// try {
+      $stmt= $pdo->query('INSERT INTO logtrail ( user_id, action_datetime, action) VALUES("'.$user_id.'","'.$action_datetime.'","'.$action.'")');
 
-      while($row  = $stmt->fetch(PDO::FETCH_OBJ))
+      while($row1  = $stmt->fetch(PDO::FETCH_OBJ))
       {
          // Assign each row of data to associative array
          $data[] = $row;
@@ -47,9 +52,21 @@
       // Return data as JSON
       echo json_encode("test");
    }
+//    catch(PDOException $e)
+//    {
+// //       echo $e->getMessage();
+//     }
+      // while($row  = $stmt->fetch(PDO::FETCH_OBJ))
+      // {
+      //    // Assign each row of data to associative array
+      //    $data[] = $row;
+      // }
+
+      // Return data as JSON
+   //    echo json_encode("test");
+   // }
    catch(PDOException $e)
    {
       echo $e->getMessage();
    }
-
 ?>

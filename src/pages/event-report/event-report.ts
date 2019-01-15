@@ -28,12 +28,40 @@ export class EventReportPage {
   walk: any;
   mental: any;
   others: any;
-
   constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl:AlertController,private http: Http, public loginService: LoginServiceProvider) {
     this.lat = navParams.data.lat;
     this.long = navParams.data.long;
   }
 
+  // log(){
+  //   var headers = new Headers();
+      
+  //       headers.append("Accept", 'application/json');
+  //       headers.append('Content-Type', 'application/x-www-form-urlencoded');
+  //       headers.append('Access-Control-Allow-Origin' , '*');
+  //       headers.append('Access-Control-Allow-Headers' , 'Content-Type');
+  //       headers.append('Access-Control-Allow-Methods', 'POST, GET, OPTIONS, PUT');
+
+  //   let options = new RequestOptions({ headers: headers });
+  //   let data2 = {
+  //         user_id: this.loginService.logged_in_user_id,
+  //         action: "Report",
+  //         action_done: this.event,
+  //         action_datetime: new Date()
+  //       }
+  //       console.log(data2);
+  //       this.http.post('http://localhost/eligtas/log.php', data2, options)
+        
+  //       .map(res=> res.json())
+  //       .subscribe((data2: any) =>
+  //       {
+  //          console.log(data2);
+  //       },
+  //       (error : any) =>
+  //       {
+  //         console.log(error);
+  //       });
+  //   }
   visualchanged(e:any, name){
     // console.log(e.checked);
     if(e.checked) {
@@ -125,7 +153,7 @@ export class EventReportPage {
           
           alert.present();
         
-        } else if(this.persons_trapped.value==""){
+    } else if (this.persons_trapped.value==""){
         
           let alert = this.alertCtrl.create({
             message:"Persons trapped field is empty!",
@@ -135,7 +163,7 @@ export class EventReportPage {
           
           alert.present();
          
-      } else {
+    } else {
         var headers = new Headers();
       
         headers.append("Accept", 'application/json');
@@ -146,6 +174,7 @@ export class EventReportPage {
         
         
         let options = new RequestOptions({ headers: headers });
+
         let data = {
           request_type_id : 1,
           person_to_check : null,
@@ -155,8 +184,20 @@ export class EventReportPage {
           other_info: this.other_info.value,
           request_lat: this.lat,
           request_long: this.long,
-          special_needs: this.others
+          special_needs: this.others,
+
+          /********** LOG **********/
+          user_id: this.loginService.logged_in_user_id,
+          action: "Event Report",
+          action_done: this.event,
+          action_datetime: new Date()
         }
+        // let data2 = {
+        //   user_id: this.loginService.logged_in_user_id,
+        //   action: "Report",
+        //   action_done: this.event,
+        //   action_datetime: new Date()
+        // }
         console.log(data);
         this.http.post('http://localhost/eligtas/report.php', data, options)
         
@@ -168,10 +209,14 @@ export class EventReportPage {
            let alert = this.alertCtrl.create({
             message: "Report sent successfully!",
             buttons: ['OK']
-            }); 
-            this.navCtrl.setRoot('HcfMappingPage');
+            });
+            // this.navCtrl.setRoot('HcfMappingPage');
             alert.present();
+            this.navCtrl.setRoot('HcfMappingPage');
             //this.navCtrl.setRoot('PilgrimProfilePage'); 
+            //this.log();
+
+
         },
         (error : any) =>
         {
@@ -184,29 +229,6 @@ export class EventReportPage {
 
         alert2.present();
         });
-
-        //////// LOG  //
-        
-        let data2 = {
-          user_id: this.loginService.logged_in_user_id,
-          action: "Report",
-          action_done: this.event.value,
-          // action_datetime: null
-          action_datetime: new Date()
-        }
-        
-        this.http.post('http://localhost/eligtas/log.php', data2, options)
-        
-        .map(res=> res.json())
-        .subscribe((data2: any) =>
-        {
-           console.log(data2);
-        },
-        (error : any) =>
-        {
-          console.log(error);
-        });
-        /////// END OF LOG //
 
 
       }

@@ -3,6 +3,7 @@ import { IonicPage, NavController, LoadingController, AlertController, NavParams
 import {Http, Headers, RequestOptions}  from '@angular/http';
 import { LoginServiceProvider } from '../../providers/login-service/login-service';
 import 'rxjs/add/operator/map';
+import { HTTP } from '@ionic-native/http';
 
 /**
  * Generated class for the LoginPage page.

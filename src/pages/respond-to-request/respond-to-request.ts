@@ -57,7 +57,7 @@ export class RespondToRequestPage {
   //   }
   //   console.log(data);
 
-  //  this.http.post('http://localhost/eligtas/retrieve-user-request.php',data,options)
+  //  this.http.post('http://172.16.30.28/eligtas/retrieve-user-request.php',data,options)
   //  .map(res=> res.json())
   //    .subscribe(
   //      res => {
@@ -94,7 +94,7 @@ export class RespondToRequestPage {
     });
   
     loader.present().then(() => {
-      this.http.post('http://localhost/eligtas/update-rescue.php',data,options)
+      this.http.post('http://172.16.30.28/eligtas/update-rescue.php',data,options)
       .map(res=> res.json())
         .subscribe(
           res => {
@@ -119,7 +119,7 @@ export class RespondToRequestPage {
       action_datetime: new Date()
     }
     
-    this.http.post('http://localhost/eligtas/log.php', data2, options)
+    this.http.post('http://172.16.30.28/eligtas/log.php', data2, options)
     
     .map(res=> res.json())
     .subscribe((data2: any) =>
@@ -150,7 +150,7 @@ export class RespondToRequestPage {
   load() : void
   {
      this.http
-     .get('http://localhost/eligtas/retrieve-request.php')
+     .get('http://172.16.30.28/eligtas/retrieve-request.php')
      .subscribe((data : any) =>
      {
         console.dir(data);

@@ -6,7 +6,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { Geolocation } from '@ionic-native/geolocation';
 import { HttpClientModule } from '@angular/common/http';
 import { HttpModule } from '@angular/http';
-
+import { HTTP } from '@ionic-native/http';
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { LoginServiceProvider } from '../providers/login-service/login-service';
@@ -32,7 +32,8 @@ import { LoginServiceProvider } from '../providers/login-service/login-service';
     SplashScreen,
     Geolocation,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    LoginServiceProvider
+    LoginServiceProvider,
+    HTTP
   ]
 })
 export class AppModule {}

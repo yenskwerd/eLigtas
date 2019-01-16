@@ -80,7 +80,7 @@ export class RequestVisualizationPage {
     }
     console.log(data);
 
-   this.http2.post('http://localhost/eligtas/retrieve-user-request.php',data,options)
+   this.http2.post('http://172.16.30.28/eligtas/retrieve-user-request.php',data,options)
    .map(res=> res.json())
      .subscribe(
        res => {
@@ -104,7 +104,7 @@ export class RequestVisualizationPage {
     }
     console.log(data);
 
-   this.http2.post('http://localhost/eligtas/retrieve-user-request.php',data,options)
+   this.http2.post('http://172.16.30.28/eligtas/retrieve-user-request.php',data,options)
    .map(res=> res.json())
      .subscribe(
        res => {
@@ -151,7 +151,7 @@ export class RequestVisualizationPage {
 requestMarker(){
   this.dataRefresher = setInterval(() =>{
     this.http
-     .get('http://localhost/eligtas/retrieve-request.php')
+     .get('http://172.16.30.28/eligtas/retrieve-request.php')
      .subscribe((data : any) =>
      {
       // this.map.removeLayer(this.markerGroup);
@@ -380,7 +380,7 @@ requestMarker(){
 
   showRequest(){
     this.http
-       .get('http://localhost/eligtas/retrieve-emergencies.php')
+       .get('http://172.16.30.28/eligtas/retrieve-emergencies.php')
        .subscribe((data : any) =>
        {
           console.log(data);

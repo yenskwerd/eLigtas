@@ -50,7 +50,7 @@ export class EventReportPage {
   //         action_datetime: new Date()
   //       }
   //       console.log(data2);
-  //       this.http.post('http://172.16.30.28/eligtas/log.php', data2, options)
+  //       this.http.post('http://usc-dcis.com/eligtas.app/log.php', data2, options)
         
   //       .map(res=> res.json())
   //       .subscribe((data2: any) =>
@@ -199,7 +199,7 @@ export class EventReportPage {
         //   action_datetime: new Date()
         // }
         console.log(data);
-        this.http.post('http://172.16.30.28/eligtas/report.php', data, options)
+        this.http.post('http://usc-dcis.com/eligtas.app/report.php', data, options)
         
         .map(res=> res.json())
         .subscribe((data: any) =>

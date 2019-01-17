@@ -128,7 +128,7 @@ export class HcfMappingPage {
 
   showHCF(){
     this.http
-       .get('http://172.16.30.28/eligtas/retrieve-emergencies.php')
+       .get('http://usc-dcis.com/eligtas.app/retrieve-emergencies.php')
        .subscribe((data : any) =>
        {
           console.log(data);

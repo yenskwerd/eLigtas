@@ -87,7 +87,7 @@ export class LoginPage {
       });
     
       loader.present().then(() => {
-        this.http.post('http://localhost/eligtas/login.php',data,options)
+        this.http.post('http://usc-dcis.com/eligtas.app/login.php',data,options)
         .map(res=> res.json())
           .subscribe(
             res => {

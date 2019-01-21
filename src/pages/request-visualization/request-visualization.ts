@@ -37,6 +37,7 @@ export class RequestVisualizationPage {
   dataRefresher: any;
   markerGroup = leaflet.featureGroup();
   markerGroup2 = leaflet.featureGroup();
+  public status : any=false;
   constructor(public navCtrl: NavController, public http : HttpClient, public http2 : Http, public navParams: NavParams, public alertCtrl : AlertController,
     public loginService: LoginServiceProvider) {
       this.requestMarkers = [];
@@ -45,21 +46,16 @@ export class RequestVisualizationPage {
   ionViewDidLoad() {
     console.log("loaded");
     //this.getUserRequest();
+ 
+   
   }
   ionViewWillEnter(){
   }
   ionViewDidEnter(){
-    // if(this.map != null){
- //      this.map.remove();
-    //   console.log("Entered != null");
-    // }
     this.loadmap();
   }
 
   ionViewDidLeave() {
-    // this.map = null;
-    //leaflet.map("map").fitWorld = null;
-    // document.getElementById('map').outerHTML = "";
     console.log("left");
     this.map.remove();
   }
@@ -154,17 +150,17 @@ export class RequestVisualizationPage {
 }
 requestMarker(){
   this.dataRefresher = setInterval(() =>{
+    //var latlng_a = new leaflet.LatLng(this.marker.latitude,this.marker.longitude), latlng_b;
+    //latlng_b = 
+    //if(this.marker)
+    if(this.loginService.logged_in_user_request_id!= null){
+      this.status = true;
+    }
     this.http
      .get('http://usc-dcis.com/eligtas.app/retrieve-request.php')
      .subscribe((data : any) =>
      {
-      // this.map.removeLayer(this.markerGroup);
-      //this.map.removeLayer(this.markerGroup2);
-      //this.dataRefresher = setInterval(() =>{
-        //console.log(data);
         this.request = data;
-        //this.map.removeLayer(this.markerGroup);
-        // this.generateParish(data);
         this.markerGroup.clearLayers();
         for(let i=0; i<data.length; i++){
           this.createMarker2(data[i]);
@@ -174,6 +170,8 @@ requestMarker(){
      {
         console.dir(error);
      });
+
+     
      },1000);
   
 }
@@ -232,9 +230,7 @@ requestMarker(){
     //     this.presentConfirm(data);
 
     //   })
-
-    
-    var circle = leaflet.circle([data.request_lat, data.request_long], {
+    leaflet.circle([data.request_lat, data.request_long], {
       color: 'Green',
           fillColor: '#81C784',
         fillOpacity: 0.5,

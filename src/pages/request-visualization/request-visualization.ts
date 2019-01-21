@@ -128,23 +128,18 @@ export class RequestVisualizationPage {
       this.map.locate({
         setView: true,
         maxZoom: 15,
-        watch: true,
+        // watch: true,
         enableHighAccuracy: true
       }).on('locationfound', (e) => {
         this.currLat= e.latitude;
         this.currLong= e.longitude;
-        this.marker=leaflet.marker([e.latitude,e.longitude], {icon: redIcon,draggable:false}).addTo(this.map)
+        this.marker=leaflet.marker([e.latitude,e.longitude], {icon: redIcon,draggable:false})
         .on('click', () => {
           alert('You are here!');
         })
-        // var circle = leaflet.circle([e.latitude, e.longitude], {
-        //   color: 'Green',
-        //       fillColor: '#81C784',
-        //     fillOpacity: 0.5,
-        //     radius: 2000
-        // }).addTo(this.map);
-        // this.markerGroup2.addLayer(this.marker);
-        // this.map.addLayer(this.marker);
+        this.markerGroup2.addLayer(this.marker);
+        this.map.addLayer(this.marker);
+        this.markerGroup2.clearLayers();
         }).on('locationerror', (err) => {
           alert(err.message);
       })

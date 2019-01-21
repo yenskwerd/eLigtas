@@ -16,8 +16,13 @@ export class MyApp {
     this.initializeApp();
 
     this.pages = [
-      { icon: 'map', title: 'AAAA', component: HomePage},
-      { icon: 'paper', title: 'BBBB', component: ""},
+      { icon: '', title: 'Go to First Aid App', component: ""},
+      { icon: '', title: 'PDCAT Calculator', component: ""},
+      { icon: '', title: 'View Reports', component: ""},
+      { icon: '', title: 'Go to Batingaw App', component: ""},
+      { icon: '', title: 'Go to Red Cross App', component: ""},
+      { icon: '', title: 'Go to Google Maps', component: ""},
+      { icon: '', title: 'Go to MIMS App', component: ""}
     ]; 
     
   }

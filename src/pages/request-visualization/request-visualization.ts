@@ -226,14 +226,14 @@ requestMarker(){
 
     } else if(data.request_status_id==2){
       this.marker2=leaflet.marker([data.request_lat,data.request_long], {icon: grayIcon});
-     
-    }else{
-      this.marker2=leaflet.marker([data.request_lat,data.request_long], {icon: purpleIcon}).on('click', () => {
-        this.presentConfirm(data);
-
-      })
-
     }
+    // }else{
+    //   this.marker2=leaflet.marker([data.request_lat,data.request_long], {icon: purpleIcon}).on('click', () => {
+    //     this.presentConfirm(data);
+
+    //   })
+
+    // }
     this.markerGroup.addLayer(this.marker2);
     this.map.addLayer(this.markerGroup);
   }

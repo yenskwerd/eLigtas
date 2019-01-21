@@ -81,12 +81,12 @@ export class HcfMappingPage {
       }).bindPopup("You are here xd")
       markerGroup.addLayer(marker);
       this.map.addLayer(markerGroup);
-      var circle = leaflet.circle([e.latitude, e.longitude], {
-        color: 'Green',
-            fillColor: '#81C784',
-          fillOpacity: 0.5,
-          radius: 2000
-      }).addTo(this.map);
+      // var circle = leaflet.circle([e.latitude, e.longitude], {
+      //   color: 'Green',
+      //       fillColor: '#81C784',
+      //     fillOpacity: 0.5,
+      //     radius: 2000
+      // }).addTo(this.map);
       this.lat = e.latitude;
       this.long = e.longitude;
       // leaflet.marker([10.3502881,123.8988732]).on('click', () => {

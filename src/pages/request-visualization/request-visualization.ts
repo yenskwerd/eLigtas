@@ -167,19 +167,8 @@ requestMarker(){
         // this.generateParish(data);
         this.markerGroup.clearLayers();
         for(let i=0; i<data.length; i++){
-          // this.markerGroup.clearLayers();
-          
           this.createMarker2(data[i]);
-          // this.markerGroup.clearLayers();
-          //console.log('lolol')
-
         }
-        //console.log(this.markerGroup);
-        // this.map.removeLayer(this.markerGroup);
-        // this.markerGroup2.clearLayers();
-        // this.map.removeLayer(this.markerGroup2);
-      // },1000);
-      // this.map.removeLayer(this.markerGroup);
     },
      (error : any) =>
      {
@@ -193,11 +182,7 @@ requestMarker(){
   
 
   createMarker2(data:any){
-    //this.map.removeLayer(this.markerGroup);
-    //this.markerGroup.clearLayers();
-      // this.map.removeLayer(this.markerGroup2);
-      // this.map.removeLayer(this.marker2);
-   // let markerGroup = leaflet.featureGroup();
+    console.log("createmarker2");
     var purpleIcon = new leaflet.Icon({
       iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-violet.png',
       shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
@@ -233,42 +218,20 @@ requestMarker(){
     if(data.request_status_id==0){
       this.marker2=leaflet.marker([data.request_lat,data.request_long], {icon: purpleIcon}).on('click', () => {
         this.presentConfirm(data);
-
-        // this.markerGroup.addLayer(this.marker2);
       })
-      // markerGroup.addLayer(this.marker2);
-      // this.map.addLayer(this.marker2);
-      //}).bindPopup("Need help").addTo(this.map);
-      
-      // leaflet.marker([data.request_lat,data.request_long]).on('click', () => {
-      //   this.presentConfirm(data);
-      // }).bindPopup("Need help").addTo(this.map);
 
-    } else if(data.request_status_id==1 || data.request_id == this.user_request_id){
+    } else if(data.request_status_id==1 && data.request_id == this.user_request_id){
       this.rout(data);
       this.marker2=leaflet.marker([data.request_lat,data.request_long], {icon: yellowIcon});
 
-      // markerGroup.addLayer(this.marker2);
-      //   this.map.addLayer(this.marker2);
-      // this.markerGroup.addLayer(this.marker2);
     } else if(data.request_status_id==2){
       this.marker2=leaflet.marker([data.request_lat,data.request_long], {icon: grayIcon});
-      // this.markerGroup.addLayer(this.marker2);
-      // markerGroup.addLayer(this.marker2);
-      //   this.map.addLayer(this.marker2);
      
     }else{
       this.marker2=leaflet.marker([data.request_lat,data.request_long], {icon: purpleIcon}).on('click', () => {
         this.presentConfirm(data);
 
-        // markerGroup.addLayer(this.marker2);
-        // this.map.addLayer(this.marker2);
       })
-      // }).bindPopup("Need help").addTo(this.map);
-      
-
-      // this.markerGroup.addLayer(this.marker2);
-        // this.map.addLayer(this.marker2);
 
     }
     var circle = leaflet.circle([data.request_lat, data.request_long], {

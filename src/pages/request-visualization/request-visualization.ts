@@ -31,6 +31,7 @@ export class RequestVisualizationPage {
   // marker: any;
   marker: any;
   marker2: any;
+  marker3: any;
   request: any;
   index: any;
   user_request_id: any;
@@ -38,6 +39,7 @@ export class RequestVisualizationPage {
   markerGroup = leaflet.featureGroup();
   markerGroup2 = leaflet.featureGroup();
   public status : any=false;
+  markerGroup3 = leaflet.featureGroup();
   constructor(public navCtrl: NavController, public http : HttpClient, public http2 : Http, public navParams: NavParams, public alertCtrl : AlertController,
     public loginService: LoginServiceProvider) {
       this.requestMarkers = [];
@@ -134,7 +136,7 @@ export class RequestVisualizationPage {
           alert('You are here!');
         })
         var circle = leaflet.circle([e.latitude, e.longitude], {
-          color: 'Green',
+          color: 'rgba(255,255,255,0)',
               fillColor: '#81C784',
             fillOpacity: 0.5,
             radius: 100
@@ -230,10 +232,12 @@ requestMarker(){
     //     this.presentConfirm(data);
 
     //   })
-    leaflet.circle([data.request_lat, data.request_long], {
-      color: 'Green',
+
+    
+    var circle = leaflet.circle([data.request_lat, data.request_long], {
+      color: "rgba(255,255,255,0)",
           fillColor: '#81C784',
-        fillOpacity: 0.5,
+        fillOpacity: 0,
         radius: 100
     }).addTo(this.map);
     this.markerGroup.addLayer(this.marker2);
@@ -257,15 +261,49 @@ requestMarker(){
       popupAnchor: [1, -34],
       shadowSize: [41, 41]
     });  
-    //this.map.removeLayer(this.marker);
+    this.markerGroup2.clearLayers();
+    //this.markerGroup.clearLayers();
+    this.map.locate({
+      setView: true,
+      maxZoom: 15,
+      // watch: true,
+      enableHighAccuracy: true
+    })
     leaflet.Routing.control({
       waypoints: [
         leaflet.latLng(data.request_lat, data.request_long),
         leaflet.latLng(this.currLat, this.currLong),
       ],routeWhileDragging:false,
-    
     }).addTo(this.map)
-    this.markerGroup2.clearLayers();
+    .on('locationfound', (e) => {
+      this.currLat= e.latitude;
+      this.currLong= e.longitude;
+      this.marker3=leaflet.marker([e.latitude,e.longitude], {icon: redIcon,draggable:false})
+      //leaflet.marker([e.latitude,e.longitude], {icon: redIcon,draggable:false})
+      var circle = leaflet.circle([e.latitude, e.longitude], {
+        color: 'Green',
+            fillColor: '#81C784',
+          fillOpacity: 0.5,
+          radius: 100
+      })
+      .on('click', () => {
+      alert('You are here!');
+      console.log(this.marker3.latLng.latitude);
+    })
+      .addTo(this.map);
+      this.markerGroup3.addLayer(this.marker3);
+      this.map.addLayer(this.markerGroup3);
+      }).on('locationerror', (err) => {
+        alert(err.message);
+    })
+    //this.map.removeLayer(this.marker);
+    // leaflet.Routing.control({
+    //     waypoints: [
+    //       leaflet.latLng(data.request_lat, data.request_long),
+    //       leaflet.latLng(this.currLat, this.currLong),
+    //     ],routeWhileDragging:false,
+    // }).addTo(this.map)
+    //this.markerGroup2.clearLayers();
     //leaflet.marker([this.currLat,this.currLong], {icon: redIcon, draggable:false}).addTo(this.map);
     
   }

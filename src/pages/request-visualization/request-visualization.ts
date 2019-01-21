@@ -228,14 +228,14 @@ requestMarker(){
 
     } else if(data.request_status_id==2){
       this.marker2=leaflet.marker([data.request_lat,data.request_long], {icon: grayIcon});
-     
-    }else{
-      this.marker2=leaflet.marker([data.request_lat,data.request_long], {icon: purpleIcon}).on('click', () => {
-        this.presentConfirm(data);
-
-      })
-
     }
+    // }else{
+    //   this.marker2=leaflet.marker([data.request_lat,data.request_long], {icon: purpleIcon}).on('click', () => {
+    //     this.presentConfirm(data);
+
+    //   })
+
+    
     var circle = leaflet.circle([data.request_lat, data.request_long], {
       color: "rgba(255,255,255,0)",
           fillColor: '#81C784',

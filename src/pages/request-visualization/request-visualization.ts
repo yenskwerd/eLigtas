@@ -268,15 +268,23 @@ requestMarker(){
     this.map.locate({
       setView: true,
       maxZoom: 15,
-      // watch: true,
+      watch: true,
       enableHighAccuracy: true
     })
     leaflet.Routing.control({
       waypoints: [
         leaflet.latLng(data.request_lat, data.request_long),
         leaflet.latLng(this.currLat, this.currLong),
-      ],routeWhileDragging:false,
-    }).addTo(this.map)
+      ],
+       routeWhileDragging:false,
+       showAlternatives:true,
+    })
+    // leaflet.Routing.plan({
+    //   Waypoint[leaflet.latLng(data.request_lat, data.request_long),
+    //     leaflet.latLng(this.currLat, this.currLong)],
+    //   addWaypoints:false,
+    // })
+    .addTo(this.map)
     .on('locationfound', (e) => {
       this.currLat= e.latitude;
       this.currLong= e.longitude;

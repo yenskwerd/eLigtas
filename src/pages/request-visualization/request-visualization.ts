@@ -127,7 +127,7 @@ export class RequestVisualizationPage {
       }).addTo(this.map);
       this.map.locate({
         setView: true,
-        //maxZoom: 15,
+        maxZoom: 15,
         watch: true,
         enableHighAccuracy: true
       }).on('locationfound', (e) => {
@@ -137,6 +137,12 @@ export class RequestVisualizationPage {
         .on('click', () => {
           alert('You are here!');
         })
+        // var circle = leaflet.circle([e.latitude, e.longitude], {
+        //   color: 'Green',
+        //       fillColor: '#81C784',
+        //     fillOpacity: 0.5,
+        //     radius: 2000
+        // }).addTo(this.map);
         // this.markerGroup2.addLayer(this.marker);
         // this.map.addLayer(this.marker);
         }).on('locationerror', (err) => {

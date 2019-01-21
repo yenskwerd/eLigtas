@@ -127,20 +127,18 @@ export class RequestVisualizationPage {
       }).addTo(this.map);
       this.map.locate({
         setView: true,
-        maxZoom: 15,
+        //maxZoom: 15,
         watch: true,
         enableHighAccuracy: true
       }).on('locationfound', (e) => {
         this.currLat= e.latitude;
         this.currLong= e.longitude;
-        //  let markerGroup2 = leaflet.featureGroup();
-        //this.marker= leaflet.marker([e.latitude, e.longitude],{draggable:false})
-        this.marker=leaflet.marker([e.latitude,e.longitude], {icon: redIcon,draggable:false})
+        this.marker=leaflet.marker([e.latitude,e.longitude], {icon: redIcon,draggable:false}).addTo(this.map)
         .on('click', () => {
           alert('You are here!');
         })
-        this.markerGroup2.addLayer(this.marker);
-        this.map.addLayer(this.marker);
+        // this.markerGroup2.addLayer(this.marker);
+        // this.map.addLayer(this.marker);
         }).on('locationerror', (err) => {
           alert(err.message);
       })

@@ -7,6 +7,9 @@
 <ion-header>
 
   <ion-navbar color="primary">
+      <button ion-button menuToggle>
+          <ion-icon name="menu"></ion-icon>
+      </button>
     <ion-title text-center>Request Visualization</ion-title>
   </ion-navbar>
 
@@ -32,5 +35,9 @@
 </ion-content>
 
 <ion-footer text-center>
-  <button ion-button (click)="pushReport()">Report</button>
+    <div *ngIf="status"><button ion-button class="reportBtn" >Arrive</button> 
+    <button ion-button class="reportBtn" >Call for Backup</button>
+    <button ion-button (click)="pushReport()" class="reportBtn" >Report</button>
+    </div>
+  <h1>//ADS//</h1>
 </ion-footer>

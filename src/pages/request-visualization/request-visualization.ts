@@ -31,12 +31,15 @@ export class RequestVisualizationPage {
   // marker: any;
   marker: any;
   marker2: any;
+  marker3: any;
   request: any;
   index: any;
   user_request_id: any;
   dataRefresher: any;
   markerGroup = leaflet.featureGroup();
   markerGroup2 = leaflet.featureGroup();
+  public status : any=false;
+  markerGroup3 = leaflet.featureGroup();
   constructor(public navCtrl: NavController, public http : HttpClient, public http2 : Http, public navParams: NavParams, public alertCtrl : AlertController,
     public loginService: LoginServiceProvider) {
       this.requestMarkers = [];
@@ -45,21 +48,16 @@ export class RequestVisualizationPage {
   ionViewDidLoad() {
     console.log("loaded");
     //this.getUserRequest();
+ 
+   
   }
   ionViewWillEnter(){
   }
   ionViewDidEnter(){
-    // if(this.map != null){
- //      this.map.remove();
-    //   console.log("Entered != null");
-    // }
     this.loadmap();
   }
 
   ionViewDidLeave() {
-    // this.map = null;
-    //leaflet.map("map").fitWorld = null;
-    // document.getElementById('map').outerHTML = "";
     console.log("left");
     this.map.remove();
   }
@@ -138,7 +136,7 @@ export class RequestVisualizationPage {
           alert('You are here!');
         })
         var circle = leaflet.circle([e.latitude, e.longitude], {
-          color: 'Green',
+          color: 'rgba(255,255,255,0)',
               fillColor: '#81C784',
             fillOpacity: 0.5,
             radius: 100
@@ -154,17 +152,17 @@ export class RequestVisualizationPage {
 }
 requestMarker(){
   this.dataRefresher = setInterval(() =>{
+    //var latlng_a = new leaflet.LatLng(this.marker.latitude,this.marker.longitude), latlng_b;
+    //latlng_b = 
+    //if(this.marker)
+    if(this.loginService.logged_in_user_request_id!= null){
+      this.status = true;
+    }
     this.http
      .get('http://usc-dcis.com/eligtas.app/retrieve-request.php')
      .subscribe((data : any) =>
      {
-      // this.map.removeLayer(this.markerGroup);
-      //this.map.removeLayer(this.markerGroup2);
-      //this.dataRefresher = setInterval(() =>{
-        //console.log(data);
         this.request = data;
-        //this.map.removeLayer(this.markerGroup);
-        // this.generateParish(data);
         this.markerGroup.clearLayers();
         for(let i=0; i<data.length; i++){
           this.createMarker2(data[i]);
@@ -174,6 +172,8 @@ requestMarker(){
      {
         console.dir(error);
      });
+
+     
      },1000);
   
 }
@@ -226,18 +226,18 @@ requestMarker(){
 
     } else if(data.request_status_id==2){
       this.marker2=leaflet.marker([data.request_lat,data.request_long], {icon: grayIcon});
-     
-    }else{
-      this.marker2=leaflet.marker([data.request_lat,data.request_long], {icon: purpleIcon}).on('click', () => {
-        this.presentConfirm(data);
-
-      })
-
     }
+    // }else{
+    //   this.marker2=leaflet.marker([data.request_lat,data.request_long], {icon: purpleIcon}).on('click', () => {
+    //     this.presentConfirm(data);
+
+    //   })
+
+    
     var circle = leaflet.circle([data.request_lat, data.request_long], {
-      color: 'Green',
+      color: "rgba(255,255,255,0)",
           fillColor: '#81C784',
-        fillOpacity: 0.5,
+        fillOpacity: 0,
         radius: 100
     }).addTo(this.map);
     this.markerGroup.addLayer(this.marker2);
@@ -261,15 +261,57 @@ requestMarker(){
       popupAnchor: [1, -34],
       shadowSize: [41, 41]
     });  
-    //this.map.removeLayer(this.marker);
+    this.markerGroup2.clearLayers();
+    //this.markerGroup.clearLayers();
+    this.map.locate({
+      setView: true,
+      maxZoom: 15,
+      watch: true,
+      enableHighAccuracy: true
+    })
     leaflet.Routing.control({
       waypoints: [
         leaflet.latLng(data.request_lat, data.request_long),
         leaflet.latLng(this.currLat, this.currLong),
-      ],routeWhileDragging:false,
-    
-    }).addTo(this.map)
-    this.markerGroup2.clearLayers();
+      ],
+       routeWhileDragging:false,
+       showAlternatives:true,
+    })
+    // leaflet.Routing.plan({
+    //   Waypoint[leaflet.latLng(data.request_lat, data.request_long),
+    //     leaflet.latLng(this.currLat, this.currLong)],
+    //   addWaypoints:false,
+    // })
+    .addTo(this.map)
+    .on('locationfound', (e) => {
+      this.currLat= e.latitude;
+      this.currLong= e.longitude;
+      this.marker3=leaflet.marker([e.latitude,e.longitude], {icon: redIcon,draggable:false})
+      //leaflet.marker([e.latitude,e.longitude], {icon: redIcon,draggable:false})
+      var circle = leaflet.circle([e.latitude, e.longitude], {
+        color: 'Green',
+            fillColor: '#81C784',
+          fillOpacity: 0.5,
+          radius: 100
+      })
+      .on('click', () => {
+      alert('You are here!');
+      console.log(this.marker3.latLng.latitude);
+    })
+      .addTo(this.map);
+      this.markerGroup3.addLayer(this.marker3);
+      this.map.addLayer(this.markerGroup3);
+      }).on('locationerror', (err) => {
+        alert(err.message);
+    })
+    //this.map.removeLayer(this.marker);
+    // leaflet.Routing.control({
+    //     waypoints: [
+    //       leaflet.latLng(data.request_lat, data.request_long),
+    //       leaflet.latLng(this.currLat, this.currLong),
+    //     ],routeWhileDragging:false,
+    // }).addTo(this.map)
+    //this.markerGroup2.clearLayers();
     //leaflet.marker([this.currLat,this.currLong], {icon: redIcon, draggable:false}).addTo(this.map);
     
   }

@@ -128,7 +128,7 @@ export class RequestVisualizationPage {
       this.map.locate({
         setView: true,
         maxZoom: 15,
-        //watch: true,
+        // watch: true,
         enableHighAccuracy: true
       }).on('locationfound', (e) => {
         this.currLat= e.latitude;
@@ -137,14 +137,14 @@ export class RequestVisualizationPage {
         .on('click', () => {
           alert('You are here!');
         })
-        // var circle = leaflet.circle([e.latitude, e.longitude], {
-        //   color: 'Green',
-        //       fillColor: '#81C784',
-        //     fillOpacity: 0.5,
-        //     radius: 2000
-        // }).addTo(this.map);
-         this.markerGroup2.addLayer(this.marker);
-         this.map.addLayer(this.marker);
+        var circle = leaflet.circle([e.latitude, e.longitude], {
+          color: 'Green',
+              fillColor: '#81C784',
+            fillOpacity: 0.5,
+            radius: 100
+        }).addTo(this.map);
+        this.markerGroup2.addLayer(this.marker);
+        this.map.addLayer(this.markerGroup2);
         }).on('locationerror', (err) => {
           alert(err.message);
       })
@@ -233,7 +233,13 @@ requestMarker(){
 
     //   })
 
-    // }
+    
+    var circle = leaflet.circle([data.request_lat, data.request_long], {
+      color: 'Green',
+          fillColor: '#81C784',
+        fillOpacity: 0.5,
+        radius: 100
+    }).addTo(this.map);
     this.markerGroup.addLayer(this.marker2);
     this.map.addLayer(this.markerGroup);
   }
@@ -244,27 +250,7 @@ requestMarker(){
   pushRespondToRequest(){
     this.navCtrl.push('RespondToRequestPage');
   }
-  change(lat:any, long:any){
-    this.map.removeLayer(this.markerGroup);
 
-    var a=10.3502881;
-    var b=123.8988732;
-    var greenIcon = new leaflet.Icon({
-      iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
-      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-      iconSize: [25, 41],
-      iconAnchor: [12, 41],
-      popupAnchor: [1, -34],
-      shadowSize: [41, 41]
-    });
-    console.log("nj gwapo");
-    leaflet.marker([lat,long], {icon: greenIcon, draggable:false}).addTo(this.map).on('click', () => {
-    
-      //alert('Hospital x');
-      // this.presentConfirm();
-    }).bindPopup("Need help")
-   
-  }
   rout(data){
     clearInterval(this.dataRefresher);
     var redIcon = new leaflet.Icon({
@@ -289,7 +275,7 @@ requestMarker(){
   }
 
   change1(){
-    var greenIcon = new leaflet.Icon({
+    var redIcon = new leaflet.Icon({
       iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
       shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
       iconSize: [25, 41],
@@ -297,10 +283,10 @@ requestMarker(){
       popupAnchor: [1, -34],
       shadowSize: [41, 41]
     }); 
-    leaflet.marker([this.currLat, this.currLong], {icon: greenIcon,draggable:false,}).addTo(this.map).on('click', () => {
-      //alert('Hospital x');
+    leaflet.marker([this.currLat, this.currLong], {icon: redIcon,draggable:false,}).addTo(this.map).on('click', () => {
+      alert('You are here');
       // this.presentConfirm();
-    }).bindPopup("Cancel aid?");
+    });
   }
   presentConfirm(data) {
     let alert = this.alertCtrl.create({

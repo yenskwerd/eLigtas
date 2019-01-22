@@ -21,11 +21,10 @@
 
 
 <ion-content >
-        <ion-item text-wrap *ngFor="let item of items">
-          <ion-avatar item-end>
-            <ion-text-avatar color="secondary">a</ion-text-avatar>
-          </ion-avatar>
-          <h2>asd</h2>
+        <ion-item text-wrap *ngFor="let item of reports">
+          
+          <ion-icon item-end  name="water" color="{{ item.triage }}"></ion-icon>
+          <h2>{{ item.victim_name }}</h2>
           <!-- <ion-icon item-end name="arrow-dropright"></ion-icon> -->
         </ion-item>
 </ion-content>

@@ -32,7 +32,6 @@ export class ReportPage {
       console.log(data);
       this.value=data;//here
       console.log(JSON.stringify(this.value,undefined,2));
-      console.log(this.hello);
     });
     modalPage.present(); 
   }

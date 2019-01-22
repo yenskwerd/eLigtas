@@ -10,11 +10,13 @@ import { HTTP } from '@ionic-native/http';
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { LoginServiceProvider } from '../providers/login-service/login-service';
+import { IonTextAvatar } from 'ionic-text-avatar';
 
 @NgModule({
   declarations: [
     MyApp,
-    HomePage
+    HomePage,
+    IonTextAvatar
   ],
   imports: [
     BrowserModule,

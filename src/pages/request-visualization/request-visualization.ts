@@ -467,6 +467,10 @@ requestMarker(){
     }
     
   }
+
+  pushReport() {
+    this.navCtrl.push('ReportPage');
+  }
   /******** END SHOW MARKERS **********/
 
   /********** UNSHOW MARKERS ************/

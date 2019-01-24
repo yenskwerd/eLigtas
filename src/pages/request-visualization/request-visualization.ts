@@ -507,7 +507,7 @@ requestMarker(){
 
   showRequest(){
     this.http
-       .get('http://usc-dcis.com/eligtas.app/retrieve-emergencies.php')
+       .get('http://usc-dcis.com/eligtas.app/retrieve-hcf.php')
        .subscribe((data : any) =>
        {
           console.log(data);
@@ -566,30 +566,30 @@ requestMarker(){
       shadowSize: [41, 41]
     });  
 
-    //in db, there is a column "type" which contains the type of emergency facility
-    if(data.type == "Hospital"){
-      this.requestMarkers[i] = leaflet.marker([data.request_lat,data.request_long], {icon: purpleIcon}).bindTooltip(data.name, 
+    //in db, there is a column "hcf_type" which contains the type of emergency facility
+    if(data.hcf_type == 1){
+      this.requestMarkers[i] = leaflet.marker([data.xloc,data.yloc], {icon: purpleIcon}).bindTooltip(data.name, 
       {
           permanent: true, 
           direction: 'bottom'
       }
   ).addTo(this.map);
-    }else if(data.type=="Fire Station"){
-      this.requestMarkers[i] = leaflet.marker([data.request_lat,data.request_long], {icon: yellowIcon}).bindTooltip(data.name, 
+    }else if(data.hcf_type == 3){
+      this.requestMarkers[i] = leaflet.marker([data.xloc,data.yloc], {icon: yellowIcon}).bindTooltip(data.name, 
         {
             permanent: true, 
             direction: 'bottom'
         }
     ).addTo(this.map);
-    }else if(data.type=="Police Station"){
-      this.requestMarkers[i] = leaflet.marker([data.request_lat,data.request_long], {icon: grayIcon}).bindTooltip(data.name, 
+    }else if(data.hcf_type == 2){
+      this.requestMarkers[i] = leaflet.marker([data.xloc,data.yloc], {icon: grayIcon}).bindTooltip(data.name, 
         {
             permanent: true, 
             direction: 'bottom'
         }
     ).addTo(this.map);
     }else{
-      this.requestMarkers[i] = leaflet.marker([data.request_lat,data.request_long], {icon: blackIcon}).bindTooltip(data.name, 
+      this.requestMarkers[i] = leaflet.marker([data.xloc,data.yloc], {icon: blackIcon}).bindTooltip(data.name, 
         {
             permanent: true, 
             direction: 'bottom'

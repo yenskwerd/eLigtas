@@ -21,13 +21,20 @@ export class ReportPage {
   reports: any = [];
   value: any;
   hello: any;
+  event: any;
+  request_id: any;
 
   constructor(public modalCtrl: ModalController, private http: HttpClient, public navCtrl: NavController, public navParams: NavParams) {
     this.hello = navParams.data.data;
+    this.event = navParams.data.event;
+    this.request_id = navParams.data.request_id;
   }
 
   public openModal(){ 
-    var modalPage = this.modalCtrl.create('ModalPage');
+    var modalPage = this.modalCtrl.create('ModalPage', {
+      event: this.event,
+      request_id: this.request_id
+    });
     modalPage.onDidDismiss(data => {
       console.log(data);
       this.value=data;//here
@@ -61,7 +68,7 @@ export class ReportPage {
 
   generateItems(data) {
     for (let i=0; i < data.length; i++) {
-      if(data[i].victim_name!="") {
+      if(data[i].victim_name != "" && data[i].request_id == this.request_id && data[i].event == this.event) {
         this.reports.push(
           { victim_name: data[i].victim_name,
             victim_desc: data[i].victim_desc,

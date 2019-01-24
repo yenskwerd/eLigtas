@@ -22,7 +22,8 @@ export class MyApp {
       { icon: '', title: 'Go to Batingaw App', component: ""},
       { icon: '', title: 'Go to Red Cross App', component: ""},
       { icon: '', title: 'Go to Google Maps', component: ""},
-      { icon: '', title: 'Go to MIMS App', component: ""}
+      { icon: '', title: 'Go to MIMS App', component: ""},
+      { icon: '', title: 'Logout', component: HomePage}
     ]; 
     
   }

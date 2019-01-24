@@ -23,8 +23,12 @@ export class ModalPage {
 
   desc: any;
   triage: any;
+  event: any;
+  request_id: any;
 
   constructor(public viewCtrl : ViewController, private http: Http, public loginService: LoginServiceProvider, public alertCtrl:AlertController, public navCtrl: NavController, public navParams: NavParams) {
+    this.event = navParams.data.event;
+    this.request_id = navParams.data.request_id;
   }
 
   ionViewDidLoad() {
@@ -35,6 +39,8 @@ export class ModalPage {
     let data = { 
       victim_name: this.victim_name.value,
       victim_desc: this.victim_desc.value,
+      event: this.event,
+      request_id: this.request_id,
       triage: this.triage
     }
     this.viewCtrl.dismiss(data);
@@ -82,7 +88,9 @@ export class ModalPage {
         let data = {
           victim_name: this.victim_name.value,
           victim_desc: this.victim_desc.value,
+          event: this.event,
           triage: this.triage,
+          request_id: this.request_id,
 
           /********** LOG **********/
           user_id: this.loginService.logged_in_user_id,

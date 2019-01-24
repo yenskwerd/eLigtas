@@ -23,9 +23,17 @@ import { getOrCreateNodeInjectorForNode } from '@angular/core/src/render3/di';
 })
 export class RequestVisualizationPage {
   @ViewChild('map') mapContainer:ElementRef;
+
+  eventForReport: any;
+  request_id: any;
+
   requestshow: any;
   requestMarkers: any;
   map:any;
+  route:any;
+  route1:null;
+  circle:any;
+  circle2:any;
   currLat:any;
   currLong:any;
   // marker: any;
@@ -121,34 +129,83 @@ export class RequestVisualizationPage {
       this.map = leaflet.map("map").fitWorld();
       leaflet.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
-        maxZoom: 18
+        maxZoom: 18,
       }).addTo(this.map);
       this.map.locate({
         setView: true,
-        maxZoom: 15,
-        // watch: true,
+        maxZoom: 120,
+        watch: true,
         enableHighAccuracy: true
-      }).on('locationfound', (e) => {
+      })
+      .on('locationfound', (e) => {
+        console.log("locationfound");
+        //  working pero blinking
+      //   if(this.map.hasLayer(this.marker) && this.map.hasLayer(this.circle)){
+      //     this.markerGroup2.clearLayers();
+      //     this.map.removeLayer(this.circle);
+      //     console.log("rmove")
+      //   }else{
+      //   this.currLat= e.latitude;
+      //   this.currLong= e.longitude;
+      //   this.marker=leaflet.marker([e.latitude,e.longitude], {icon: redIcon,draggable:false})
+      //   .on('click', () => {
+      //     alert('You are here!');
+      //   }).addTo(this.map)
+      //   this.circle = leaflet.circle([e.latitude, e.longitude], {
+      //     color: 'rgba(255,255,255,0)',
+      //         fillColor: '#81C784',
+      //       fillOpacity: 0.5,
+      //       radius: 100
+      //   }).addTo(this.map)
+      //   this.markerGroup2.addLayer(this.marker);
+      //   this.markerGroup2.addLayer(this.circle);
+      //   this.map.addLayer(this.markerGroup2);
+      // }
+      // })
+        //****************** */
+        if(this.map.hasLayer(this.marker) && this.map.hasLayer(this.circle)){
+          this.markerGroup2.clearLayers();
+          this.map.removeLayer(this.circle);
+          console.log("rmove")
+        }
+        
         this.currLat= e.latitude;
         this.currLong= e.longitude;
         this.marker=leaflet.marker([e.latitude,e.longitude], {icon: redIcon,draggable:false})
         .on('click', () => {
           alert('You are here!');
-        })
-        var circle = leaflet.circle([e.latitude, e.longitude], {
+        }).addTo(this.map)
+        this.circle = leaflet.circle([e.latitude, e.longitude], {
           color: 'rgba(255,255,255,0)',
               fillColor: '#81C784',
             fillOpacity: 0.5,
             radius: 100
-        }).addTo(this.map);
+        }).addTo(this.map)
         this.markerGroup2.addLayer(this.marker);
+        this.markerGroup2.addLayer(this.circle);
         this.map.addLayer(this.markerGroup2);
-        }).on('locationerror', (err) => {
+      })
+        .on('locationerror', (err) => {
           alert(err.message);
       })
-
+      if(this.map.hasLayer(this.marker) && this.map.hasLayer(this.circle)){
+        this.markerGroup2.clearLayers();
+        this.map.removeLayer(this.circle);
+        console.log("rmove")
+      }
       this.requestMarker();
+      // if(this.map.hasLayer(this.marker) && this.map.hasLayer(this.circle)){
+      //   this.markerGroup2.clearLayers();
+      //   this.map.removeLayer(this.circle);
+      //   console.log("rmove")
+      // }
   }); 
+}
+removemarkercircle(){
+  if(this.map.hasLayer(this.marker)){
+    this.markerGroup2.clearLayers();
+    this.map.removeLayer(this.circle);
+  }
 }
 requestMarker(){
   this.dataRefresher = setInterval(() =>{
@@ -182,7 +239,7 @@ requestMarker(){
   
 
   createMarker2(data:any){
-    console.log("createmarker2");
+    // console.log("createmarker2");
     var purpleIcon = new leaflet.Icon({
       iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-violet.png',
       shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
@@ -222,6 +279,8 @@ requestMarker(){
 
     } else if(data.request_status_id==1 && data.request_id == this.user_request_id){
       this.rout(data);
+      this.eventForReport = data.event;
+      this.request_id = data.request_id;
       this.marker2=leaflet.marker([data.request_lat,data.request_long], {icon: yellowIcon});
 
     } else if(data.request_status_id==2){
@@ -251,6 +310,26 @@ requestMarker(){
     this.navCtrl.push('RespondToRequestPage');
   }
 
+  addRoutingControl = function (waypoints) { 
+    if (this.route1 != null)
+        this.removeRoutingControl();
+
+    // routingControl = L.Routing.control({
+    //     waypoints: waypoints
+    // }).addTo(map);
+
+  this.route1= leaflet.Routing.control({
+      waypoints: waypoints
+  }).addTo(this.map);
+};
+
+  removeRoutingControl = function () {
+    if (this.route1 != null) {
+        this.map.removeControl(this.route1);
+        this.route1 = null;
+    }
+};
+
   rout(data){
     clearInterval(this.dataRefresher);
     var redIcon = new leaflet.Icon({
@@ -262,13 +341,16 @@ requestMarker(){
       shadowSize: [41, 41]
     });  
     this.markerGroup2.clearLayers();
-    //this.markerGroup.clearLayers();
+
+    //mugana 
+
     this.map.locate({
       setView: true,
-      maxZoom: 15,
+      maxZoom: 120,
       watch: true,
       enableHighAccuracy: true
     })
+    
     leaflet.Routing.control({
       waypoints: [
         leaflet.latLng(data.request_lat, data.request_long),
@@ -277,18 +359,14 @@ requestMarker(){
        routeWhileDragging:false,
        showAlternatives:true,
     })
-    // leaflet.Routing.plan({
-    //   Waypoint[leaflet.latLng(data.request_lat, data.request_long),
-    //     leaflet.latLng(this.currLat, this.currLong)],
-    //   addWaypoints:false,
-    // })
     .addTo(this.map)
+    
     .on('locationfound', (e) => {
       this.currLat= e.latitude;
       this.currLong= e.longitude;
       this.marker3=leaflet.marker([e.latitude,e.longitude], {icon: redIcon,draggable:false})
       //leaflet.marker([e.latitude,e.longitude], {icon: redIcon,draggable:false})
-      var circle = leaflet.circle([e.latitude, e.longitude], {
+      this.circle2 = leaflet.circle([e.latitude, e.longitude], {
         color: 'Green',
             fillColor: '#81C784',
           fillOpacity: 0.5,
@@ -296,7 +374,7 @@ requestMarker(){
       })
       .on('click', () => {
       alert('You are here!');
-      console.log(this.marker3.latLng.latitude);
+      //console.log(this.marker3.latLng.latitude);
     })
       .addTo(this.map);
       this.markerGroup3.addLayer(this.marker3);
@@ -304,16 +382,69 @@ requestMarker(){
       }).on('locationerror', (err) => {
         alert(err.message);
     })
-    //this.map.removeLayer(this.marker);
-    // leaflet.Routing.control({
+    //************** */
+
+
+    //di mugana ang orutes
+
+    // this.map.locate({
+    //   setView: true,
+    //   maxZoom: 120,
+    //   watch: true,
+    //   enableHighAccuracy: true
+    // })
+
+    // .on('locationfound', (e) => {
+    //   console.log("locationfound");
+    
+    //   this.addRoutingControl({
     //     waypoints: [
     //       leaflet.latLng(data.request_lat, data.request_long),
     //       leaflet.latLng(this.currLat, this.currLong),
-    //     ],routeWhileDragging:false,
-    // }).addTo(this.map)
-    //this.markerGroup2.clearLayers();
-    //leaflet.marker([this.currLat,this.currLong], {icon: redIcon, draggable:false}).addTo(this.map);
-    
+    //     ]
+    //   })
+    //   // .addTo(this.map)
+    //   if(this.map.hasLayer(this.marker3) && this.map.hasLayer(this.circle2)){
+    //     this.markerGroup3.clearLayers();
+    //     this.map.removeLayer(this.circle2);
+    //     // this.map.removeLayer(this.route);
+    //     this.removeRoutingControl();
+    //     console.log(this.route)
+    //   }
+      
+    //   this.currLat= e.latitude;
+    //   this.currLong= e.longitude;
+    //   this.marker3=leaflet.marker([e.latitude,e.longitude], {icon: redIcon,draggable:false})
+    //   .on('click', () => {
+    //     alert('You are here!');
+    //   }).addTo(this.map)
+    //   this.circle2 = leaflet.circle([e.latitude, e.longitude], {
+    //     color: 'rgba(255,255,255,0)',
+    //         fillColor: '#81C784',
+    //       fillOpacity: 0.5,
+    //       radius: 100
+    //   }).addTo(this.map)
+    //   this.markerGroup3.addLayer(this.marker3);
+    //   this.markerGroup3.addLayer(this.circle2);
+    //   this.addRoutingControl({
+    //     waypoints: [
+    //       leaflet.latLng(data.request_lat, data.request_long),
+    //       leaflet.latLng(this.currLat, this.currLong),
+    //     ]
+    //   })
+    //   //this.markerGroup3.addLayer(this.route);
+    //   this.map.addLayer(this.markerGroup3);
+    // })
+    //   .on('locationerror', (err) => {
+    //     alert(err.message);
+    // })
+    // if(this.map.hasLayer(this.marker3) && this.map.hasLayer(this.circle2)){
+    //   this.markerGroup3.clearLayers();
+    //   this.map.removeLayer(this.circle2);
+    //   // this.map.removeLayer(this.route);
+    //   // this.removeRoutingControl();
+    //   console.log("rmove")
+    // }
   }
 
   change1(){
@@ -469,7 +600,10 @@ requestMarker(){
   }
 
   pushReport() {
-    this.navCtrl.push('ReportPage');
+    this.navCtrl.push('ReportPage', {
+      event: this.eventForReport,
+      request_id: this.request_id
+    });
   }
   /******** END SHOW MARKERS **********/
 

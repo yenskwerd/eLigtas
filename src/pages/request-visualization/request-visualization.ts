@@ -342,7 +342,7 @@ requestMarker(){
     });  
     this.markerGroup2.clearLayers();
 
-    //mugana 
+    // //mugana pero ang marker waypoint madrag niya dimusunod sa current loac
 
     this.map.locate({
       setView: true,

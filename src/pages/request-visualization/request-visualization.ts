@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
+import { ModalController, IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { HttpClient } from '@angular/common/http';  
 import {Http, Headers, RequestOptions}  from '@angular/http';
 import leaflet, { Draggable, marker } from 'leaflet';
@@ -47,8 +47,9 @@ export class RequestVisualizationPage {
   markerGroup = leaflet.featureGroup();
   markerGroup2 = leaflet.featureGroup();
   public status : any=false;
+  public arrive : any=false;
   markerGroup3 = leaflet.featureGroup();
-  constructor(public navCtrl: NavController, public http : HttpClient, public http2 : Http, public navParams: NavParams, public alertCtrl : AlertController,
+  constructor(public modalCtrl: ModalController, public navCtrl: NavController, public http : HttpClient, public http2 : Http, public navParams: NavParams, public alertCtrl : AlertController,
     public loginService: LoginServiceProvider) {
       this.requestMarkers = [];
   }
@@ -59,8 +60,10 @@ export class RequestVisualizationPage {
  
    
   }
+
   ionViewWillEnter(){
   }
+
   ionViewDidEnter(){
     this.loadmap();
   }
@@ -599,11 +602,76 @@ requestMarker(){
     
   }
 
-  pushReport() {
-    this.navCtrl.push('ReportPage', {
+  public openReport(){ 
+    var modalPage = this.modalCtrl.create('ReportPage', {
       event: this.eventForReport,
       request_id: this.request_id
     });
+    modalPage.present(); 
+  }
+
+  // pushReport() {
+  //   this.navCtrl.push('ReportPage', {
+  //     event: this.eventForReport,
+  //     request_id: this.request_id
+  //   });
+  // }
+
+  pushArrive() {
+    this.arrive = true;
+    this.status = false;
+
+
+    var headers = new Headers();
+      
+    headers.append("Accept", 'application/json');
+    headers.append('Content-Type', 'application/x-www-form-urlencoded');
+    headers.append('Access-Control-Allow-Origin' , '*');
+    headers.append('Access-Control-Allow-Headers' , 'Content-Type');
+    headers.append('Access-Control-Allow-Methods', 'POST, GET, OPTIONS, PUT');
+    
+    
+    let options = new RequestOptions({ headers: headers });
+
+    let data = {
+      /********** LOG **********/
+      user_id: this.loginService.logged_in_user_id,
+      action: "Arrived",
+      action_datetime: new Date()
+    }
+    
+    console.log(data);
+    this.http2.post('http://usc-dcis.com/eligtas.app/log.php', data, options)
+    
+    .map(res=> res.json())
+    .subscribe((data: any) =>
+    {
+       // If the request was successful notify the user
+       console.log(data);
+       let alert = this.alertCtrl.create({
+        message: "You have arrived!",
+        buttons: ['OK']
+        });
+        // this.navCtrl.setRoot('HcfMappingPage');
+        alert.present();
+        //this.navCtrl.setRoot('PilgrimProfilePage'); 
+        //this.log();
+
+
+    },
+    (error : any) =>
+    {
+      console.log(error);
+      let alert2 = this.alertCtrl.create({
+        title:"FAILED",
+        subTitle: "Something went wrong!",
+        buttons: ['OK']
+        });
+
+      alert2.present();
+    });
+
+
   }
   /******** END SHOW MARKERS **********/
 

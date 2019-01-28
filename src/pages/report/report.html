@@ -8,6 +8,11 @@
 
   <ion-navbar>
     <ion-title>Report</ion-title>
+    <ion-buttons left>
+      <button ion-button (click)="closeModal()">
+        <ion-icon name="close"></ion-icon>
+      </button>
+    </ion-buttons>
     <ion-buttons right>
         <button ion-button icon-only (click)="openModal()">
           <ion-icon name="add"></ion-icon>

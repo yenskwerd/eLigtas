@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ModalController, IonicPage, NavController, NavParams } from 'ionic-angular';
+import { ModalController, IonicPage, NavController, ViewController, NavParams } from 'ionic-angular';
 import {Http, Headers, RequestOptions}  from '@angular/http';
 import { HttpClient } from '@angular/common/http'; 
 
@@ -24,7 +24,7 @@ export class ReportPage {
   event: any;
   request_id: any;
 
-  constructor(public modalCtrl: ModalController, private http: HttpClient, public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public viewCtrl : ViewController, public modalCtrl: ModalController, private http: HttpClient, public navCtrl: NavController, public navParams: NavParams) {
     this.hello = navParams.data.data;
     this.event = navParams.data.event;
     this.request_id = navParams.data.request_id;
@@ -77,6 +77,17 @@ export class ReportPage {
         );
       }
     }
+  }
+
+  public closeModal(){
+    // let data = { 
+    //   victim_name: this.victim_name.value,
+    //   victim_desc: this.victim_desc.value,
+    //   event: this.event,
+    //   request_id: this.request_id,
+    //   triage: this.triage
+    // }
+    this.viewCtrl.dismiss();
   }
 
 }

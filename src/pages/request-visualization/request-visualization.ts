@@ -2,7 +2,7 @@ import { Component, ViewChild, ElementRef } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { HttpClient } from '@angular/common/http';  
 import {Http, Headers, RequestOptions}  from '@angular/http';
-import leaflet, { Draggable, marker } from 'leaflet';
+import leaflet, { Draggable, marker, LatLng } from 'leaflet';
 import { LoginServiceProvider } from '../../providers/login-service/login-service';
 import 'leaflet-routing-machine';
 import 'rxjs/add/operator/map';
@@ -44,6 +44,7 @@ export class RequestVisualizationPage {
   index: any;
   user_request_id: any;
   dataRefresher: any;
+  LatLng1:any;
   markerGroup = leaflet.featureGroup();
   markerGroup2 = leaflet.featureGroup();
   public status : any=false;
@@ -132,8 +133,9 @@ export class RequestVisualizationPage {
         maxZoom: 18,
       }).addTo(this.map);
       this.map.locate({
-        setView: true,
-        maxZoom: 120,
+        setView:this.LatLng1,
+      //setView: true,
+      //maxZoom: 120,
         watch: true,
         enableHighAccuracy: true
       })
@@ -168,9 +170,9 @@ export class RequestVisualizationPage {
           this.map.removeLayer(this.circle);
           console.log("rmove")
         }
-        
         this.currLat= e.latitude;
         this.currLong= e.longitude;
+        this.LatLng1=leaflet.latLng(this.currLat,this.currLong);
         this.marker=leaflet.marker([e.latitude,e.longitude], {icon: redIcon,draggable:false})
         .on('click', () => {
           alert('You are here!');
@@ -345,12 +347,13 @@ requestMarker(){
     // //mugana pero ang marker waypoint madrag niya dimusunod sa current loac
 
     this.map.locate({
-      setView: true,
-      maxZoom: 120,
+      setView:this.LatLng1,
+      //setView: true,
+      //maxZoom: 120,
       watch: true,
       enableHighAccuracy: true
     })
-    
+    //console.log(this.LatLng1)
     leaflet.Routing.control({
       waypoints: [
         leaflet.latLng(data.request_lat, data.request_long),
@@ -364,6 +367,8 @@ requestMarker(){
     .on('locationfound', (e) => {
       this.currLat= e.latitude;
       this.currLong= e.longitude;
+      this.LatLng1=leaflet.latLng(e.latitude,e.longitude);
+      console.log(this.LatLng1);
       this.marker3=leaflet.marker([e.latitude,e.longitude], {icon: redIcon,draggable:false})
       //leaflet.marker([e.latitude,e.longitude], {icon: redIcon,draggable:false})
       this.circle2 = leaflet.circle([e.latitude, e.longitude], {
@@ -376,12 +381,21 @@ requestMarker(){
       alert('You are here!');
       //console.log(this.marker3.latLng.latitude);
     })
+    // leaflet.Routing.control({
+    //   waypoints: [
+    //     leaflet.latLng(data.request_lat, data.request_long),
+    //     leaflet.latLng(this.currLat, this.currLong),
+    //   ],
+    //    routeWhileDragging:false,
+    //    showAlternatives:true,
+    // })
       .addTo(this.map);
       this.markerGroup3.addLayer(this.marker3);
       this.map.addLayer(this.markerGroup3);
       }).on('locationerror', (err) => {
         alert(err.message);
     })
+    this.removeRoutingControl();
     //************** */
 
 

@@ -216,9 +216,6 @@ removemarkercircle(){
 }
 requestMarker(){
   this.dataRefresher = setInterval(() =>{
-    //var latlng_a = new leaflet.LatLng(this.marker.latitude,this.marker.longitude), latlng_b;
-    //latlng_b = 
-    //if(this.marker)
     if(this.loginService.logged_in_user_request_id!= null){
       this.status = true;
     }
@@ -236,10 +233,7 @@ requestMarker(){
      {
         console.dir(error);
      });
-
-     
      },1000);
-  
 }
   
     
@@ -294,13 +288,7 @@ requestMarker(){
     } else if(data.request_status_id==2){
       this.marker2=leaflet.marker([data.request_lat,data.request_long], {icon: grayIcon});
     }
-    // }else{
-    //   this.marker2=leaflet.marker([data.request_lat,data.request_long], {icon: purpleIcon}).on('click', () => {
-    //     this.presentConfirm(data);
 
-    //   })
-
-    
     var circle = leaflet.circle([data.request_lat, data.request_long], {
       color: "rgba(255,255,255,0)",
           fillColor: '#81C784',
@@ -528,7 +516,7 @@ requestMarker(){
             console.log('asdfasdf');
             this.navCtrl.setRoot('RespondToRequestPage', {
               request_id : data.request_id,
-              request_status_id : data.request_status_id,
+              request_status_id : data.request_status_id, 
               person_to_check: data.person_to_check,
               event: data.event,
               persons_injured: data.persons_injured,
@@ -613,11 +601,11 @@ requestMarker(){
     //in db, there is a column "hcf_type" which contains the type of emergency facility
     if(data.hcf_type == 1){
       this.requestMarkers[i] = leaflet.marker([data.xloc,data.yloc], {icon: purpleIcon}).bindTooltip(data.name, 
-      {
-          permanent: true, 
-          direction: 'bottom'
-      }
-  ).addTo(this.map);
+        {
+            permanent: true, 
+            direction: 'bottom'
+        }
+      ).addTo(this.map);
     }else if(data.hcf_type == 3){
       this.requestMarkers[i] = leaflet.marker([data.xloc,data.yloc], {icon: yellowIcon}).bindTooltip(data.name, 
         {
@@ -689,7 +677,6 @@ requestMarker(){
     headers.append('Access-Control-Allow-Headers' , 'Content-Type');
     headers.append('Access-Control-Allow-Methods', 'POST, GET, OPTIONS, PUT');
     
-    
     let options = new RequestOptions({ headers: headers });
 
     let data = {
@@ -740,5 +727,65 @@ requestMarker(){
   }
   /******** END UNSHOW MARKERS **********/
   
+  requestCallForBackUp(){
+    //this.dataRefresher = setInterval(() =>{
+      if(this.loginService.logged_in_user_request_id!= null){
+        this.status = true;
+      }
+
+      // this.http
+      //  .get('http://usc-dcis.com/eligtas.app/retrieve-cfb-num.php')
+      //  .subscribe((data : any) =>
+      //  {
+      //     this.request = data;
+      //     //this.markerGroup.clearLayers();
+      //     this.callForBackUpMarker(data);
+      //     console.log(data);
+          
+      // },
+      //  (error : any) =>
+      //  {
+      //     console.dir(error);
+      //  });
+      var headers = new Headers();
+      
+      headers.append("Accept", 'application/json');
+      headers.append('Content-Type', 'application/x-www-form-urlencoded');
+      headers.append('Access-Control-Allow-Origin' , '*');
+      headers.append('Access-Control-Allow-Headers' , 'Content-Type');
+      headers.append('Access-Control-Allow-Methods', 'POST, GET, OPTIONS, PUT');
+      
+      let options = new RequestOptions({ headers: headers });
+
+      let data = {
+        request_id: this.request_id
+      }
+
+       this.http2.post('http://usc-dcis.com/eligtas.app/retrieve-cfb-num.php',data,options)
+       .map(res=> res.json())
+         .subscribe(
+           res => {
+            this.callForBackUpMarker(res);
+            console.log(res);
+       }); 
+    //},1000);
+  }
+
+  callForBackUpMarker(data:any){
+    var numberOfResponders = data.count;
+
+    var numIcon = new leaflet.DivIcon({
+      className: "number-icon",
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [3, -40],
+      html: numberOfResponders     
+    });  
+    leaflet.marker([data.request_lat,data.request_long],
+      {
+          icon: numIcon
+      }).addTo(this.map);
+  }
+
 }
 

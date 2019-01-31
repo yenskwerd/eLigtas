@@ -8,6 +8,7 @@ import 'leaflet-routing-machine';
 import 'rxjs/add/operator/map';
 import { analyzeAndValidateNgModules } from '@angular/compiler';
 import { getOrCreateNodeInjectorForNode } from '@angular/core/src/render3/di';
+import { startTimeRange } from '@angular/core/src/profile/wtf_impl';
 
 /**
  * Generated class for the RequestVisualizationPage page.
@@ -47,6 +48,7 @@ export class RequestVisualizationPage {
   LatLng1:any;
   markerGroup = leaflet.featureGroup();
   markerGroup2 = leaflet.featureGroup();
+  public startroute : any=false;
   public status : any=false;
   public arrive : any=false;
   markerGroup3 = leaflet.featureGroup();
@@ -136,8 +138,8 @@ export class RequestVisualizationPage {
         maxZoom: 18,
       }).addTo(this.map);
       this.map.locate({
-        setView:this.LatLng1,
-      //setView: true,
+        //setView:this.LatLng1,
+      setView: true,
       //maxZoom: 120,
         watch: true,
         enableHighAccuracy: true
@@ -284,6 +286,7 @@ requestMarker(){
 
     } else if(data.request_status_id==1 && data.request_id == this.user_request_id){
       this.rout(data);
+      this.startroute=true;
       this.eventForReport = data.event;
       this.request_id = data.request_id;
       this.marker2=leaflet.marker([data.request_lat,data.request_long], {icon: yellowIcon});
@@ -319,10 +322,6 @@ requestMarker(){
     if (this.route1 != null)
         this.removeRoutingControl();
 
-    // routingControl = L.Routing.control({
-    //     waypoints: waypoints
-    // }).addTo(map);
-
   this.route1= leaflet.Routing.control({
       waypoints: waypoints
   }).addTo(this.map);
@@ -357,17 +356,31 @@ requestMarker(){
       enableHighAccuracy: true
     })
     //console.log(this.LatLng1)
-    leaflet.Routing.control({
-      waypoints: [
-        leaflet.latLng(data.request_lat, data.request_long),
-        leaflet.latLng(this.currLat, this.currLong),
-      ],
-       routeWhileDragging:false,
-       showAlternatives:true,
-    })
-    .addTo(this.map)
-    
+    // leaflet.Routing.control({
+    //   waypoints: [
+    //     leaflet.latLng(data.request_lat, data.request_long),
+    //     leaflet.latLng(this.currLat, this.currLong),
+    //   ],
+    //    routeWhileDragging:false,
+    //    showAlternatives:true,
+    // })
+    // this.addRoutingControl({
+    //     waypoints: [
+    //       leaflet.latLng(data.request_lat, data.request_long),
+    //       leaflet.latLng(this.currLat, this.currLong),
+    //     ]
+    //   })
+    // .addTo(this.map)
+    this.markerGroup2.clearLayers();
+    this.map.removeLayer(this.circle)
     .on('locationfound', (e) => {
+      if(this.map.hasLayer(this.marker3) && this.map.hasLayer(this.circle2)){
+        this.markerGroup3.clearLayers();
+        this.map.removeLayer(this.circle2);
+        this.removeRoutingControl();
+        console.log("rmove")
+      }
+
       this.currLat= e.latitude;
       this.currLong= e.longitude;
       this.LatLng1=leaflet.latLng(e.latitude,e.longitude);
@@ -388,17 +401,31 @@ requestMarker(){
     //   waypoints: [
     //     leaflet.latLng(data.request_lat, data.request_long),
     //     leaflet.latLng(this.currLat, this.currLong),
-    //   ],
-    //    routeWhileDragging:false,
-    //    showAlternatives:true,
+    //   ]
     // })
-      .addTo(this.map);
+    // .addTo(this.map);
+      this.addRoutingControl({
+        
+        waypoints: [
+          leaflet.latLng(data.request_lat, data.request_long,),
+          leaflet.latLng(this.currLat, this.currLong),
+        ],
+        routeWhileDragging:false
+      })
+     // .addTo(this.map);
       this.markerGroup3.addLayer(this.marker3);
+      this.markerGroup3.addLayer(this.circle2);
       this.map.addLayer(this.markerGroup3);
       }).on('locationerror', (err) => {
         alert(err.message);
     })
-    this.removeRoutingControl();
+    //this.removeRoutingControl();
+    if(this.map.hasLayer(this.marker3) && this.map.hasLayer(this.circle2)){
+      this.markerGroup3.clearLayers();
+      this.map.removeLayer(this.circle2);
+      // this.removeRoutingControl();
+      console.log("rmove")
+    }
     //************** */
 
 
@@ -630,6 +657,24 @@ requestMarker(){
   //     request_id: this.request_id
   //   });
   // }
+
+  start(data:any){
+    // var modalPage = this.modalCtrl.create('ReportPage', {
+    //   event: this.eventForReport,
+    //   request_id: this.request_id
+    // });
+    // modalPage.present(); \
+    if(this.startroute==true){
+    this.rout(data);
+    }else{
+      let alert = this.alertCtrl.create({
+        message: "You didnt respond!",
+        buttons: ['OK']
+        });
+        // this.navCtrl.setRoot('HcfMappingPage');
+        alert.present();
+    }
+  }
 
   pushArrive() {
     this.arrive = true;

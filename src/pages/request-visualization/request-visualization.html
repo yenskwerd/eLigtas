@@ -11,7 +11,7 @@
           <ion-icon name="menu"></ion-icon>
       </button>
     <ion-title text-center>Request Visualization</ion-title>
-  </ion-navbar>
+  </ion-navbar> 
 
 </ion-header>
 
@@ -39,7 +39,7 @@
       <button ion-button (click)="pushArrive()" class="reportBtn" block>Arrive</button> 
     </div>
     <div *ngIf="arrive">
-      <button ion-button class="reportBtn" >Call for Backup</button>
+      <button ion-button class="reportBtn" (click)="requestCallForBackUp()">Call for Backup</button>
       <button ion-button (click)="openReport()" class="reportBtn" >Report</button>
     </div>
 </ion-footer>

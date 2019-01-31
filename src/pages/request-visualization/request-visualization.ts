@@ -28,7 +28,9 @@ export class RequestVisualizationPage {
   eventForReport: any;
   request_id: any;
 
-  requestshow: any;
+  HCFshow: any;
+  emergencyshow: any;
+  
   requestMarkers: any;
   map:any;
   route:any;
@@ -60,7 +62,6 @@ export class RequestVisualizationPage {
   ionViewDidLoad() {
     console.log("loaded");
     //this.getUserRequest();
- 
    
   }
 
@@ -536,15 +537,40 @@ requestMarker(){
     alert.present();
   }
 
-
-  showRequest(){
+  showHCF(){
     this.http
        .get('http://usc-dcis.com/eligtas.app/retrieve-hcf.php')
        .subscribe((data : any) =>
        {
           console.log(data);
           this.request = data;
-          if(this.requestshow == true){
+          if(this.HCFshow == true){
+            for(let i=0; i<data.length; i++){
+              this.createMarker(data[i], i);
+            }
+            console.log("true");
+          }else{
+            for(let i=0; i<this.requestMarkers.length; i++){
+              this.deleteMarker(i);
+            }
+            console.log("false");
+          }
+          
+       },
+       (error : any) =>
+       {
+          console.dir(error);
+       });  
+  }
+  
+  showEmergency(){
+    this.http
+       .get('http://usc-dcis.com/eligtas.app/retrieve-emergencies.php')
+       .subscribe((data : any) =>
+       {
+          console.log(data);
+          this.request = data;
+          if(this.emergencyshow == true){
             for(let i=0; i<data.length; i++){
               this.createMarker(data[i], i);
             }

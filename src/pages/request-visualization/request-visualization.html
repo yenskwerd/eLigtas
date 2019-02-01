@@ -21,8 +21,11 @@
     <!--Show Health Care Facilities Toggle-->
     <div style="width:100%; height: 10%;">
       <ion-item>
-        <ion-label>Show Health Care Facilities</ion-label>
-        <ion-toggle [(ngModel)]="requestshow" (ngModelChange)="showRequest($event)" ></ion-toggle>
+        <!-- <ion-label>Show Health Care Facilities</ion-label>
+        <ion-toggle [(ngModel)]="requestshow" (ngModelChange)="showRequest($event)" ></ion-toggle> -->
+        <ion-toggle ng-model="simple" ion-true-text="online" ion-false-text="online">
+          Simple Example: <b>{{ simple || false }}</b>
+        </ion-toggle>
       </ion-item>
     </div>
     <!--End Show Health Care Facilities Toggle-->

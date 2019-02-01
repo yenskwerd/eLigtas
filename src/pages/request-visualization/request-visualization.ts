@@ -26,7 +26,7 @@ export class RequestVisualizationPage {
 
   eventForReport: any;
   request_id: any;
-
+  alert: any = false ;
   requestshow: any;
   requestMarkers: any;
   map:any;
@@ -700,7 +700,7 @@ requestMarker(){
       // },
       //  (error : any) =>
       //  {
-      //     console.dir(error);
+      //     console.dir(error);c
       //  });
       var headers = new Headers();
       

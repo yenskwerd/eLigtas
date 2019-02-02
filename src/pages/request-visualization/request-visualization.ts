@@ -27,11 +27,16 @@ export class RequestVisualizationPage {
 
   eventForReport: any;
   request_id: any;
+<<<<<<< HEAD
+  alert: any = false ;
+  requestshow: any;
+=======
 
   HCFshow: any;
   emergencyshow: any;
   stat_id: any;
   
+>>>>>>> f5662f965a4b5a971aab9f8cc75fc170eaae223b
   requestMarkers: any;
   map:any;
   route:any;
@@ -777,7 +782,7 @@ requestMarker(){
       // },
       //  (error : any) =>
       //  {
-      //     console.dir(error);
+      //     console.dir(error);c
       //  });
       var headers = new Headers();
       

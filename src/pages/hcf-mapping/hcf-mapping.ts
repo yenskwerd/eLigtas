@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import leaflet from 'leaflet';
 import { HttpClient } from '@angular/common/http';  
 import { LoginPage } from '../login/login';
@@ -26,13 +26,15 @@ export class HcfMappingPage {
   hcfshow: any;
   request: any;
   hcfMarkers: any[];
+  alert: any = false;
 
-  constructor(public navCtrl: NavController, public http : HttpClient, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, public http : HttpClient, public navParams: NavParams, public alertCtrl : AlertController) {
     this.hcfMarkers = [];
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad HcfMappingPage');
+    this.responseAlert();
   }
 
   ionViewDidEnter(){
@@ -50,7 +52,36 @@ export class HcfMappingPage {
     console.log("left");
 
   }
-
+  dataRefresher:any;
+  responseAlert(){
+    this.dataRefresher = setInterval(() =>{
+      let alert = this.alertCtrl.create({
+        title: 'Alert',
+        message: 'Did anyone respond to your request?',
+        buttons: [
+          {
+            text: 'Yes',
+            role: 'cancel',
+            handler: () => {
+              clearInterval(this.dataRefresher);
+              
+            }
+          },
+          {
+            text: 'No',
+            handler: () => {
+              console.log('Cancel clicked');
+              // this.navCtrl.push('RespondToRequestPage'); 
+              clearInterval(this.dataRefresher);
+              this.responseAlert();
+            
+            }
+          }
+        ]
+      });
+      alert.present();
+    },300000);
+  }
 
 
   loadmap(){

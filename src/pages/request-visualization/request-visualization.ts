@@ -30,6 +30,7 @@ export class RequestVisualizationPage {
 
   HCFshow: any;
   emergencyshow: any;
+  stat_id: any;
   
   requestMarkers: any;
   map:any;
@@ -98,7 +99,9 @@ export class RequestVisualizationPage {
      .subscribe(
        res => {
        console.log(res.request_id);
+       console.log(res.stat_id);
        this.user_request_id = res.request_id;
+       this.stat_id = res.stat_id;
    }); 
   }
 
@@ -123,6 +126,8 @@ export class RequestVisualizationPage {
        res => {
        console.log(res.request_id);
        this.user_request_id = res.request_id;
+       console.log(res.stat_id);
+       this.stat_id = res.stat_id;
 
 
        var redIcon = new leaflet.Icon({
@@ -281,7 +286,7 @@ requestMarker(){
 
     } else if(data.request_status_id==1 && data.request_id == this.user_request_id){
       this.rout(data);
-      this.startroute=true;
+      //this.startroute=true;
       this.eventForReport = data.event;
       this.request_id = data.request_id;
       this.marker2=leaflet.marker([data.request_lat,data.request_long], {icon: yellowIcon});
@@ -394,7 +399,8 @@ requestMarker(){
     // })
     // .addTo(this.map);
       this.addRoutingControl({
-        
+        watch: true,
+      enableHighAccuracy: true,
         waypoints: [
           leaflet.latLng(data.request_lat, data.request_long,),
           leaflet.latLng(this.currLat, this.currLong),

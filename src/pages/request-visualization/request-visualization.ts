@@ -27,16 +27,13 @@ export class RequestVisualizationPage {
 
   eventForReport: any;
   request_id: any;
-<<<<<<< HEAD
   alert: any = false ;
   requestshow: any;
-=======
 
   HCFshow: any;
   emergencyshow: any;
   stat_id: any;
   
->>>>>>> f5662f965a4b5a971aab9f8cc75fc170eaae223b
   requestMarkers: any;
   map:any;
   route:any;
@@ -60,9 +57,12 @@ export class RequestVisualizationPage {
   public status : any=false;
   public arrive : any=false;
   markerGroup3 = leaflet.featureGroup();
+
+  trytry: any;
   constructor(public modalCtrl: ModalController, public navCtrl: NavController, public http : HttpClient, public http2 : Http, public navParams: NavParams, public alertCtrl : AlertController,
     public loginService: LoginServiceProvider) {
       this.requestMarkers = [];
+
   }
 
   ionViewDidLoad() {
@@ -295,6 +295,7 @@ requestMarker(){
       this.eventForReport = data.event;
       this.request_id = data.request_id;
       this.marker2=leaflet.marker([data.request_lat,data.request_long], {icon: yellowIcon});
+      this.trytry = this.LatLng1.distanceTo(leaflet.latLng(data.request_lat,data.request_long));
 
     } else if(data.request_status_id==2){
       this.marker2=leaflet.marker([data.request_lat,data.request_long], {icon: grayIcon});
@@ -684,26 +685,99 @@ requestMarker(){
   // }
 
   start(data:any){
-    // var modalPage = this.modalCtrl.create('ReportPage', {
-    //   event: this.eventForReport,
-    //   request_id: this.request_id
-    // });
-    // modalPage.present(); \
-    if(this.startroute==true){
-    this.rout(data);
-    }else{
-      let alert = this.alertCtrl.create({
-        message: "You didnt respond!",
+    
+    // if(this.startroute==true){
+    //   this.rout(data);
+    // }else{
+    //   let alert = this.alertCtrl.create({
+    //     message: "You didnt respond!",
+    //     buttons: ['OK']
+    //     });
+    //     // this.navCtrl.setRoot('HcfMappingPage');
+    //     alert.present();
+    // }
+
+    this.stat_id = 1;
+
+    var headers = new Headers();
+      
+    headers.append("Accept", 'application/json');
+    headers.append('Content-Type', 'application/x-www-form-urlencoded');
+    headers.append('Access-Control-Allow-Origin' , '*');
+    headers.append('Access-Control-Allow-Headers' , 'Content-Type');
+    headers.append('Access-Control-Allow-Methods', 'POST, GET, OPTIONS, PUT');
+    
+    let options = new RequestOptions({ headers: headers });
+
+    let data1 = {
+      /********** LOG **********/
+      user_id: this.loginService.logged_in_user_id,
+      action: "Started Navigating",
+      action_datetime: new Date()
+    }
+    
+    console.log(data1);
+    this.http2.post('http://usc-dcis.com/eligtas.app/log.php', data1, options)
+    
+    .map(res=> res.json())
+    .subscribe((data1: any) =>
+    {
+       // If the request was successful notify the user
+       console.log(data1);
+       let alert = this.alertCtrl.create({
+        message: "You have started navigating(???)",
         buttons: ['OK']
         });
         // this.navCtrl.setRoot('HcfMappingPage');
         alert.present();
+        //this.navCtrl.setRoot('PilgrimProfilePage'); 
+        //this.log();
+
+
+    },
+    (error : any) =>
+    {
+      console.log(error);
+      let alert2 = this.alertCtrl.create({
+        title:"FAILED",
+        subTitle: "Something went wrong!",
+        buttons: ['OK']
+        });
+
+      alert2.present();
+    });
+    
+    let data2 = {
+      user_id: this.loginService.logged_in_user_id,
+      stat_id: 1
     }
+    this.http2.post('http://usc-dcis.com/eligtas.app/update-stat.php', data2, options)
+    .map(res=> res.json())
+    .subscribe((data2: any) =>
+    {
+       // If the request was successful notify the user
+      //  console.log(data2);
+      //  let alert = this.alertCtrl.create({
+      //   message: "You have started navigating(???)",
+      //   buttons: ['OK']
+      //   });
+      //   alert.present();
+    },
+    (error : any) =>
+    {
+      console.log(error);
+      let alert2 = this.alertCtrl.create({
+        title:"FAILED",
+        subTitle: "Something went wrong!",
+        buttons: ['OK']
+        });
+
+      alert2.present();
+    });
   }
 
   pushArrive() {
-    this.arrive = true;
-    this.status = false;
+    this.stat_id=2;
 
 
     var headers = new Headers();
@@ -755,6 +829,33 @@ requestMarker(){
     });
 
 
+    let data2 = {
+      user_id: this.loginService.logged_in_user_id,
+      stat_id: 2
+    }
+    this.http2.post('http://usc-dcis.com/eligtas.app/update-stat.php', data2, options)
+    .map(res=> res.json())
+    .subscribe((data2: any) =>
+    {
+       // If the request was successful notify the user
+      //  console.log(data2);
+      //  let alert = this.alertCtrl.create({
+      //   message: "You have started navigating(???)",
+      //   buttons: ['OK']
+      //   });
+      //   alert.present();
+    },
+    (error : any) =>
+    {
+      console.log(error);
+      let alert2 = this.alertCtrl.create({
+        title:"FAILED",
+        subTitle: "Something went wrong!",
+        buttons: ['OK']
+        });
+
+      alert2.present();
+    });
   }
   /******** END SHOW MARKERS **********/
 

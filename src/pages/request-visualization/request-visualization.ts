@@ -29,6 +29,8 @@ export class RequestVisualizationPage {
   request_id: any;
   alert: any = false ;
   requestshow: any;
+  cfb: any = false;
+  isenabled:boolean=false;
 
   HCFshow: any;
   emergencyshow: any;
@@ -284,7 +286,7 @@ requestMarker(){
       popupAnchor: [1, -34],
       shadowSize: [41, 41]
     });  
-    if(data.request_status_id==0){
+    if(data.request_status_id==null){
       this.marker2=leaflet.marker([data.request_lat,data.request_long], {icon: purpleIcon}).on('click', () => {
         this.presentConfirm(data);
       })
@@ -297,8 +299,29 @@ requestMarker(){
       this.marker2=leaflet.marker([data.request_lat,data.request_long], {icon: yellowIcon});
       this.trytry = this.LatLng1.distanceTo(leaflet.latLng(data.request_lat,data.request_long));
 
-    } else if(data.request_status_id==2){
+    } else if( data.request_status_id==2 ){
       this.marker2=leaflet.marker([data.request_lat,data.request_long], {icon: grayIcon});
+    } else if (data.request_status_id == 0) {
+      var headers = new Headers();
+      
+      headers.append("Accept", 'application/json');
+      headers.append('Content-Type', 'application/x-www-form-urlencoded');
+      headers.append('Access-Control-Allow-Origin' , '*');
+      headers.append('Access-Control-Allow-Headers' , 'Content-Type');
+      headers.append('Access-Control-Allow-Methods', 'POST, GET, OPTIONS, PUT');
+      
+      let options = new RequestOptions({ headers: headers });
+
+      let data1 = {
+        request_id: data.request_id
+      }
+
+       this.http2.post('http://usc-dcis.com/eligtas.app/retrieve-cfb-num.php',data1,options)
+       .map(res=> res.json())
+         .subscribe(
+           res => {
+            this.callForBackUpMarker(res);
+       }); 
     }
 
     var circle = leaflet.circle([data.request_lat, data.request_long], {
@@ -870,21 +893,6 @@ requestMarker(){
       if(this.loginService.logged_in_user_request_id!= null){
         this.status = true;
       }
-
-      // this.http
-      //  .get('http://usc-dcis.com/eligtas.app/retrieve-cfb-num.php')
-      //  .subscribe((data : any) =>
-      //  {
-      //     this.request = data;
-      //     //this.markerGroup.clearLayers();
-      //     this.callForBackUpMarker(data);
-      //     console.log(data);
-          
-      // },
-      //  (error : any) =>
-      //  {
-      //     console.dir(error);c
-      //  });
       var headers = new Headers();
       
       headers.append("Accept", 'application/json');
@@ -906,7 +914,39 @@ requestMarker(){
             this.callForBackUpMarker(res);
             console.log(res);
        }); 
-    //},1000);
+       
+    /******** UPDATE REQUEST STATUS ID **********/
+    let data2 = {
+      request_id: this.request_id,
+      request_status_id: 0
+    }
+
+    this.http2.post('http://usc-dcis.com/eligtas.app/update-request.php', data2, options)
+    .map(res=> res.json())
+    .subscribe((data2: any) =>
+    {
+      console.log(data2);
+       // If the request was successful notify the user
+      //  console.log(data2);
+      //  let alert = this.alertCtrl.create({
+      //   message: "You have started navigating(???)",
+      //   buttons: ['OK']
+      //   });
+      //   alert.present();
+    },
+    (error : any) =>
+    {
+      console.log(error);
+      let alert2 = this.alertCtrl.create({
+        title:"FAILED",
+        subTitle: "Request not updated. huhu!",
+        buttons: ['OK']
+        });
+
+      alert2.present();
+    });
+    
+    this.cfb = true;
   }
 
   callForBackUpMarker(data:any){
@@ -922,7 +962,10 @@ requestMarker(){
     leaflet.marker([data.request_lat,data.request_long],
       {
           icon: numIcon
-      }).addTo(this.map);
+      }).addTo(this.map)
+      // .on('click', () => {
+      //   this.presentConfirm(data);
+      // });
   }
 
 }

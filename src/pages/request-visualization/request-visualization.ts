@@ -8,7 +8,6 @@ import 'leaflet-routing-machine';
 import 'rxjs/add/operator/map';
 import { analyzeAndValidateNgModules } from '@angular/compiler';
 import { getOrCreateNodeInjectorForNode } from '@angular/core/src/render3/di';
-import { startTimeRange } from '@angular/core/src/profile/wtf_impl';
 
 /**
  * Generated class for the RequestVisualizationPage page.
@@ -27,10 +26,11 @@ export class RequestVisualizationPage {
 
   eventForReport: any;
   request_id: any;
-  alert: any = false ;
+ 
   requestshow: any;
   cfb: any = false;
   isenabled:boolean=false;
+  alert: any = false ;
 
   HCFshow: any;
   emergencyshow: any;
@@ -55,7 +55,6 @@ export class RequestVisualizationPage {
   LatLng1:any;
   markerGroup = leaflet.featureGroup();
   markerGroup2 = leaflet.featureGroup();
-  public startroute : any=false;
   public status : any=false;
   public arrive : any=false;
   markerGroup3 = leaflet.featureGroup();
@@ -70,6 +69,7 @@ export class RequestVisualizationPage {
   ionViewDidLoad() {
     console.log("loaded");
     //this.getUserRequest();
+ 
    
   }
 
@@ -151,8 +151,8 @@ export class RequestVisualizationPage {
         maxZoom: 18,
       }).addTo(this.map);
       this.map.locate({
-        //setView:this.LatLng1,
-      setView: true,
+        setView:this.LatLng1,
+      //setView: true,
       //maxZoom: 120,
         watch: true,
         enableHighAccuracy: true
@@ -345,6 +345,10 @@ requestMarker(){
     if (this.route1 != null)
         this.removeRoutingControl();
 
+    // routingControl = L.Routing.control({
+    //     waypoints: waypoints
+    // }).addTo(map);
+
   this.route1= leaflet.Routing.control({
       waypoints: waypoints
   }).addTo(this.map);
@@ -379,31 +383,17 @@ requestMarker(){
       enableHighAccuracy: true
     })
     //console.log(this.LatLng1)
-    // leaflet.Routing.control({
-    //   waypoints: [
-    //     leaflet.latLng(data.request_lat, data.request_long),
-    //     leaflet.latLng(this.currLat, this.currLong),
-    //   ],
-    //    routeWhileDragging:false,
-    //    showAlternatives:true,
-    // })
-    // this.addRoutingControl({
-    //     waypoints: [
-    //       leaflet.latLng(data.request_lat, data.request_long),
-    //       leaflet.latLng(this.currLat, this.currLong),
-    //     ]
-    //   })
-    // .addTo(this.map)
-    this.markerGroup2.clearLayers();
-    this.map.removeLayer(this.circle)
+    leaflet.Routing.control({
+      waypoints: [
+        leaflet.latLng(data.request_lat, data.request_long),
+        leaflet.latLng(this.currLat, this.currLong),
+      ],
+       routeWhileDragging:false,
+       showAlternatives:true,
+    })
+    .addTo(this.map)
+    
     .on('locationfound', (e) => {
-      if(this.map.hasLayer(this.marker3) && this.map.hasLayer(this.circle2)){
-        this.markerGroup3.clearLayers();
-        this.map.removeLayer(this.circle2);
-        this.removeRoutingControl();
-        console.log("rmove")
-      }
-
       this.currLat= e.latitude;
       this.currLong= e.longitude;
       this.LatLng1=leaflet.latLng(e.latitude,e.longitude);
@@ -424,8 +414,11 @@ requestMarker(){
     //   waypoints: [
     //     leaflet.latLng(data.request_lat, data.request_long),
     //     leaflet.latLng(this.currLat, this.currLong),
-    //   ]
+    //   ],
+    //    routeWhileDragging:false,
+    //    showAlternatives:true,
     // })
+      .addTo(this.map);
     // .addTo(this.map);
       this.addRoutingControl({
         watch: true,
@@ -438,18 +431,11 @@ requestMarker(){
       })
      // .addTo(this.map);
       this.markerGroup3.addLayer(this.marker3);
-      this.markerGroup3.addLayer(this.circle2);
       this.map.addLayer(this.markerGroup3);
       }).on('locationerror', (err) => {
         alert(err.message);
     })
-    //this.removeRoutingControl();
-    if(this.map.hasLayer(this.marker3) && this.map.hasLayer(this.circle2)){
-      this.markerGroup3.clearLayers();
-      this.map.removeLayer(this.circle2);
-      // this.removeRoutingControl();
-      console.log("rmove")
-    }
+    this.removeRoutingControl();
     //************** */
 
 
@@ -572,40 +558,15 @@ requestMarker(){
     alert.present();
   }
 
-  showHCF(){
+
+  showRequest(){
     this.http
        .get('http://usc-dcis.com/eligtas.app/retrieve-hcf.php')
        .subscribe((data : any) =>
        {
           console.log(data);
           this.request = data;
-          if(this.HCFshow == true){
-            for(let i=0; i<data.length; i++){
-              this.createMarker(data[i], i);
-            }
-            console.log("true");
-          }else{
-            for(let i=0; i<this.requestMarkers.length; i++){
-              this.deleteMarker(i);
-            }
-            console.log("false");
-          }
-          
-       },
-       (error : any) =>
-       {
-          console.dir(error);
-       });  
-  }
-  
-  showEmergency(){
-    this.http
-       .get('http://usc-dcis.com/eligtas.app/retrieve-emergencies.php')
-       .subscribe((data : any) =>
-       {
-          console.log(data);
-          this.request = data;
-          if(this.emergencyshow == true){
+          if(this.requestshow == true){
             for(let i=0; i<data.length; i++){
               this.createMarker(data[i], i);
             }

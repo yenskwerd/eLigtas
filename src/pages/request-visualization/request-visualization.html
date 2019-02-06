@@ -20,25 +20,56 @@
   
     <!--Show Health Care Facilities Toggle-->
     <div style="width:100%; height: 10%;">
+<<<<<<< HEAD
       <ion-item>
         <ion-label>Show Health Care Facilities</ion-label>
         <ion-toggle [(ngModel)]="requestshow" (ngModelChange)="showRequest($event)" ></ion-toggle>
       </ion-item>
     </div>
+=======
+      
+      <!-- <ion-item>
+        <ion-label>Show Health Care Facilities</ion-label>
+        <ion-toggle [(ngModel)]="requestshow" (ngModelChange)="showRequest($event)" ></ion-toggle>
+      </ion-item> -->
+
+      <ion-grid>
+        <ion-row>
+          <ion-col>      
+            <ion-item>
+              <ion-label>HCF</ion-label>
+              <ion-toggle [(ngModel)]="HCFshow" (ngModelChange)="showHCF($event)" ></ion-toggle>
+            </ion-item>
+          </ion-col>
+          <ion-col>      
+            <ion-item>
+              <ion-label>Emergency</ion-label>
+              <ion-toggle [(ngModel)]="emergencyshow" (ngModelChange)="showEmergency($event)" ></ion-toggle>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+    
+>>>>>>> 50fc9d299197f6b216f32923cd2ad9031a0eef14
     <!--End Show Health Care Facilities Toggle-->
 
   <div id="map" style="width:100%; height: 90%;">
   </div>
-  <!-- <div class="bottomBotton">
-    <button ion-button type="submit" class="btmButton" (click)="pushRespondToRequest()" block>View Request Details</button>
-  </div> -->
+  
 </ion-content>
 
 <ion-footer text-center>
-    <div *ngIf="status">
+    <div *ngIf="stat_id==0 && user_request_id!=NULL">
+      <button ion-button (click)="start()" class="reportBtn" block>Start</button> 
+    </div>
+    <div *ngIf="stat_id==1 && trytry>100">
+      <button ion-button (click)="pushArrive()" class="reportBtn" disabled block>Arrive</button> 
+    </div>
+    <div *ngIf="stat_id==1 && trytry<=100">
       <button ion-button (click)="pushArrive()" class="reportBtn" block>Arrive</button> 
     </div>
-    <div *ngIf="arrive">
+    <div *ngIf="stat_id==2">
       <button ion-button class="reportBtn" (click)="requestCallForBackUp()">Call for Backup</button>
       <button ion-button (click)="openReport()" class="reportBtn" >Report</button>
     </div>

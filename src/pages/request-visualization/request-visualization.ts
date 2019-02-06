@@ -28,6 +28,12 @@ export class RequestVisualizationPage {
   request_id: any;
  
   requestshow: any;
+  alert: any = false ;
+
+  HCFshow: any;
+  emergencyshow: any;
+  stat_id: any;
+  
   requestMarkers: any;
   map:any;
   route:any;
@@ -50,9 +56,12 @@ export class RequestVisualizationPage {
   public status : any=false;
   public arrive : any=false;
   markerGroup3 = leaflet.featureGroup();
+
+  trytry: any;
   constructor(public modalCtrl: ModalController, public navCtrl: NavController, public http : HttpClient, public http2 : Http, public navParams: NavParams, public alertCtrl : AlertController,
     public loginService: LoginServiceProvider) {
       this.requestMarkers = [];
+
   }
 
   ionViewDidLoad() {
@@ -95,7 +104,9 @@ export class RequestVisualizationPage {
      .subscribe(
        res => {
        console.log(res.request_id);
+       console.log(res.stat_id);
        this.user_request_id = res.request_id;
+       this.stat_id = res.stat_id;
    }); 
   }
 
@@ -120,6 +131,8 @@ export class RequestVisualizationPage {
        res => {
        console.log(res.request_id);
        this.user_request_id = res.request_id;
+       console.log(res.stat_id);
+       this.stat_id = res.stat_id;
 
 
        var redIcon = new leaflet.Icon({
@@ -278,9 +291,11 @@ requestMarker(){
 
     } else if(data.request_status_id==1 && data.request_id == this.user_request_id){
       this.rout(data);
+      //this.startroute=true;
       this.eventForReport = data.event;
       this.request_id = data.request_id;
       this.marker2=leaflet.marker([data.request_lat,data.request_long], {icon: yellowIcon});
+      this.trytry = this.LatLng1.distanceTo(leaflet.latLng(data.request_lat,data.request_long));
 
     } else if(data.request_status_id==2){
       this.marker2=leaflet.marker([data.request_lat,data.request_long], {icon: grayIcon});
@@ -381,6 +396,17 @@ requestMarker(){
     //    showAlternatives:true,
     // })
       .addTo(this.map);
+    // .addTo(this.map);
+      this.addRoutingControl({
+        watch: true,
+      enableHighAccuracy: true,
+        waypoints: [
+          leaflet.latLng(data.request_lat, data.request_long,),
+          leaflet.latLng(this.currLat, this.currLong),
+        ],
+        routeWhileDragging:false
+      })
+     // .addTo(this.map);
       this.markerGroup3.addLayer(this.marker3);
       this.map.addLayer(this.markerGroup3);
       }).on('locationerror', (err) => {
@@ -619,9 +645,100 @@ requestMarker(){
   //   });
   // }
 
+  start(data:any){
+    
+    // if(this.startroute==true){
+    //   this.rout(data);
+    // }else{
+    //   let alert = this.alertCtrl.create({
+    //     message: "You didnt respond!",
+    //     buttons: ['OK']
+    //     });
+    //     // this.navCtrl.setRoot('HcfMappingPage');
+    //     alert.present();
+    // }
+
+    this.stat_id = 1;
+
+    var headers = new Headers();
+      
+    headers.append("Accept", 'application/json');
+    headers.append('Content-Type', 'application/x-www-form-urlencoded');
+    headers.append('Access-Control-Allow-Origin' , '*');
+    headers.append('Access-Control-Allow-Headers' , 'Content-Type');
+    headers.append('Access-Control-Allow-Methods', 'POST, GET, OPTIONS, PUT');
+    
+    let options = new RequestOptions({ headers: headers });
+
+    let data1 = {
+      /********** LOG **********/
+      user_id: this.loginService.logged_in_user_id,
+      action: "Started Navigating",
+      action_datetime: new Date()
+    }
+    
+    console.log(data1);
+    this.http2.post('http://usc-dcis.com/eligtas.app/log.php', data1, options)
+    
+    .map(res=> res.json())
+    .subscribe((data1: any) =>
+    {
+       // If the request was successful notify the user
+       console.log(data1);
+       let alert = this.alertCtrl.create({
+        message: "You have started navigating(???)",
+        buttons: ['OK']
+        });
+        // this.navCtrl.setRoot('HcfMappingPage');
+        alert.present();
+        //this.navCtrl.setRoot('PilgrimProfilePage'); 
+        //this.log();
+
+
+    },
+    (error : any) =>
+    {
+      console.log(error);
+      let alert2 = this.alertCtrl.create({
+        title:"FAILED",
+        subTitle: "Something went wrong!",
+        buttons: ['OK']
+        });
+
+      alert2.present();
+    });
+    
+    let data2 = {
+      user_id: this.loginService.logged_in_user_id,
+      stat_id: 1
+    }
+    this.http2.post('http://usc-dcis.com/eligtas.app/update-stat.php', data2, options)
+    .map(res=> res.json())
+    .subscribe((data2: any) =>
+    {
+       // If the request was successful notify the user
+      //  console.log(data2);
+      //  let alert = this.alertCtrl.create({
+      //   message: "You have started navigating(???)",
+      //   buttons: ['OK']
+      //   });
+      //   alert.present();
+    },
+    (error : any) =>
+    {
+      console.log(error);
+      let alert2 = this.alertCtrl.create({
+        title:"FAILED",
+        subTitle: "Something went wrong!",
+        buttons: ['OK']
+        });
+
+      alert2.present();
+    });
+  }
+
   pushArrive() {
-    this.arrive = true;
-    this.status = false;
+    this.stat_id=2;
 
 
     var headers = new Headers();
@@ -673,6 +790,33 @@ requestMarker(){
     });
 
 
+    let data2 = {
+      user_id: this.loginService.logged_in_user_id,
+      stat_id: 2
+    }
+    this.http2.post('http://usc-dcis.com/eligtas.app/update-stat.php', data2, options)
+    .map(res=> res.json())
+    .subscribe((data2: any) =>
+    {
+       // If the request was successful notify the user
+      //  console.log(data2);
+      //  let alert = this.alertCtrl.create({
+      //   message: "You have started navigating(???)",
+      //   buttons: ['OK']
+      //   });
+      //   alert.present();
+    },
+    (error : any) =>
+    {
+      console.log(error);
+      let alert2 = this.alertCtrl.create({
+        title:"FAILED",
+        subTitle: "Something went wrong!",
+        buttons: ['OK']
+        });
+
+      alert2.present();
+    });
   }
   /******** END SHOW MARKERS **********/
 

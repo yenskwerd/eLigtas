@@ -19,6 +19,7 @@ import { asTextData } from '@angular/core/src/view';
   templateUrl: 'event-report.html',
 })
 export class EventReportPage {
+  max_id: any;
   today: number = Date.now();
   event: any;
   lat: any;
@@ -31,37 +32,23 @@ export class EventReportPage {
   constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl:AlertController,private http: Http, public loginService: LoginServiceProvider) {
     this.lat = navParams.data.lat;
     this.long = navParams.data.long;
+
+    
+    this.http
+      .get('http://usc-dcis.com/eligtas.app/retrieve-max-request.php')
+      .map(res => res.json())
+      .subscribe((data : any) =>
+      {
+        // console.dir(data);
+        this.max_id = data.max_id + 1;
+        console.log(this.max_id);
+      },
+      (error : any) =>
+      {
+         console.dir(error);
+      });
   }
 
-  // log(){
-  //   var headers = new Headers();
-      
-  //       headers.append("Accept", 'application/json');
-  //       headers.append('Content-Type', 'application/x-www-form-urlencoded');
-  //       headers.append('Access-Control-Allow-Origin' , '*');
-  //       headers.append('Access-Control-Allow-Headers' , 'Content-Type');
-  //       headers.append('Access-Control-Allow-Methods', 'POST, GET, OPTIONS, PUT');
-
-  //   let options = new RequestOptions({ headers: headers });
-  //   let data2 = {
-  //         user_id: this.loginService.logged_in_user_id,
-  //         action: "Report",
-  //         action_done: this.event,
-  //         action_datetime: new Date()
-  //       }
-  //       console.log(data2);
-  //       this.http.post('http://usc-dcis.com/eligtas.app/log.php', data2, options)
-        
-  //       .map(res=> res.json())
-  //       .subscribe((data2: any) =>
-  //       {
-  //          console.log(data2);
-  //       },
-  //       (error : any) =>
-  //       {
-  //         console.log(error);
-  //       });
-  //   }
   visualchanged(e:any, name){
     // console.log(e.checked);
     if(e.checked) {
@@ -141,6 +128,9 @@ export class EventReportPage {
     }
     console.log(this.others);
 
+    
+
+
     console.log(this.lat);
     console.log(this.report);
     if(this.persons_injured.value==""){
@@ -185,6 +175,8 @@ export class EventReportPage {
           request_lat: this.lat,
           request_long: this.long,
           special_needs: this.others,
+
+          max_id: this.max_id,
 
           /********** LOG **********/
           user_id: this.loginService.logged_in_user_id,

@@ -232,8 +232,7 @@ requestMarker(){
     if(this.loginService.logged_in_user_request_id!= null){
       this.status = true;
     }
-    this.http
-     .get('http://usc-dcis.com/eligtas.app/retrieve-request.php')
+    this.http.get('http://usc-dcis.com/eligtas.app/retrieve-request.php')
      .subscribe((data : any) =>
      {
         this.request = data;

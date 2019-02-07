@@ -53,6 +53,8 @@ export class HcfMappingPage {
 
   }
   dataRefresher:any;
+  check:any =0;
+ 
   responseAlert(){
     this.dataRefresher = setInterval(() =>{
       let alert = this.alertCtrl.create({
@@ -63,8 +65,8 @@ export class HcfMappingPage {
             text: 'Yes',
             role: 'cancel',
             handler: () => {
-              clearInterval(this.dataRefresher);
-              
+            this.check=1;
+            console.log(this.check);
             }
           },
           {
@@ -72,15 +74,21 @@ export class HcfMappingPage {
             handler: () => {
               console.log('Cancel clicked');
               // this.navCtrl.push('RespondToRequestPage'); 
-              clearInterval(this.dataRefresher);
-              this.responseAlert();
-            
+            this.check=0;
+            console.log(this.check);
+            this.responseAlert();
             }
           }
         ]
       });
-      alert.present();
-    },300000);
+      if(this.check==0){
+          clearInterval(this.dataRefresher);
+          alert.present();
+      } else {
+          clearInterval(this.dataRefresher);
+      } 
+      
+        },5000);
   }
 
 

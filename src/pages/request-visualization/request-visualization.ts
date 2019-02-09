@@ -8,6 +8,9 @@ import 'leaflet-routing-machine';
 import 'rxjs/add/operator/map';
 import { analyzeAndValidateNgModules } from '@angular/compiler';
 import { getOrCreateNodeInjectorForNode } from '@angular/core/src/render3/di';
+import { r } from '@angular/core/src/render3';
+import { GESTURE_PRIORITY_MENU_SWIPE } from 'ionic-angular/umd/gestures/gesture-controller';
+
 
 /**
  * Generated class for the RequestVisualizationPage page.
@@ -145,15 +148,16 @@ export class RequestVisualizationPage {
         popupAnchor: [1, -34],
         shadowSize: [41, 41]
       });  
-      this.map = leaflet.map("map").fitWorld();
+      this.map = leaflet.map("map",{center:(this.currLat,this.currLong),  }).setView(this.currLat, this.currLong);
       leaflet.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
         maxZoom: 18,
       }).addTo(this.map);
       this.map.locate({
-        setView:this.LatLng1,
-      //setView: true,
-      //maxZoom: 120,
+        // setView:(this.currLat,this.currLong),
+        //setView: true,
+        //center:this.LatLng1,
+        maxZoom: 120,
         watch: true,
         enableHighAccuracy: true
       })
@@ -375,21 +379,55 @@ requestMarker(){
     // //mugana pero ang marker waypoint madrag niya dimusunod sa current loac
 
     this.map.locate({
-      setView:this.LatLng1,
-      //setView: true,
-      //maxZoom: 120,
+      //setView:this.LatLng1,
+       setView: false,
+      //center:(this.currLat,this.currLong),
+      maxZoom: 120,
       watch: true,
       enableHighAccuracy: true
     })
+    var waypoints=[
+      leaflet.latLng(data.request_lat, data.request_long),
+      leaflet.latLng(this.currLat, this.currLong)
+    ]
     //console.log(this.LatLng1)
+  //   var plan = leaflet.Routing.plan({
+  //     addWaypoints: false,
+  //     draggableWaypoints: false,
+  //     routeWhileDragging: false,
+  //     createMarker: function(i, wp, er) {
+  //         return null;
+  //     }
+  // });
+
     leaflet.Routing.control({
-      waypoints: [
-        leaflet.latLng(data.request_lat, data.request_long),
-        leaflet.latLng(this.currLat, this.currLong),
-      ],
+      waypoints: waypoints,
+      plan: leaflet.Routing.plan(waypoints, {
+        addWaypoints: false,
+        draggableWaypoints: false,
+        routeWhileDragging: false,
+        createMarker: function(i, wp) {
+          return leaflet.marker(wp.latLng, {
+            draggable: false,
+            
+          });
+        }
+      }),
+      // waypoints: [null],
        routeWhileDragging:false,
+       fitSelectedRoutes: false,
        showAlternatives:true,
+       show: true,
+       autoRoute: true,
+      //  createMarker: function () {
+      //   return null;
+      // }
     })
+  //   return r;
+  // }
+  // var control = getRoute();
+  // var routeLayer = leaflet.layerGroup([control]);
+  // this.map.addLayer(routeLayer)
     .addTo(this.map)
     
     .on('locationfound', (e) => {

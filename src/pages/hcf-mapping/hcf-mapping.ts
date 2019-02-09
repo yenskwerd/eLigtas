@@ -1,8 +1,10 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import leaflet from 'leaflet';
+import {Http, Headers, RequestOptions}  from '@angular/http';
 import { HttpClient } from '@angular/common/http';  
 import { LoginPage } from '../login/login';
+import { LoginServiceProvider } from '../../providers/login-service/login-service';
 import { dateValueRange } from 'ionic-angular/umd/util/datetime-util';
 /**
  * Generated class for the HcfMappingPage page.
@@ -27,14 +29,16 @@ export class HcfMappingPage {
   request: any;
   hcfMarkers: any[];
   alert: any = false;
+  user_request_id: any;
+  count: any;
 
-  constructor(public navCtrl: NavController, public http : HttpClient, public navParams: NavParams, public alertCtrl : AlertController) {
+  constructor(public navCtrl: NavController, public http : HttpClient, public navParams: NavParams, public alertCtrl : AlertController, public http2 : Http, public loginService: LoginServiceProvider) {
     this.hcfMarkers = [];
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad HcfMappingPage');
-    this.responseAlert();
+    this.checkResponse();
   }
 
   ionViewDidEnter(){
@@ -89,6 +93,68 @@ export class HcfMappingPage {
       } 
       
         },5000);
+  }
+
+  getUserRequest(){
+    //gets user data
+    var headers = new Headers();
+      
+    headers.append("Accept", 'application/json');
+    headers.append('Content-Type', 'application/x-www-form-urlencoded');
+    headers.append('Access-Control-Allow-Origin' , '*');
+    headers.append('Access-Control-Allow-Headers' , 'Content-Type');
+    headers.append('Access-Control-Allow-Methods', 'POST, GET, OPTIONS, PUT');
+    
+    let options = new RequestOptions({ headers: headers });
+    let data = {
+      user_id: this.loginService.logged_in_user_id
+    }
+    console.log(data);
+
+   this.http2.post('http://usc-dcis.com/eligtas.app/retrieve-user-request.php',data,options)
+   .map(res=> res.json())
+     .subscribe(
+       res => {
+       console.log(res.request_id);
+       this.user_request_id = res.request_id;
+   }); 
+  }
+
+  getCount() {
+
+    this.getUserRequest();
+
+    var headers = new Headers();
+      
+    headers.append("Accept", 'application/json');
+    headers.append('Content-Type', 'application/x-www-form-urlencoded');
+    headers.append('Access-Control-Allow-Origin' , '*');
+    headers.append('Access-Control-Allow-Headers' , 'Content-Type');
+    headers.append('Access-Control-Allow-Methods', 'POST, GET, OPTIONS, PUT');
+    
+    let options = new RequestOptions({ headers: headers });
+
+    let data1 = {
+      request_id: this.user_request_id
+    }
+
+    this.http2.post('http://usc-dcis.com/eligtas.app/retrieve-cfb-num.php',data1,options)
+     .map(res=> res.json())
+       .subscribe(
+         res => {
+          console.log(res.count);
+          this.count = res.count;
+          // this.callForBackUpMarker(res);
+    }); 
+
+  }
+
+  checkResponse() {
+    this.getCount();
+
+    if (this.count == 0) {
+      this.responseAlert();
+    } 
   }
 
 

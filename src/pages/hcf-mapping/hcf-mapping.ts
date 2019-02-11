@@ -38,7 +38,7 @@ export class HcfMappingPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad HcfMappingPage');
-    this.checkResponse();
+    this.getCount();
   }
 
   ionViewDidEnter(){
@@ -144,18 +144,14 @@ export class HcfMappingPage {
          res => {
           console.log(res.count);
           this.count = res.count;
+          if (res.count == 0) {
+            this.responseAlert();
+          } 
           // this.callForBackUpMarker(res);
     }); 
 
   }
 
-  checkResponse() {
-    this.getCount();
-
-    if (this.count == 0) {
-      this.responseAlert();
-    } 
-  }
 
 
   loadmap(){

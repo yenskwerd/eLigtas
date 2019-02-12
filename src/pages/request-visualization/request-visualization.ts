@@ -595,6 +595,57 @@ requestMarker(){
     alert.present();
   }
 
+  showHCF(){
+    this.http
+       .get('http://usc-dcis.com/eligtas.app/retrieve-hcf.php')
+       .subscribe((data : any) =>
+       {
+          console.log(data);
+          this.request = data;
+          if(this.HCFshow == true){
+            for(let i=0; i<data.length; i++){
+              this.createMarker(data[i], i);
+            }
+            console.log("true");
+          }else{
+            for(let i=0; i<this.requestMarkers.length; i++){
+              this.deleteMarker(i);
+            }
+            console.log("false");
+          }
+          
+       },
+       (error : any) =>
+       {
+          console.dir(error);
+       });  
+  }
+  
+  showEmergency(){
+    this.http
+       .get('http://usc-dcis.com/eligtas.app/retrieve-emergencies.php')
+       .subscribe((data : any) =>
+       {
+          console.log(data);
+          this.request = data;
+          if(this.emergencyshow == true){
+            for(let i=0; i<data.length; i++){
+              this.createMarker(data[i], i);
+            }
+            console.log("true");
+          }else{
+            for(let i=0; i<this.requestMarkers.length; i++){
+              this.deleteMarker(i);
+            }
+            console.log("false");
+          }
+          
+       },
+       (error : any) =>
+       {
+          console.dir(error);
+       });  
+  }
 
   showRequest(){
     this.http

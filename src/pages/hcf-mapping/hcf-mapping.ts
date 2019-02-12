@@ -25,7 +25,9 @@ export class HcfMappingPage {
   currLong:any;
   lat: any;
   long: any;
-  hcfshow: any;
+  // hcfshow: any;
+  HCFshow: any;
+  emergencyshow: any;
   request: any;
   hcfMarkers: any[];
   alert: any = false;
@@ -227,14 +229,66 @@ export class HcfMappingPage {
     });
   }
 
+  // showHCF(){
+  //   this.http
+  //      .get('http://usc-dcis.com/eligtas.app/retrieve-emergencies.php')
+  //      .subscribe((data : any) =>
+  //      {
+  //         console.log(data);
+  //         this.request = data;
+  //         if(this.hcfshow == true){
+  //           for(let i=0; i<data.length; i++){
+  //             this.createMarker(data[i], i);
+  //           }
+  //           console.log("true");
+  //         }else{
+  //           for(let i=0; i<this.hcfMarkers.length; i++){
+  //             this.deleteMarker(i);
+  //           }
+  //           console.log("false");
+  //         }
+          
+  //      },
+  //      (error : any) =>
+  //      {
+  //         console.dir(error);
+  //      });  
+  // }
+
   showHCF(){
+    this.http
+       .get('http://usc-dcis.com/eligtas.app/retrieve-hcf.php')
+       .subscribe((data : any) =>
+       {
+          console.log(data);
+          this.request = data;
+          if(this.HCFshow == true){
+            for(let i=0; i<data.length; i++){
+              this.createMarker(data[i], i);
+            }
+            console.log("true");
+          }else{
+            for(let i=0; i<this.hcfMarkers.length; i++){
+              this.deleteMarker(i);
+            }
+            console.log("false");
+          }
+          
+       },
+       (error : any) =>
+       {
+          console.dir(error);
+       });  
+  }
+  
+  showEmergency(){
     this.http
        .get('http://usc-dcis.com/eligtas.app/retrieve-emergencies.php')
        .subscribe((data : any) =>
        {
           console.log(data);
           this.request = data;
-          if(this.hcfshow == true){
+          if(this.emergencyshow == true){
             for(let i=0; i<data.length; i++){
               this.createMarker(data[i], i);
             }
@@ -289,29 +343,29 @@ export class HcfMappingPage {
     });  
 
     //in db, there is a column "type" which contains the type of emergency facility
-    if(data.type == "Hospital"){
-      this.hcfMarkers[i] = leaflet.marker([data.request_lat,data.request_long], {icon: purpleIcon}).bindTooltip(data.name, 
+    if(data.hcf_type == 1){
+      this.hcfMarkers[i] = leaflet.marker([data.xloc,data.yloc], {icon: purpleIcon}).bindTooltip(data.name, 
       {
           permanent: true, 
           direction: 'bottom'
       }
   ).addTo(this.map);
-    }else if(data.type=="Fire Station"){
-      this.hcfMarkers[i] = leaflet.marker([data.request_lat,data.request_long], {icon: yellowIcon}).bindTooltip(data.name, 
+    }else if(data.hcf_type == 3){
+      this.hcfMarkers[i] = leaflet.marker([data.xloc,data.yloc], {icon: yellowIcon}).bindTooltip(data.name, 
         {
             permanent: true, 
             direction: 'bottom'
         }
     ).addTo(this.map);
-    }else if(data.type=="Police Station"){
-      this.hcfMarkers[i] = leaflet.marker([data.request_lat,data.request_long], {icon: grayIcon}).bindTooltip(data.name, 
+    }else if(data.hcf_type == 2){
+      this.hcfMarkers[i] = leaflet.marker([data.xloc,data.yloc], {icon: grayIcon}).bindTooltip(data.name, 
         {
             permanent: true, 
             direction: 'bottom'
         }
     ).addTo(this.map);
     }else{
-      this.hcfMarkers[i] = leaflet.marker([data.request_lat,data.request_long], {icon: blackIcon}).bindTooltip(data.name, 
+      this.hcfMarkers[i] = leaflet.marker([data.xloc,data.yloc], {icon: blackIcon}).bindTooltip(data.name, 
         {
             permanent: true, 
             direction: 'bottom'

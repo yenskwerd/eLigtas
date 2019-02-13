@@ -43,6 +43,10 @@ export class LoginPage {
     this.navCtrl.push('RequestVisualizationPage');
   }
 
+  changePassword(){
+    this.navCtrl.push('ForgotPasswordPage');
+  }
+
   logIn(){
     if(this.username.value==""){
     

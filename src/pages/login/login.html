@@ -19,7 +19,7 @@
     <ion-row justify-content-center align-items-center style="height: 70%">
       <!-- <h1 text-center>Login</h1> -->
       <form text-center>
-      <img src="assets/imgs/logo.png" class="logo-login">
+      <img src="assets/imgs/asd.png" class="logo-login">
           <ion-item>
             <ion-label stacked>Username</ion-label>
             <ion-input type="text" name="username" #username></ion-input>
@@ -30,7 +30,7 @@
           </ion-item>
           <button ion-button type="submit" (click)="logIn()" block>Login</button>
         <div text-center>
-          <a href="">Forgot Password?</a><br>
+          <a (click)="changePassword()">Forgot Password?</a><br>
           <!-- <a (click)="SignUp()">Register?</a> -->
         </div>
       </form>

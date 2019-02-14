@@ -333,6 +333,7 @@ requestMarker(){
         fillOpacity: 0,
         radius: 100
     }).addTo(this.map);
+    this.map.removeLayer(this.markerGroup);
     this.markerGroup.addLayer(this.marker2);
     this.map.addLayer(this.markerGroup);
   }

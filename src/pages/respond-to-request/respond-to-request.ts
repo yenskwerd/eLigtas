@@ -132,6 +132,11 @@ export class RespondToRequestPage {
     });
     /////// END OF LOG //
   }
+
+  pushBackToMap(){
+ 
+    this.navCtrl.setRoot('RequestVisualizationPage');
+  }
  
 
   // getResult(data){

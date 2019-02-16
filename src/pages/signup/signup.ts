@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController, MenuController } from 'ionic-angular';
 import {Http, Headers, RequestOptions}  from '@angular/http';
 import 'rxjs/add/operator/map';
 
@@ -20,7 +20,15 @@ export class SignupPage {
   options: any;
   options2: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl:AlertController,private http: Http) {
+  constructor(public menuCtrl: MenuController, public navCtrl: NavController, public navParams: NavParams, public alertCtrl:AlertController,private http: Http) {
+  }
+
+  ionViewWillEnter() {
+    this.menuCtrl.swipeEnable(false);
+  }
+
+  ionViewDidLeave() {
+    this.menuCtrl.swipeEnable(true);
   }
   
   @ViewChild('user_email') user_email;

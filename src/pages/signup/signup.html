@@ -13,7 +13,8 @@
 </ion-header>
 
 
-<ion-content padding>
+<ion-content class="bg" padding text-center no-bounce>
+  <ion-row justify-content-center align-items-center style="height: 100%">
     <form>
         <ion-item>
           <ion-label stacked>Email</ion-label>
@@ -59,4 +60,5 @@
         
         <button ion-button type="submit" (click)="signUp()" block>Sign Up</button>
       </form>
+  </ion-row>
 </ion-content>

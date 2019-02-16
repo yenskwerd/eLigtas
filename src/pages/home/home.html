@@ -10,14 +10,18 @@
 
 <ion-content class="bg" padding text-center no-bounce>
 
-  <ion-grid style="height: 100%">
+  <!-- <ion-grid style="height: 100%"> -->
     <ion-row justify-content-center align-items-center style="height: 100%">
+      <ion-grid></ion-grid>
+      <ion-grid></ion-grid>
+      <ion-grid></ion-grid>
+      <ion-grid></ion-grid>
+      <ion-grid></ion-grid>
+      <ion-grid></ion-grid>
       <br>
       <ion-title text-center>
-      <img src="assets/imgs/eligtas.png" class="logo-login">
-        <!-- eLigtas -->
-        <br>
-        A Disaster Management App
+        <img src="assets/imgs/eligtas.png" class="logo-login">
+        <br>A Disaster Management App
       </ion-title>
       <ion-grid>
         <p>
@@ -31,13 +35,19 @@
           <br><h4>DOST</h4>
         </p>
       </ion-grid>
+      <button ion-button (click)="PushLoginPage()"><ion-icon name="log-in"> </ion-icon>&nbsp; Login</button>
+      <button ion-button (click)="PushSignupPage()"><ion-icon name="person-add"></ion-icon>&nbsp; Signup</button>
+      <ion-grid></ion-grid>
+      <ion-grid></ion-grid>
+      <ion-grid></ion-grid>
+      <ion-grid></ion-grid>
+      <ion-grid></ion-grid>
+      <ion-grid></ion-grid>
     </ion-row>
-  </ion-grid>
+  <!-- </ion-grid> -->
 
   
 </ion-content>
 
-<ion-footer text-center>
-  <button ion-button (click)="PushLoginPage()">Login</button>
-  <button ion-button (click)="PushSignupPage()">Signup</button>
-</ion-footer>
+<!-- <ion-footer text-center>
+</ion-footer> -->

@@ -1,8 +1,9 @@
 import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, LoadingController, AlertController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, LoadingController, AlertController, NavParams, MenuController } from 'ionic-angular';
 import {Http, Headers, RequestOptions}  from '@angular/http';
 import { LoginServiceProvider } from '../../providers/login-service/login-service';
 import 'rxjs/add/operator/map';
+import { Events } from 'ionic-angular';
 import { HTTP } from '@ionic-native/http';
 
 /**
@@ -19,8 +20,16 @@ import { HTTP } from '@ionic-native/http';
 })
 export class LoginPage {
 
-  constructor(public navCtrl: NavController, public loading:LoadingController, private http: Http, public alertCtrl: AlertController, public navParams: NavParams,
-    public loginService: LoginServiceProvider) {
+  constructor(public navCtrl: NavController, public menuCtrl: MenuController, public loading:LoadingController, private http: Http, public alertCtrl: AlertController, public navParams: NavParams,
+    public loginService: LoginServiceProvider, public events: Events) {
+  }
+
+  ionViewWillEnter() {
+    this.menuCtrl.swipeEnable(false);
+  }
+
+  ionViewDidLeave() {
+    this.menuCtrl.swipeEnable(true);
   }
 
   @ViewChild('username') username;
@@ -33,6 +42,7 @@ export class LoginPage {
    * Citizen Login                  *
    *********************************/
   pushCitizenHomePage(){
+    this.events.publish('user:sidebar');
     this.navCtrl.push('HcfMappingPage');
   }
 
@@ -40,6 +50,7 @@ export class LoginPage {
   * Responder Login                 *
   **********************************/
   pushResponderHomePage(){
+    this.events.publish('user:sidebar');
     this.navCtrl.push('RequestVisualizationPage');
   }
 
@@ -101,7 +112,9 @@ export class LoginPage {
           if(res != "Your username or password is invalid!"){
             this.loginService.loginState = res.specUser_id;
             this.loginService.logged_in_user_id = res.user_id;
-            this.loginService.logged_in_user_request_id = res.request_id
+            this.loginService.logged_in_user_request_id = res.request_id;
+            this.loginService.logged_in_user_name = res.user_name;
+            this.events.publish('user:sidebar');
             // this.events.publish('user:sidebar');
             let alert = this.alertCtrl.create({
             subTitle: "You successfully logged in!",

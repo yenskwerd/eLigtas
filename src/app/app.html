@@ -2,19 +2,48 @@
 <ion-menu [content]="content">
 
     <ion-header>
-        <ion-toolbar>
-            <ion-title>E-Ligtas</ion-title>
+        <ion-toolbar text-center>
+          <img src="assets/imgs/pp.png" width="40%" class="logo-menu" />
+          <h4>hi {{username}}</h4>
         </ion-toolbar>
     </ion-header>
   
-    <ion-content>
+    <!-- <ion-content>
       <ion-list>
         <button menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)">
           {{p.title}}
         </button>
       </ion-list>
+    </ion-content> -->
+    
+    <ion-content>
+      <ion-list no-lines>
+            <button menuClose ion-item *ngFor="let p of mainmenus" (click)="openPage(p)">
+              <ion-row>
+                <ion-col col-2>
+                  <ion-icon name="{{p.icon}}"></ion-icon>
+                </ion-col>
+                <ion-col>{{p.title}}</ion-col> 
+              </ion-row>
+            </button>
+      </ion-list>
+      
+      <ion-footer>
+        <ion-list no-lines>
+              <button menuClose ion-item *ngFor="let p of extrapages" (click)="openPage(p)">
+                  <ion-row>
+                    <ion-col col-2>
+                      <ion-icon name="{{p.icon}}"></ion-icon>
+                    </ion-col>
+                    <ion-col>
+                      {{p.title}}
+                    </ion-col> 
+                  </ion-row>
+              </button>
+          </ion-list>
+      </ion-footer>
+
     </ion-content>
-  
   </ion-menu>
   
   <ion-nav id="nav" [root]="rootPage" type="overlay" #content swipeBackEnabled="false"></ion-nav>

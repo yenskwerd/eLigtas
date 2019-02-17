@@ -15,7 +15,12 @@
 
 <ion-content padding>
 
-  <button ion-button type="submit" (click)="pushChangePin()" block>Change Pin</button>
+  <button ion-button type="submit" (click)="pushChangePin()" block>Change Location</button>
+
+  <ion-icon *ngIf="currentNumber>0" name="remove-circle" (click)="decrement()"></ion-icon>&nbsp;
+    {{currentNumber}}
+  <ion-icon name="add-circle" (click)="increment()"></ion-icon>
+  
   <form>
     <ion-item>
       <ion-label stacked>Event</ion-label>
@@ -61,7 +66,7 @@
       </ion-item>
     
     </ion-list>
-    <button ion-button type="submit" (click)="report()" block>Drop Pin</button>
+    <button ion-button type="submit" (click)="report()" block>Submit Request</button>
   </form>
 </ion-content>
 <!-- <ion-footer text-center>

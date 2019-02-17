@@ -94,7 +94,7 @@ export class HcfMappingPage {
           clearInterval(this.dataRefresher);
       } 
       
-        },5000);
+        },600000);
   }
 
   getUserRequest(){

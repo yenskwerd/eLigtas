@@ -15,11 +15,13 @@ export class MyApp {
   username: any;
 
   rootPage:any = HomePage;
-  mainmenus: Array<{icon:string, title: string, component: any}>;
+  mainmenu: {icon:string, title: string, component: any}; 
+  pages: Array<{icon:string, title: string, component: any}>;
 
   extrapages: Array<{icon:string, title: string, component: any}>;
   submenus: Array<{icon:string, title: string, component: any}>;
   home: Array<{icon:string, title: string, component: any}>;
+  shownGroup = null;
  
   constructor(public platform: Platform, public statusBar: StatusBar, public events: Events, public splashScreen: SplashScreen, public loginService: LoginServiceProvider) {
     this.initializeApp();
@@ -31,12 +33,12 @@ export class MyApp {
 
     
     this.submenus = [
-      { icon: "medkit", title: 'Go to First Aid App', component: ""},
+      { icon: "medkit", title: 'First Aid App', component: ""},
       { icon: 'filing', title: 'View Reports', component: ""},
-      { icon: 'globe', title: 'Go to Batingaw App', component: ""},
-      { icon: 'medkit', title: 'Go to Red Cross App', component: ""},
-      { icon: 'locate', title: 'Go to Google Maps', component: ""},
-      { icon: 'globe', title: 'Go to MIMS App', component: ""}
+      { icon: 'globe', title: 'Batingaw App', component: ""},
+      { icon: 'medkit', title: 'Red Cross App', component: ""},
+      { icon: 'locate', title: 'Google Maps', component: ""},
+      { icon: 'globe', title: 'MIMS App', component: ""}
     ];
 
     // this.pages = [
@@ -52,15 +54,26 @@ export class MyApp {
     
   }
 
+  toggleGroup(group) {
+    if (this.isGroupShown(group)) {
+        this.shownGroup = null;
+    } else {
+        this.shownGroup = group;
+    }
+  }
+  isGroupShown(group) {
+      return this.shownGroup === group;
+  }
+
   createSidebar(){
-        this.mainmenus = [
+        this.pages = [
           { icon: "time", title: 'History', component: ""},
-          { icon: 'apps', title: 'Apps', component: ""},
           { icon: 'settings', title: 'Settings', component: ""}
         ];
         this.extrapages = [
           { icon: 'log-out', title:'Log out', component: HomePage}
         ];
+        this.mainmenu = { icon: 'apps', title: 'Apps', component: ""};
   }
 
   initializeApp(){

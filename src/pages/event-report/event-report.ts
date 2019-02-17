@@ -29,6 +29,7 @@ export class EventReportPage {
   walk: any;
   mental: any;
   others: any;
+  private currentNumber = 0;
   constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl:AlertController,private http: Http, public loginService: LoginServiceProvider) {
     this.lat = navParams.data.lat;
     this.long = navParams.data.long;
@@ -47,6 +48,14 @@ export class EventReportPage {
       {
          console.dir(error);
       });
+  }
+
+  private increment () {
+    this.currentNumber++;
+  }
+  
+  private decrement () {
+    this.currentNumber--;
   }
 
   visualchanged(e:any, name){

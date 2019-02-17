@@ -3,8 +3,8 @@
 
     <ion-header>
         <ion-toolbar text-center>
-          <img src="assets/imgs/pp.png" width="40%" class="logo-menu" />
-          <h4>hi {{username}}</h4>
+          <img src="assets/imgs/pp.png" width="35%" class="logo-menu" />
+          <h5>hi {{username}}</h5>
         </ion-toolbar>
     </ion-header>
   
@@ -18,7 +18,7 @@
     
     <ion-content>
       <ion-list no-lines>
-            <button menuClose ion-item *ngFor="let p of mainmenus" (click)="openPage(p)">
+            <button menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)">
               <ion-row>
                 <ion-col col-2>
                   <ion-icon name="{{p.icon}}"></ion-icon>
@@ -27,23 +27,42 @@
               </ion-row>
             </button>
       </ion-list>
+
+      <ion-list no-lines>
+          <ion-item text-wrap (click)="toggleGroup(i)" [ngClass]="{active: isGroupShown(i)}">
+            <ion-row> 
+              <ion-col col-2><ion-icon name="apps"></ion-icon></ion-col>
+              <ion-col>Apps</ion-col>
+              <ion-col *ngIf="sublevel"><ion-icon color="success" item-right [name]="isGroupShown(i) ? 'arrow-down' : 'arrow-forward'"></ion-icon></ion-col>
+            </ion-row>
+            <ion-row *ngIf="isGroupShown(i)">
+              <ion-list>
+                <button menuClose ion-item *ngFor="let p of submenus" (click)="openPage(p)">
+                    <ion-row>
+                      <ion-col col-2>
+                        <ion-icon name="{{p.icon}}"></ion-icon>
+                      </ion-col>
+                      <ion-col>{{p.title}}</ion-col> 
+                    </ion-row>
+                </button>
+              </ion-list>
+            </ion-row>
+          </ion-item>
+      </ion-list>   
       
+
+    </ion-content>
+    
       <ion-footer>
-        <ion-list no-lines>
               <button menuClose ion-item *ngFor="let p of extrapages" (click)="openPage(p)">
                   <ion-row>
                     <ion-col col-2>
                       <ion-icon name="{{p.icon}}"></ion-icon>
                     </ion-col>
-                    <ion-col>
-                      {{p.title}}
-                    </ion-col> 
+                    <ion-col>{{p.title}}</ion-col> 
                   </ion-row>
               </button>
-          </ion-list>
       </ion-footer>
-
-    </ion-content>
   </ion-menu>
   
   <ion-nav id="nav" [root]="rootPage" type="overlay" #content swipeBackEnabled="false"></ion-nav>

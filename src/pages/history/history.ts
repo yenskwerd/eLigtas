@@ -67,7 +67,7 @@ export class HistoryPage {
 
   
   generateHistory(data) {
-    console.log(data.length);
+    console.log(data.request_id);
     for (let i=0; i < data.length; i++) {
       this.history.push(
         { request_id: data[i].request_id,

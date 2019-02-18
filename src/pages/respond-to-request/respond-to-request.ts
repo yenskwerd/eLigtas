@@ -74,7 +74,7 @@ export class RespondToRequestPage {
     this.navCtrl.setRoot('RequestVisualizationPage');
   }
 
-  pushCallForBackupPage(){
+  pushRespondNowPage(){
     var headers = new Headers();
       
     headers.append("Accept", 'application/json');
@@ -111,12 +111,33 @@ export class RespondToRequestPage {
     //  location.reload();
         });
 
-    //////// LOG  //
+    /********** LOG **********/
         
+    // let data2 = {
+    //   user_id: this.loginService.logged_in_user_id,
+    //   action: "Respond",
+    //   action_datetime: new Date(),
+    //   request_id: this.request_id
+    // }
+    
+    // this.http.post('http://usc-dcis.com/eligtas.app/log.php', data2, options)
+    
+    // .map(res=> res.json())
+    // .subscribe((data2: any) =>
+    // {
+    //    console.log(data2);
+    // },
+    // (error : any) =>
+    // {
+    //   console.log(error);
+    // });
+
+    
     let data2 = {
       user_id: this.loginService.logged_in_user_id,
       action: "Respond",
-      action_datetime: new Date()
+      action_datetime: new Date(),
+      request_id: this.request_id
     }
     
     this.http.post('http://usc-dcis.com/eligtas.app/log.php', data2, options)
@@ -130,7 +151,8 @@ export class RespondToRequestPage {
     {
       console.log(error);
     });
-    /////// END OF LOG //
+
+    /********** END OF LOG **********/
   }
 
   pushBackToMap(){

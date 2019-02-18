@@ -11,12 +11,14 @@ import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { LoginServiceProvider } from '../providers/login-service/login-service';
 import { IonTextAvatar } from 'ionic-text-avatar';
+import { HistoryPage } from '../pages/history/history';
 
 @NgModule({
   declarations: [
     MyApp,
     HomePage,
-    IonTextAvatar
+    IonTextAvatar,
+    HistoryPage
   ],
   imports: [
     BrowserModule,
@@ -27,7 +29,8 @@ import { IonTextAvatar } from 'ionic-text-avatar';
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    HomePage
+    HomePage,
+    HistoryPage
   ],
   providers: [
     StatusBar,

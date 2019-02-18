@@ -642,6 +642,16 @@ requestMarker(){
   }
   
   showEmergency(){
+
+    var grayIcon = new leaflet.Icon({
+      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-grey.png',
+      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      shadowSize: [41, 41]
+    }); 
+    
     this.http
        .get('http://usc-dcis.com/eligtas.app/retrieve-emergencies.php')
        .subscribe((data : any) =>
@@ -650,7 +660,12 @@ requestMarker(){
           this.request = data;
           if(this.emergencyshow == true){
             for(let i=0; i<data.length; i++){
-              this.createMarker(data[i], i);
+              this.requestMarkers[i] = leaflet.marker([data.xloc,data.yloc], {icon: grayIcon}).bindTooltip(data.name, 
+                {
+                    permanent: true, 
+                    direction: 'bottom'
+                }
+              ).addTo(this.map);
             }
             console.log("true");
           }else{
@@ -817,7 +832,7 @@ requestMarker(){
        // If the request was successful notify the user
        console.log(data1);
        let alert = this.alertCtrl.create({
-        message: "You have started navigating(???)",
+        message: "You have started navigating.",
         buttons: ['OK']
         });
         // this.navCtrl.setRoot('HcfMappingPage');
@@ -886,7 +901,8 @@ requestMarker(){
       /********** LOG **********/
       user_id: this.loginService.logged_in_user_id,
       action: "Arrived",
-      action_datetime: new Date()
+      action_datetime: new Date(),
+      request_id: this.request_id
     }
     
     console.log(data);
@@ -1015,6 +1031,27 @@ requestMarker(){
       alert2.present();
     });
     
+    /********** LOG **********/
+    let data3 = {
+      user_id: this.loginService.logged_in_user_id,
+      action: "Callback",
+      action_datetime: new Date(),
+      request_id: this.request_id
+    }
+    
+    this.http2.post('http://usc-dcis.com/eligtas.app/log.php', data3, options)
+    
+    .map(res=> res.json())
+    .subscribe((data3: any) =>
+    {
+       console.log(data3);
+    },
+    (error : any) =>
+    {
+      console.log(error);
+    });
+    /********** END OF LOG **********/
+
     this.cfb = true;
   }
 

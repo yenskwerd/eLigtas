@@ -282,6 +282,16 @@ export class HcfMappingPage {
   }
   
   showEmergency(){
+
+    var grayIcon = new leaflet.Icon({
+      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-grey.png',
+      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      shadowSize: [41, 41]
+    }); 
+    
     this.http
        .get('http://usc-dcis.com/eligtas.app/retrieve-emergencies.php')
        .subscribe((data : any) =>
@@ -290,7 +300,12 @@ export class HcfMappingPage {
           this.request = data;
           if(this.emergencyshow == true){
             for(let i=0; i<data.length; i++){
-              this.createMarker(data[i], i);
+              this.hcfMarkers[i] = leaflet.marker([data.xloc,data.yloc], {icon: grayIcon}).bindTooltip(data.name, 
+                {
+                    permanent: true, 
+                    direction: 'bottom'
+                }
+              ).addTo(this.map);
             }
             console.log("true");
           }else{

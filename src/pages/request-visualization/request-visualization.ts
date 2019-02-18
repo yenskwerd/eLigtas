@@ -167,7 +167,7 @@ export class RequestVisualizationPage {
         popupAnchor: [1, -34],
         shadowSize: [41, 41]
       });  
-      this.map = leaflet.map("map",{center:(this.currLat,this.currLong),  }).fitWorld();
+      this.map = leaflet.map("map").fitWorld();
       leaflet.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
         maxZoom: 18,
@@ -175,37 +175,22 @@ export class RequestVisualizationPage {
       this.map.locate({
         // setView:(this.currLat,this.currLong),
         setView: true,
-        center:this.LatLng1,
-        maxZoom: 120,
+        maxZoom: 16,
         watch: true,
-        enableHighAccuracy: true
+        enableHighAccuracy: true,
+      }).on('click', () => {
+        this.map.locate({setView:false})
       })
+      // this.map.locate({
+      //   // setView:(this.currLat,this.currLong),
+      //   setView: false,
+      //   // center:this.LatLng1,
+      //   maxZoom: 16,
+      //   watch: true,
+      //   enableHighAccuracy: true
+      // })
       .on('locationfound', (e) => {
         console.log("locationfound");
-        //  working pero blinking
-      //   if(this.map.hasLayer(this.marker) && this.map.hasLayer(this.circle)){
-      //     this.markerGroup2.clearLayers();
-      //     this.map.removeLayer(this.circle);
-      //     console.log("rmove")
-      //   }else{
-      //   this.currLat= e.latitude;
-      //   this.currLong= e.longitude;
-      //   this.marker=leaflet.marker([e.latitude,e.longitude], {icon: redIcon,draggable:false})
-      //   .on('click', () => {
-      //     alert('You are here!');
-      //   }).addTo(this.map)
-      //   this.circle = leaflet.circle([e.latitude, e.longitude], {
-      //     color: 'rgba(255,255,255,0)',
-      //         fillColor: '#81C784',
-      //       fillOpacity: 0.5,
-      //       radius: 100
-      //   }).addTo(this.map)
-      //   this.markerGroup2.addLayer(this.marker);
-      //   this.markerGroup2.addLayer(this.circle);
-      //   this.map.addLayer(this.markerGroup2);
-      // }
-      // })
-        //****************** */
         if(this.map.hasLayer(this.marker) && this.map.hasLayer(this.circle)){
           this.markerGroup2.clearLayers();
           this.map.removeLayer(this.circle);
@@ -400,8 +385,8 @@ requestMarker(){
 
     this.map.locate({
       //setView:this.LatLng1,
-       setView: false,
-      //center:(this.currLat,this.currLong),
+       //setView: false,
+      center:(this.currLat,this.currLong),
       maxZoom: 120,
       watch: true,
       enableHighAccuracy: true

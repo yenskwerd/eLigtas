@@ -6,6 +6,7 @@ import { LoginServiceProvider } from '../providers/login-service/login-service';
 import { Events } from 'ionic-angular';
 
 import { HomePage } from '../pages/home/home';
+import { HistoryPage } from '../pages/history/history';
 @Component({
   templateUrl: 'app.html'
 })
@@ -67,7 +68,7 @@ export class MyApp {
 
   createSidebar(){
         this.pages = [
-          { icon: "time", title: 'History', component: ""},
+          { icon: "time", title: 'History', component: HistoryPage},
           { icon: 'settings', title: 'Settings', component: ""}
         ];
         this.extrapages = [

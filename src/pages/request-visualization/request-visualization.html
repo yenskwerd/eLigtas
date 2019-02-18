@@ -53,7 +53,7 @@
 
 <ion-footer text-center>
     <div *ngIf="stat_id==0 && user_request_id!=NULL">
-      <button ion-button (click)="start()" class="reportBtn" block>Start</button> 
+      <button ion-button (click)="start()" class="reportBtn" block>Start Navigation</button> 
     </div>
     <div *ngIf="stat_id==1 && trytry>100">
       <button ion-button (click)="pushArrive()" class="reportBtn" disabled block>Arrive</button> 
@@ -62,7 +62,8 @@
       <button ion-button (click)="pushArrive()" class="reportBtn" block>Arrive</button> 
     </div>
     <div *ngIf="stat_id==2">
-      <button (disabled)=cfb ion-button class="reportBtn" (click)="requestCallForBackUp()">Call for Backup</button>
+      <button *ngIf="cfb==true" disabled ion-button class="reportBtn" (click)="requestCallForBackUp()">Call for Backup</button>
+      <button *ngIf="cfb==false" ion-button class="reportBtn" (click)="requestCallForBackUp()">Call for Backup</button>
       <button ion-button (click)="openReport()" class="reportBtn" >Report</button>
     </div>
 </ion-footer>

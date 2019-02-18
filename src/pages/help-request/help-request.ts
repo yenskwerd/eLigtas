@@ -152,7 +152,7 @@ export class HelpRequestPage {
 
           /********** LOG **********/
           user_id: this.loginService.logged_in_user_id,
-          action: "Help Request",
+          action: "Request",
           action_done: this.event,
           action_datetime: new Date()
         }

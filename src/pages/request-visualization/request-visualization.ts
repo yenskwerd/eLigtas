@@ -6,6 +6,7 @@ import leaflet, { Draggable, marker, LatLng } from 'leaflet';
 import { LoginServiceProvider } from '../../providers/login-service/login-service';
 import 'leaflet-routing-machine';
 import 'rxjs/add/operator/map';
+import { Platform } from 'ionic-angular';
 import { analyzeAndValidateNgModules } from '@angular/compiler';
 import { getOrCreateNodeInjectorForNode } from '@angular/core/src/render3/di';
 import { r } from '@angular/core/src/render3';
@@ -64,9 +65,27 @@ export class RequestVisualizationPage {
 
   trytry: any;
   constructor(public modalCtrl: ModalController, public navCtrl: NavController, public http : HttpClient, public http2 : Http, public navParams: NavParams, public alertCtrl : AlertController,
-    public loginService: LoginServiceProvider) {
+    public loginService: LoginServiceProvider, public platform : Platform) {
       this.requestMarkers = [];
-
+      platform.registerBackButtonAction(() => {
+        if(navCtrl.canGoBack()){
+          navCtrl.pop();
+        } else {
+            const alert = this.alertCtrl.create({
+              message: 'Are you sure you want to close the app?',
+              buttons:[{
+                  text: 'No',
+                  role: 'cancel',
+              },{
+                text: 'Yes',
+                handler: () => {
+                  platform.exitApp();
+                }
+              }]
+              
+            })
+        }
+      });
   }
 
   ionViewDidLoad() {

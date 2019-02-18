@@ -1,3 +1,13 @@
 page-change-pin {
-
+    .map-marker-centered{
+        width: 25px;
+        height: 41px;
+        position:absolute;
+        left: 0;
+        right: 0;
+        margin:0 auto;
+        top:37%;
+        z-index: 1000;
+      }
 }
+

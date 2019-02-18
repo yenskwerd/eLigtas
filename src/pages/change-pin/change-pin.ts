@@ -17,12 +17,14 @@ import leaflet from 'leaflet';
 export class ChangePinPage {
   map:any;
   lat: any;
+  lat11: any;
+  lat22: any;
   long: any;
   public lat1: any;
   public long1: any;
   currLat:any;
   currLong:any;
-  marker: any;
+  public marker: any;
   request: any;
   markerGroup = leaflet.featureGroup();
   markerGroup2 = leaflet.featureGroup();
@@ -55,11 +57,10 @@ export class ChangePinPage {
   loadmap(){
     var redIcon = new leaflet.Icon({
       iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
-      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-      iconSize: [25, 41],
+      // shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+      iconSize: [0, 0],
       iconAnchor: [12, 41],
       popupAnchor: [1, -34],
-      shadowSize: [41, 41]
     });  
     this.map = leaflet.map("map").fitWorld();
       leaflet.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -75,6 +76,7 @@ export class ChangePinPage {
         //  let markerGroup2 = leaflet.featureGroup();
         //this.marker= leaflet.marker([e.latitude, e.longitude],{draggable:false})
         this.marker=leaflet.marker([this.lat,this.long], {icon: redIcon, draggable: true})
+         
         // this.marker=leaflet.marker([e.latitude, e.longitude], {icon: redIcon, draggable: true})
         .on('click', () => {
           alert('Pinned Location');
@@ -94,12 +96,13 @@ export class ChangePinPage {
       })
   }
 
-
   pushPinLocation(){
-    console.log(this.lat1, this.long1);
+    
+    console.log(this.map.getCenter.lat());
+    console.log(this.map.getCenter.long());
     this.navCtrl.setRoot(this.request, {
-      lat: this.lat1,
-      long: this.long1
+      lat: this.map.getCenter().lat,
+      long: this.map.getCenter().lng
     });
   }
 }

@@ -154,7 +154,7 @@ export class CheckPersonPage {
 
           /********** LOG **********/
           user_id: this.loginService.logged_in_user_id,
-          action: "Check Person",
+          action: "Request",
           action_done: this.event,
           action_datetime: new Date()
         }

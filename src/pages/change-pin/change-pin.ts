@@ -98,8 +98,8 @@ export class ChangePinPage {
 
   pushPinLocation(){
     
-    console.log(this.map.getCenter.lat());
-    console.log(this.map.getCenter.long());
+    console.log(this.map.getCenter().lat);
+    console.log(this.map.getCenter().lng);
     this.navCtrl.setRoot(this.request, {
       lat: this.map.getCenter().lat,
       long: this.map.getCenter().lng

@@ -168,8 +168,8 @@ export class HcfMappingPage {
     // }).on('locationfound', (e) => {
     //   console.log('found you');
     //   })
-   
-    this.map = leaflet.map("map").fitWorld();
+    var latlng = leaflet.latLng(10.3574632, 123.8343172);
+    this.map = leaflet.map("map").setView(latlng, 20);
     leaflet.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
       maxZoom: 18
@@ -300,7 +300,7 @@ export class HcfMappingPage {
           this.request = data;
           if(this.emergencyshow == true){
             for(let i=0; i<data.length; i++){
-              this.hcfMarkers[i] = leaflet.marker([data.xloc,data.yloc], {icon: grayIcon}).bindTooltip(data.name, 
+              this.hcfMarkers[i] = leaflet.marker([data[i].xloc,data[i].yloc], {icon: grayIcon}).bindTooltip(data[i].name, 
                 {
                     permanent: true, 
                     direction: 'bottom'

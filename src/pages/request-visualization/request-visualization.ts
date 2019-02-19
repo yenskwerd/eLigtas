@@ -169,7 +169,8 @@ export class RequestVisualizationPage {
         shadowSize: [41, 41]
       });  
       var latlng = leaflet.latLng(10.3574632, 123.8343172);
-      this.map = leaflet.map("map").setView(latlng, 100);
+      //this.map = leaflet.map("map").setView(latlng, 100);
+      this.map = leaflet.map("map").fitWorld();
       leaflet.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
         maxZoom: 18,

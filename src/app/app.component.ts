@@ -87,7 +87,7 @@ export class MyApp {
   }
 
   openPage(page) {
-   this.nav.setRoot(page.component);
+   this.nav.push(page.component);
   }
 
 }

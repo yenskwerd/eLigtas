@@ -154,9 +154,12 @@ export class HcfMappingPage {
           console.log(res.count);
           this.count = res.count;
           if (res.count == 0) {
-            document.getElementById("looking").style.display = "none";
             this.responseAlert();
-          } 
+            console.log("0 ang value")
+          } else {
+            document.getElementById("looking").style.display = "none";
+            console.log("dili 0 ang value")
+          }
           // this.callForBackUpMarker(res);
     }); 
 
@@ -177,7 +180,8 @@ export class HcfMappingPage {
     //   console.log('found you');
     //   })
     var latlng = leaflet.latLng(10.3574632, 123.8343172);
-    this.map = leaflet.map("map").setView(latlng, 20);
+    // this.map = leaflet.map("map").setView(latlng, 16);
+    this.map = leaflet.map("map").fitWorld();
     leaflet.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
       maxZoom: 18
@@ -189,7 +193,7 @@ export class HcfMappingPage {
       let markerGroup = leaflet.featureGroup();
       let marker: any = leaflet.marker([e.latitude, e.longitude]).on('click', () => {
         console.log(this.lat,this.long);
-      }).bindPopup("You are here xd")
+      }).bindPopup("You are here!")
       markerGroup.addLayer(marker);
       this.map.addLayer(markerGroup);
       // var circle = leaflet.circle([e.latitude, e.longitude], {
@@ -237,40 +241,40 @@ export class HcfMappingPage {
 };
 
   route(data){
-    // var waypoints=[
-    //   leaflet.latLng(data.xloc, data.yloc),
-    //   leaflet.latLng(this.currLat, this.currLong)
-    // ]
+    var waypoints=[
+      leaflet.latLng(data.xloc, data.yloc),
+      leaflet.latLng(this.currLat, this.currLong)
+    ]
 
-    // leaflet.Routing.control({
-    //   waypoints: waypoints,
-    //   plan: leaflet.Routing.plan(waypoints, {
-    //     addWaypoints: false,
-    //     draggableWaypoints: false,
-    //     routeWhileDragging: false,
-    //     createMarker: function(i, wp) {
-    //       return leaflet.marker(wp.latLng, {
-    //         draggable: false,
-            
-    //       });
-    //     }
-    //   }),
-    //   // waypoints: [null],
-    //    routeWhileDragging:false,
-    //    fitSelectedRoutes: false,
-    //    showAlternatives:true,
-    //    show: true,
-    //    autoRoute: true,
-    //   //  createMarker: function () {
-    //   //   return null;
-    //   // }
-    // }).addTo(this.map);
     leaflet.Routing.control({
-      waypoints: [
-        leaflet.latLng(data.xloc, data.yloc),
-        leaflet.latLng(this.currLat, this.currLong)
-      ]
+      waypoints: waypoints,
+      plan: leaflet.Routing.plan(waypoints, {
+        addWaypoints: false,
+        draggableWaypoints: false,
+        routeWhileDragging: false,
+        createMarker: function(i, wp,) {
+          return leaflet.marker(wp.latLng, {
+            draggable: false,
+            
+          });
+        }
+      }),
+      // waypoints: [null],
+       routeWhileDragging:false,
+       fitSelectedRoutes: false,
+       showAlternatives:true,
+       show: true,
+       autoRoute: true,
+      //  createMarker: function () {
+      //   return null;
+      // }
     }).addTo(this.map);
+    // leaflet.Routing.control({
+    //   waypoints: [
+    //     leaflet.latLng(data.xloc, data.yloc),
+    //     leaflet.latLng(this.currLat, this.currLong)
+    //   ]
+    // }).addTo(this.map);
   }
   PushReportEventPage(){
     this.navCtrl.push('EventReportPage', {
@@ -346,7 +350,7 @@ export class HcfMappingPage {
                 this.index = i;
               }
             }
-            this.route(this.distanceArr[this.index]);
+           // this.route(this.distanceArr[this.index]);
             console.log("true");
           }else{
             for(let i=0; i<this.hcfMarkers.length; i++){

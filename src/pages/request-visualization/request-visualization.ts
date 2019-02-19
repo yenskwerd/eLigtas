@@ -40,7 +40,6 @@ export class RequestVisualizationPage {
   HCFshow: any;
   emergencyshow: any;
   stat_id: any;
-  
   requestMarkers: any;
   map:any;
   route:any;
@@ -205,6 +204,7 @@ export class RequestVisualizationPage {
         this.currLat= e.latitude;
         this.currLong= e.longitude;
         this.LatLng1=leaflet.latLng(this.currLat,this.currLong);
+        this.map.locate({setView:this.LatLng1});
         this.marker=leaflet.marker([e.latitude,e.longitude], {icon: redIcon,draggable:false})
         .on('click', () => {
           alert('You are here!');
@@ -266,8 +266,6 @@ requestMarker(){
      });
      },1000);
 }
-  
-    
   
 
   createMarker2(data:any){

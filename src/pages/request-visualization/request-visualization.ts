@@ -11,6 +11,7 @@ import { analyzeAndValidateNgModules, flatten } from '@angular/compiler';
 import { getOrCreateNodeInjectorForNode } from '@angular/core/src/render3/di';
 import { r } from '@angular/core/src/render3';
 import { GESTURE_PRIORITY_MENU_SWIPE } from 'ionic-angular/umd/gestures/gesture-controller';
+import { map } from 'rxjs/operator/map';
 
 
 /**
@@ -91,8 +92,6 @@ export class RequestVisualizationPage {
   ionViewDidLoad() {
     console.log("loaded");
     //this.getUserRequest();
- 
-   
   }
 
   ionViewWillEnter(){
@@ -101,10 +100,12 @@ export class RequestVisualizationPage {
   ionViewDidEnter(){
     this.loadmap();
   }
+  
 
   ionViewDidLeave() {
     console.log("left");
     this.map.remove();
+    this.navCtrl.pop();
   }
 
   getUserRequest(){
@@ -167,10 +168,12 @@ export class RequestVisualizationPage {
         popupAnchor: [1, -34],
         shadowSize: [41, 41]
       });  
-      this.map = leaflet.map("map").fitWorld();
+      var latlng = leaflet.latLng(10.3574632, 123.8343172);
+      this.map = leaflet.map("map").setView(latlng, 100);
       leaflet.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
         maxZoom: 18,
+        
       }).addTo(this.map);
       this.map.locate({
         //center:(this.currLat,this.currLong),
@@ -216,6 +219,7 @@ export class RequestVisualizationPage {
         this.markerGroup2.addLayer(this.circle);
         this.map.addLayer(this.markerGroup2);
       })
+      
         .on('locationerror', (err) => {
           alert(err.message);
       })
@@ -226,12 +230,15 @@ export class RequestVisualizationPage {
       }
       console.log(this.LatLng1);
       this.requestMarker();
+      
       // if(this.map.hasLayer(this.marker) && this.map.hasLayer(this.circle)){
       //   this.markerGroup2.clearLayers();
       //   this.map.removeLayer(this.circle);
       //   console.log("rmove")
       // }
   }); 
+  
+ 
 }
 removemarkercircle(){
   if(this.map.hasLayer(this.marker)){
@@ -640,7 +647,7 @@ requestMarker(){
           this.request = data;
           if(this.emergencyshow == true){
             for(let i=0; i<data.length; i++){
-              this.requestMarkers[i] = leaflet.marker([data.xloc,data.yloc], {icon: grayIcon}).bindTooltip(data.name, 
+              this.requestMarkers[i] = leaflet.marker([data[i].xloc,data[i].yloc], {icon: grayIcon}).bindTooltip(data[i].name, 
                 {
                     permanent: true, 
                     direction: 'bottom'

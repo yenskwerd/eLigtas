@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import {Http, Headers, RequestOptions}  from '@angular/http';
 import { LoginServiceProvider } from '../../providers/login-service/login-service';
 
+import { RequestVisualizationPage } from '../request-visualization/request-visualization';
 /**
  * Generated class for the HistoryPage page.
  *
@@ -25,6 +26,7 @@ export class HistoryPage {
   ionViewDidLoad() {
     console.log('ionViewDidLoad HistoryPage');
     this.load();
+    
   }
 
 

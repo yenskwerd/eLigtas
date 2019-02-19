@@ -195,7 +195,6 @@ export class RequestVisualizationPage {
       //   enableHighAccuracy: true
       // })
       .on('locationfound', (e) => {
-        this.map.setView(e.LatLng);
         console.log("locationfound");
         if(this.map.hasLayer(this.marker) && this.map.hasLayer(this.circle)){
           this.markerGroup2.clearLayers();

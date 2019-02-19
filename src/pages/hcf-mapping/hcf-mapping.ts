@@ -34,7 +34,7 @@ export class HcfMappingPage {
   alert: any = false;
   user_request_id: any;
   count: any;
-  looking: any = false;
+  looking: any;
   trytry:any;
   minimum:any;
   LatLng1: any;
@@ -154,9 +154,7 @@ export class HcfMappingPage {
           console.log(res.count);
           this.count = res.count;
           if (res.count == 0) {
-
-            this.looking = true;
-
+            document.getElementById("looking").style.display = "none";
             this.responseAlert();
           } 
           // this.callForBackUpMarker(res);

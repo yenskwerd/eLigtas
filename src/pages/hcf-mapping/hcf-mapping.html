@@ -31,7 +31,7 @@
           <ion-col>      
             <ion-item>
               <ion-label>HCF</ion-label>
-              <ion-toggle [(ngModel)]="HCFshow" (ngModelChange)="showHCF($event)" ></ion-toggle>
+              <ion-toggle [(ngModel)]="HCFshow" (ngModelChange)="showHCF($event)" (click)="rout()"></ion-toggle>
             </ion-item>
           </ion-col>
           <ion-col>      
@@ -44,6 +44,14 @@
       </ion-grid>
     </div>
     <!--End Show Health Care Facilities Toggle-->
+      <!-- <ion-grid>
+        <ion-row> -->
+          <!-- <div *ngIf="looking==true">
+            <button ion-button class="reportBtn" block>waiting for responder</button> 
+          </div> -->
+        <!-- </ion-row>
+      </ion-grid> -->
+    <button style=" position: absolute; width: 100%" *ngIf="looking==true" ion-button class="reportBtn" block>waiting for responder</button> 
   <div id="map" style="width:100%; height: 90%;">
   </div>
 </ion-content>

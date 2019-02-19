@@ -1,6 +1,6 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
-import leaflet from 'leaflet';
+import leaflet, { latLng } from 'leaflet';
 import {Http, Headers, RequestOptions}  from '@angular/http';
 import { HttpClient } from '@angular/common/http';  
 import { LoginPage } from '../login/login';
@@ -33,6 +33,12 @@ export class HcfMappingPage {
   alert: any = false;
   user_request_id: any;
   count: any;
+  looking: any = false;
+  trytry:any;
+  minimum:any;
+  LatLng1: any;
+  distanceArr: any = [];
+  index: any;
 
   constructor(public navCtrl: NavController, public http : HttpClient, public navParams: NavParams, public alertCtrl : AlertController, public http2 : Http, public loginService: LoginServiceProvider) {
     this.hcfMarkers = [];
@@ -147,6 +153,9 @@ export class HcfMappingPage {
           console.log(res.count);
           this.count = res.count;
           if (res.count == 0) {
+
+            this.looking = true;
+
             this.responseAlert();
           } 
           // this.callForBackUpMarker(res);
@@ -192,6 +201,7 @@ export class HcfMappingPage {
       // }).addTo(this.map);
       this.lat = e.latitude;
       this.long = e.longitude;
+      this.LatLng1=leaflet.latLng(e.latitude,e.longitude);
       // leaflet.marker([10.3502881,123.8988732]).on('click', () => {
       //   alert('Hospital x');
       //   console.log(e.latitude,e.longitude);
@@ -207,7 +217,56 @@ export class HcfMappingPage {
   }
   // 10.3502881,123.8988732
   // 10.361011,123.9070701
+  addRoutingControl = function (waypoints) { 
+    if (this.route1 != null)
+        this.removeRoutingControl();
 
+    // routingControl = L.Routing.control({
+    //     waypoints: waypoints
+    // }).addTo(map);
+
+  this.route1= leaflet.Routing.control({
+      waypoints: waypoints
+  }).addTo(this.map);
+};
+
+  removeRoutingControl = function () {
+    if (this.route1 != null) {
+        this.map.removeControl(this.route1);
+        this.route1 = null;
+    }
+};
+
+  route(data){
+    var waypoints=[
+      leaflet.latLng(data.xloc, data.yloc),
+      leaflet.latLng(this.currLat, this.currLong)
+    ]
+
+    leaflet.Routing.control({
+      waypoints: waypoints,
+      plan: leaflet.Routing.plan(waypoints, {
+        addWaypoints: false,
+        draggableWaypoints: false,
+        routeWhileDragging: false,
+        createMarker: function(i, wp) {
+          return leaflet.marker(wp.latLng, {
+            draggable: false,
+            
+          });
+        }
+      }),
+      // waypoints: [null],
+       routeWhileDragging:false,
+       fitSelectedRoutes: false,
+       showAlternatives:true,
+       show: true,
+       autoRoute: true,
+      //  createMarker: function () {
+      //   return null;
+      // }
+    })
+  }
   PushReportEventPage(){
     this.navCtrl.push('EventReportPage', {
       lat: this.lat,
@@ -265,7 +324,24 @@ export class HcfMappingPage {
           if(this.HCFshow == true){
             for(let i=0; i<data.length; i++){
               this.createMarker(data[i], i);
+              // this.trytry = this.LatLng1.distanceTo(leaflet.latLng(data.request_lat,data.request_long));
+              this.distanceArr.push({
+                distance: this.LatLng1.distanceTo(leaflet.latLng(data[i].xloc,data[i].yloc)),
+                xloc: data[i].xloc,
+                yloc: data[i].yloc
+              });
             }
+
+            this.minimum = this.distanceArr[0].distance;
+            this.index = 0;
+            
+            for(let i=1; i<this.distanceArr.length; i++){
+              if(this.distanceArr[i].distance<this.minimum){
+                this.minimum = this.distanceArr[i].distance;
+                this.index = i;
+              }
+            }
+            //this.route(this.distanceArr[this.index]);
             console.log("true");
           }else{
             for(let i=0; i<this.hcfMarkers.length; i++){
@@ -387,7 +463,6 @@ export class HcfMappingPage {
         }
     ).addTo(this.map);
     }
-    
   }
   /******** END SHOW MARKERS **********/
 

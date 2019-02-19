@@ -7,7 +7,7 @@ import { LoginServiceProvider } from '../../providers/login-service/login-servic
 import 'leaflet-routing-machine';
 import 'rxjs/add/operator/map';
 import { Platform } from 'ionic-angular';
-import { analyzeAndValidateNgModules } from '@angular/compiler';
+import { analyzeAndValidateNgModules, flatten } from '@angular/compiler';
 import { getOrCreateNodeInjectorForNode } from '@angular/core/src/render3/di';
 import { r } from '@angular/core/src/render3';
 import { GESTURE_PRIORITY_MENU_SWIPE } from 'ionic-angular/umd/gestures/gesture-controller';
@@ -173,14 +173,16 @@ export class RequestVisualizationPage {
         maxZoom: 18,
       }).addTo(this.map);
       this.map.locate({
-        // setView:(this.currLat,this.currLong),
-        setView: true,
+        //center:(this.currLat,this.currLong),
+        setView: false,
         maxZoom: 16,
         watch: true,
         enableHighAccuracy: true,
-      }).on('click', () => {
-        this.map.locate({setView:false})
       })
+      // .on('click', () => {
+      //   this.map.locate({setView:false});
+      //   console.log("NJ GWAPO");
+      // })
       // this.map.locate({
       //   // setView:(this.currLat,this.currLong),
       //   setView: false,
@@ -190,6 +192,7 @@ export class RequestVisualizationPage {
       //   enableHighAccuracy: true
       // })
       .on('locationfound', (e) => {
+        this.map.setView(e.LatLng);
         console.log("locationfound");
         if(this.map.hasLayer(this.marker) && this.map.hasLayer(this.circle)){
           this.markerGroup2.clearLayers();
@@ -221,6 +224,7 @@ export class RequestVisualizationPage {
         this.map.removeLayer(this.circle);
         console.log("rmove")
       }
+      console.log(this.LatLng1);
       this.requestMarker();
       // if(this.map.hasLayer(this.marker) && this.map.hasLayer(this.circle)){
       //   this.markerGroup2.clearLayers();
@@ -283,7 +287,7 @@ requestMarker(){
       iconSize: [25, 41],
       iconAnchor: [12, 41],
       popupAnchor: [1, -34],
-      shadowSize: [41, 41]
+      shadowSize: [41,   41]
     });  
     var blackIcon = new leaflet.Icon({
       iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-black.png',
@@ -386,7 +390,7 @@ requestMarker(){
     this.map.locate({
       //setView:this.LatLng1,
        //setView: false,
-      center:(this.currLat,this.currLong),
+      //center:(this.currLat,this.currLong),
       maxZoom: 120,
       watch: true,
       enableHighAccuracy: true
@@ -395,15 +399,6 @@ requestMarker(){
       leaflet.latLng(data.request_lat, data.request_long),
       leaflet.latLng(this.currLat, this.currLong)
     ]
-    //console.log(this.LatLng1)
-  //   var plan = leaflet.Routing.plan({
-  //     addWaypoints: false,
-  //     draggableWaypoints: false,
-  //     routeWhileDragging: false,
-  //     createMarker: function(i, wp, er) {
-  //         return null;
-  //     }
-  // });
 
     leaflet.Routing.control({
       waypoints: waypoints,

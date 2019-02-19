@@ -184,33 +184,16 @@ export class RequestVisualizationPage {
         enableHighAccuracy: true
         
       })
+      // this.map.locate({
+      //   // setView:(this.currLat,this.currLong),
+      //   setView: false,
+      //   // center:this.LatLng1,
+      //   maxZoom: 16,
+      //   watch: true,
+      //   enableHighAccuracy: true
+      // })
       .on('locationfound', (e) => {
         console.log("locationfound");
-        
-        //  working pero blinking
-      //   if(this.map.hasLayer(this.marker) && this.map.hasLayer(this.circle)){
-      //     this.markerGroup2.clearLayers();
-      //     this.map.removeLayer(this.circle);
-      //     console.log("rmove")
-      //   }else{
-      //   this.currLat= e.latitude;
-      //   this.currLong= e.longitude;
-      //   this.marker=leaflet.marker([e.latitude,e.longitude], {icon: redIcon,draggable:false})
-      //   .on('click', () => {
-      //     alert('You are here!');
-      //   }).addTo(this.map)
-      //   this.circle = leaflet.circle([e.latitude, e.longitude], {
-      //     color: 'rgba(255,255,255,0)',
-      //         fillColor: '#81C784',
-      //       fillOpacity: 0.5,
-      //       radius: 100
-      //   }).addTo(this.map)
-      //   this.markerGroup2.addLayer(this.marker);
-      //   this.markerGroup2.addLayer(this.circle);
-      //   this.map.addLayer(this.markerGroup2);
-      // }
-      // })
-        //****************** */
         if(this.map.hasLayer(this.marker) && this.map.hasLayer(this.circle)){
           this.markerGroup2.clearLayers();
           this.map.removeLayer(this.circle);
@@ -409,8 +392,8 @@ requestMarker(){
 
     this.map.locate({
       //setView:this.LatLng1,
-       setView: false,
-      //center:(this.currLat,this.currLong),
+       //setView: false,
+      center:(this.currLat,this.currLong),
       maxZoom: 120,
       watch: true,
       enableHighAccuracy: true

@@ -28,17 +28,17 @@
           <ion-label stacked>Password</ion-label>
           <ion-input type="password" name="password" #user_password></ion-input>
         </ion-item>
-        <ion-item>
+        <!-- <ion-item>
           <ion-label stacked>I am a</ion-label>
           <ion-select #C interface="popover" (ionChange)="optionfilter(options);" [(ngModel)]="options" name="options">
             <ion-option value="1">Regular User</ion-option>
           </ion-select>
-        </ion-item>
+        </ion-item> -->
         <ion-item>
-          <ion-label stacked>and a</ion-label>
+          <ion-label stacked>User Type</ion-label>
           <ion-select #C interface="popover" (ionChange)="optionfilter2(options2);" [(ngModel)]="options2" name="options2">
-            <ion-option value="1">First Responder *</ion-option>
-            <ion-option value="2">PDCAT User *</ion-option>
+            <ion-option value="1">Regular User</ion-option>
+            <ion-option value="2">First Responder</ion-option>
           </ion-select>
         </ion-item>
         

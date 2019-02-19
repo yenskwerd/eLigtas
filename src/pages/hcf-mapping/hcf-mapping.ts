@@ -6,6 +6,7 @@ import { HttpClient } from '@angular/common/http';
 import { LoginPage } from '../login/login';
 import { LoginServiceProvider } from '../../providers/login-service/login-service';
 import { dateValueRange } from 'ionic-angular/umd/util/datetime-util';
+import 'leaflet-routing-machine';
 /**
  * Generated class for the HcfMappingPage page.
  *
@@ -238,34 +239,40 @@ export class HcfMappingPage {
 };
 
   route(data){
-    var waypoints=[
-      leaflet.latLng(data.xloc, data.yloc),
-      leaflet.latLng(this.currLat, this.currLong)
-    ]
+    // var waypoints=[
+    //   leaflet.latLng(data.xloc, data.yloc),
+    //   leaflet.latLng(this.currLat, this.currLong)
+    // ]
 
-    leaflet.Routing.control({
-      waypoints: waypoints,
-      plan: leaflet.Routing.plan(waypoints, {
-        addWaypoints: false,
-        draggableWaypoints: false,
-        routeWhileDragging: false,
-        createMarker: function(i, wp) {
-          return leaflet.marker(wp.latLng, {
-            draggable: false,
+    // leaflet.Routing.control({
+    //   waypoints: waypoints,
+    //   plan: leaflet.Routing.plan(waypoints, {
+    //     addWaypoints: false,
+    //     draggableWaypoints: false,
+    //     routeWhileDragging: false,
+    //     createMarker: function(i, wp) {
+    //       return leaflet.marker(wp.latLng, {
+    //         draggable: false,
             
-          });
-        }
-      }),
-      // waypoints: [null],
-       routeWhileDragging:false,
-       fitSelectedRoutes: false,
-       showAlternatives:true,
-       show: true,
-       autoRoute: true,
-      //  createMarker: function () {
-      //   return null;
-      // }
-    })
+    //       });
+    //     }
+    //   }),
+    //   // waypoints: [null],
+    //    routeWhileDragging:false,
+    //    fitSelectedRoutes: false,
+    //    showAlternatives:true,
+    //    show: true,
+    //    autoRoute: true,
+    //   //  createMarker: function () {
+    //   //   return null;
+    //   // }
+    // }).addTo(this.map);
+    leaflet.Routing.control({
+      waypoints: [
+        leaflet.latLng(data.xloc, data.yloc),
+        leaflet.latLng(this.currLat, this.currLong)
+      ]
+    }).addTo(this.map);
   }
   PushReportEventPage(){
     this.navCtrl.push('EventReportPage', {
@@ -341,7 +348,7 @@ export class HcfMappingPage {
                 this.index = i;
               }
             }
-            //this.route(this.distanceArr[this.index]);
+            this.route(this.distanceArr[this.index]);
             console.log("true");
           }else{
             for(let i=0; i<this.hcfMarkers.length; i++){

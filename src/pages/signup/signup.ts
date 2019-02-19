@@ -82,7 +82,7 @@ export class SignupPage {
           user_email: this.user_email.value,
           user_name: this.user_name.value,
           user_password: this.user_password.value,
-          regUser_id: this.options,
+          regUser_id: 1,
           specUser_id: this.options2
         }
         console.log(data);

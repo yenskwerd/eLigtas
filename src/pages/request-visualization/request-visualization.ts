@@ -1059,5 +1059,105 @@ requestMarker(){
       // });
   }
 
+  pushDone() {
+    this.stat_id=3;
+    // if(this.loginService.logged_in_user_request_id!= null){
+    //   this.status = true;
+    // }
+    var headers = new Headers();
+    
+    headers.append("Accept", 'application/json');
+    headers.append('Content-Type', 'application/x-www-form-urlencoded');
+    headers.append('Access-Control-Allow-Origin' , '*');
+    headers.append('Access-Control-Allow-Headers' , 'Content-Type');
+    headers.append('Access-Control-Allow-Methods', 'POST, GET, OPTIONS, PUT');
+    
+    let options = new RequestOptions({ headers: headers });
+
+     
+    /******** UPDATE REQUEST STATUS ID **********/
+    let data2 = {
+      request_id: this.request_id,
+      request_status_id: 2
+    }
+
+    this.http2.post('http://usc-dcis.com/eligtas.app/update-request.php', data2, options)
+    .map(res=> res.json())
+    .subscribe((data2: any) =>
+    {
+      console.log(data2);
+      // If the request was successful notify the user
+      //  console.log(data2);
+      //  let alert = this.alertCtrl.create({
+      //   message: "You have started navigating(???)",
+      //   buttons: ['OK']
+      //   });
+      //   alert.present();
+    },
+    (error : any) =>
+    {
+      console.log(error);
+      let alert2 = this.alertCtrl.create({
+        title:"FAILED",
+        subTitle: "Request not updated. huhu!",
+        buttons: ['OK']
+        });
+
+      alert2.present();
+    });
+    
+    /********** LOG **********/
+    let data3 = {
+      user_id: this.loginService.logged_in_user_id,
+      action: "Rescued",
+      action_datetime: new Date(),
+      request_id: this.request_id
+    }
+    
+    this.http2.post('http://usc-dcis.com/eligtas.app/log.php', data3, options)
+    
+    .map(res=> res.json())
+    .subscribe((data3: any) =>
+    {
+      console.log(data3);
+    },
+    (error : any) =>
+    {
+      console.log(error);
+    });
+    /********** END OF LOG **********/
+
+    
+    let data4 = {
+      user_id: this.loginService.logged_in_user_id,
+      stat_id: 3
+    }
+    this.http2.post('http://usc-dcis.com/eligtas.app/update-stat.php', data4, options)
+    .map(res=> res.json())
+    .subscribe((data2: any) =>
+    {
+       // If the request was successful notify the user
+      //  console.log(data2);
+      //  let alert = this.alertCtrl.create({
+      //   message: "You have started navigating(???)",
+      //   buttons: ['OK']
+      //   });
+      //   alert.present();
+    },
+    (error : any) =>
+    {
+      console.log(error);
+      let alert2 = this.alertCtrl.create({
+        title:"FAILED",
+        subTitle: "Something went wrong!",
+        buttons: ['OK']
+        });
+
+      alert2.present();
+    });
+
+  }
+
+  
 }
 

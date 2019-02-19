@@ -324,6 +324,7 @@ export class HcfMappingPage {
   // }
 
   showHCF(){
+    // this.dataRefresher = setInterval(() =>{
     this.http
        .get('http://usc-dcis.com/eligtas.app/retrieve-hcf.php')
        .subscribe((data : any) =>
@@ -332,13 +333,15 @@ export class HcfMappingPage {
           this.request = data;
           if(this.HCFshow == true){
             for(let i=0; i<data.length; i++){
-              this.createMarker(data[i], i);
-              // this.trytry = this.LatLng1.distanceTo(leaflet.latLng(data.request_lat,data.request_long));
-              this.distanceArr.push({
-                distance: this.LatLng1.distanceTo(leaflet.latLng(data[i].xloc,data[i].yloc)),
-                xloc: data[i].xloc,
-                yloc: data[i].yloc
-              });
+              if(data[i].status==1) {
+                this.createMarker(data[i], i);
+                // this.trytry = this.LatLng1.distanceTo(leaflet.latLng(data.request_lat,data.request_long));
+                this.distanceArr.push({
+                  distance: this.LatLng1.distanceTo(leaflet.latLng(data[i].xloc,data[i].yloc)),
+                  xloc: data[i].xloc,
+                  yloc: data[i].yloc
+                });
+              }
             }
 
             this.minimum = this.distanceArr[0].distance;
@@ -350,7 +353,7 @@ export class HcfMappingPage {
                 this.index = i;
               }
             }
-           // this.route(this.distanceArr[this.index]);
+            this.route(this.distanceArr[this.index]);
             console.log("true");
           }else{
             for(let i=0; i<this.hcfMarkers.length; i++){
@@ -364,6 +367,7 @@ export class HcfMappingPage {
        {
           console.dir(error);
        });  
+      // },1000);
   }
   
   showEmergency(){

@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Nav, Platform } from 'ionic-angular';
+import { App, Nav, Platform, MenuController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { LoginServiceProvider } from '../providers/login-service/login-service';
@@ -24,7 +24,7 @@ export class MyApp {
   home: Array<{icon:string, title: string, component: any}>;
   shownGroup = null;
  
-  constructor(public platform: Platform, public statusBar: StatusBar, public events: Events, public splashScreen: SplashScreen, public loginService: LoginServiceProvider) {
+  constructor(public platform: Platform, public app: App, public menuCtrl: MenuController, public statusBar: StatusBar, public events: Events, public splashScreen: SplashScreen, public loginService: LoginServiceProvider) {
     this.initializeApp();
 
     events.subscribe('user:sidebar', () => {
@@ -85,10 +85,22 @@ export class MyApp {
       this.splashScreen.hide();
     });
   }
+  
+  // logoutClicked() {
+  //   console.log("Logout");
+  //   //this.authService.logout();
+  //   this.menuCtrl.close();
+  //   var nav = this.app.getRootNav();
+  //   //nav.setRoot(LoginPage);
+  // }
 
   openPage(page) {
    this.nav.push(page.component);
   }
+
+  openPage2(page) {
+    this.nav.setRoot(page.component);
+   }
 
 }
 

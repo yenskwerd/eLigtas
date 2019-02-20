@@ -316,6 +316,7 @@ requestMarker(){
       this.trytry = this.LatLng1.distanceTo(leaflet.latLng(data.request_lat,data.request_long));
 
     } else if( data.request_status_id==2 ){
+      this.eventForReport = data.event;
       this.marker2=leaflet.marker([data.request_lat,data.request_long], {icon: grayIcon});
     } else if (data.request_status_id == 0) {
       var headers = new Headers();
@@ -609,7 +610,9 @@ requestMarker(){
           this.request = data;
           if(this.HCFshow == true){
             for(let i=0; i<data.length; i++){
-              this.createMarker(data[i], i);
+              if (data[i].status==1) {
+                this.createMarker(data[i], i);
+              }
             }
             console.log("true");
           }else{
@@ -645,12 +648,14 @@ requestMarker(){
           this.request = data;
           if(this.emergencyshow == true){
             for(let i=0; i<data.length; i++){
-              this.requestMarkers[i] = leaflet.marker([data[i].xloc,data[i].yloc], {icon: grayIcon}).bindTooltip(data[i].name, 
-                {
-                    permanent: true, 
-                    direction: 'bottom'
-                }
-              ).addTo(this.map);
+              if(data[i].status==1) {
+                this.requestMarkers[i] = leaflet.marker([data[i].xloc,data[i].yloc], {icon: grayIcon}).bindTooltip(data[i].name, 
+                  {
+                      permanent: true, 
+                      direction: 'bottom'
+                  }
+                ).addTo(this.map);
+              }
             }
             console.log("true");
           }else{
@@ -762,9 +767,10 @@ requestMarker(){
   }
 
   public openReport(){ 
+    console.log(this.eventForReport, this.user_request_id)
     var modalPage = this.modalCtrl.create('ReportPage', {
       event: this.eventForReport,
-      request_id: this.request_id
+      request_id: this.user_request_id,
     });
     modalPage.present(); 
   }

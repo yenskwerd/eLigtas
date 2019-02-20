@@ -335,7 +335,6 @@ export class HcfMappingPage {
             for(let i=0; i<data.length; i++){
               if(data[i].status==1) {
                 this.createMarker(data[i], i);
-                // this.trytry = this.LatLng1.distanceTo(leaflet.latLng(data.request_lat,data.request_long));
                 this.distanceArr.push({
                   distance: this.LatLng1.distanceTo(leaflet.latLng(data[i].xloc,data[i].yloc)),
                   xloc: data[i].xloc,
@@ -389,12 +388,14 @@ export class HcfMappingPage {
           this.request = data;
           if(this.emergencyshow == true){
             for(let i=0; i<data.length; i++){
-              this.hcfMarkers[i] = leaflet.marker([data[i].xloc,data[i].yloc], {icon: grayIcon}).bindTooltip(data[i].name, 
-                {
-                    permanent: true, 
-                    direction: 'bottom'
-                }
-              ).addTo(this.map);
+              if(data[i].status==1) {
+                this.hcfMarkers[i] = leaflet.marker([data[i].xloc,data[i].yloc], {icon: grayIcon}).bindTooltip(data[i].name, 
+                  {
+                      permanent: true, 
+                      direction: 'bottom'
+                  }
+                ).addTo(this.map);
+              }
             }
             console.log("true");
           }else{

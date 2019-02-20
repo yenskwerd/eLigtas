@@ -31,6 +31,7 @@ export class ReportPage {
   }
 
   public openModal(){ 
+    console.log(this.request_id)
     var modalPage = this.modalCtrl.create('ModalPage', {
       event: this.event,
       request_id: this.request_id

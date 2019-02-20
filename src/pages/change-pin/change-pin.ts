@@ -96,6 +96,13 @@ export class ChangePinPage {
       })
   }
 
+  pushCancel(){
+    this.navCtrl.setRoot(this.request, {
+      lat: this.lat,
+      long: this.long
+    });
+  }
+
   pushPinLocation(){
     
     console.log(this.map.getCenter().lat);

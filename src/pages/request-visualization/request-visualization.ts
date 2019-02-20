@@ -172,15 +172,19 @@ export class RequestVisualizationPage {
       this.map = leaflet.map("map").fitWorld();
       leaflet.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
-        maxZoom: 18,
-        
+        maxZoom: 10,
+        minZoom:16
       }).addTo(this.map);
       this.map.locate({
         //center:(this.currLat,this.currLong),
-        setView: false,
-        maxZoom: 16,
+        setView: true,
+        maxZoom: 14,
+        // minZoom:16,
+        // zoomOut:5,
         watch: true,
         enableHighAccuracy: true,
+        maximumAge:10000,
+        timeout: 20000
       })
       // .on('click', () => {
       //   this.map.locate({setView:false});
@@ -394,12 +398,15 @@ requestMarker(){
     // //mugana pero ang marker waypoint madrag niya dimusunod sa current loac
 
     this.map.locate({
-      //setView:this.LatLng1,
-       //setView: false,
-      //center:(this.currLat,this.currLong),
-      maxZoom: 120,
+      // setView:this.LatLng1,
+      //  setView: false,
+      // center:(this.currLat,this.currLong),
+      maxZoom: 14,
+      // minZoom:16,
       watch: true,
-      enableHighAccuracy: true
+      enableHighAccuracy: true,
+      maximumAge:10000,
+      timeout: 20000
     })
     var waypoints=[
       leaflet.latLng(data.request_lat, data.request_long),

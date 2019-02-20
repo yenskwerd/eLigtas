@@ -225,7 +225,7 @@ export class RequestVisualizationPage {
       })
       
         .on('locationerror', (err) => {
-          alert(err.message);
+          // alert(err.message);
       })
       if(this.map.hasLayer(this.marker) && this.map.hasLayer(this.circle)){
         this.markerGroup2.clearLayers();
@@ -483,7 +483,7 @@ requestMarker(){
       this.markerGroup3.addLayer(this.marker3);
       this.map.addLayer(this.markerGroup3);
       }).on('locationerror', (err) => {
-        alert(err.message);
+        // alert(err.message);
     })
     this.removeRoutingControl();
     //************** */

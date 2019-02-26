@@ -63,6 +63,8 @@ export class RequestVisualizationPage {
   public arrive : any=false;
   markerGroup3 = leaflet.featureGroup();
 
+  mapctr: any = 0;
+
   trytry: any;
   constructor(public modalCtrl: ModalController, public navCtrl: NavController, public http : HttpClient, public http2 : Http, public navParams: NavParams, public alertCtrl : AlertController,
     public loginService: LoginServiceProvider, public platform : Platform) {
@@ -177,7 +179,7 @@ export class RequestVisualizationPage {
       }).addTo(this.map);
       this.map.locate({
         //center:(this.currLat,this.currLong),
-        setView: true,
+        // setView: true,
         // maxZoom: 14,
         // minZoom:16,
         // zoomOut:5,
@@ -222,6 +224,11 @@ export class RequestVisualizationPage {
         this.markerGroup2.addLayer(this.marker);
         this.markerGroup2.addLayer(this.circle);
         this.map.addLayer(this.markerGroup2);
+        console.log(this.mapctr);
+        if(this.mapctr == 0) {
+          this.initView(this.currLat, this.currLong);
+        }
+        this.mapctr++;
       })
       
         .on('locationerror', (err) => {
@@ -240,10 +247,21 @@ export class RequestVisualizationPage {
       //   this.map.removeLayer(this.circle);
       //   console.log("rmove")
       // }
+      
   }); 
-  
- 
 }
+
+initView(lat, long) {
+  console.log(lat,long);
+      this.map.locate({
+        setView:(this.currLat,this.currLong),
+        // setView: false,
+        // center:this.LatLng1,
+        maxZoom: 16,
+        enableHighAccuracy: true
+      })
+}
+
 removemarkercircle(){
   if(this.map.hasLayer(this.marker)){
     this.markerGroup2.clearLayers();

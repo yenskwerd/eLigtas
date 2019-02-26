@@ -178,7 +178,7 @@ export class RequestVisualizationPage {
       this.map.locate({
         //center:(this.currLat,this.currLong),
         setView: true,
-        maxZoom: 14,
+        // maxZoom: 14,
         // minZoom:16,
         // zoomOut:5,
         watch: true,
@@ -208,7 +208,7 @@ export class RequestVisualizationPage {
         this.currLat= e.latitude;
         this.currLong= e.longitude;
         this.LatLng1=leaflet.latLng(this.currLat,this.currLong);
-        this.map.locate({setView:this.LatLng1});
+        // this.map.locate({setView:this.LatLng1});
         this.marker=leaflet.marker([e.latitude,e.longitude], {icon: redIcon,draggable:false})
         .on('click', () => {
           alert('You are here!');
@@ -399,7 +399,7 @@ requestMarker(){
 
     this.map.locate({
       // setView:this.LatLng1,
-      //  setView: false,
+       setView: true,
       // center:(this.currLat,this.currLong),
       maxZoom: 14,
       // minZoom:16,
@@ -483,7 +483,7 @@ requestMarker(){
       this.markerGroup3.addLayer(this.marker3);
       this.map.addLayer(this.markerGroup3);
       }).on('locationerror', (err) => {
-        // alert(err.message);
+        alert(err.message);
     })
     this.removeRoutingControl();
     //************** */

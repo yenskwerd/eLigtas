@@ -213,7 +213,10 @@ export class EventReportPage {
             });
             // this.navCtrl.setRoot('HcfMappingPage');
             alert.present();
-            this.navCtrl.setRoot('HcfMappingPage');
+            this.navCtrl.setRoot('HcfMappingPage', {
+              lat: this.lat,
+              long: this.long             
+            });
             //this.navCtrl.setRoot('PilgrimProfilePage'); 
             //this.log();
 

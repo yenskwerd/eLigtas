@@ -169,7 +169,10 @@ export class CheckPersonPage {
             message: "Request sent successfully!",
             buttons: ['OK']
             }); 
-            this.navCtrl.setRoot('HcfMappingPage');
+            this.navCtrl.setRoot('HcfMappingPage', {
+              lat: this.lat,
+              long: this.long             
+            });
             alert.present();
             //this.navCtrl.setRoot('PilgrimProfilePage'); 
         },

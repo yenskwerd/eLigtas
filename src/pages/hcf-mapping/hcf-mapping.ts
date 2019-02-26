@@ -41,8 +41,17 @@ export class HcfMappingPage {
   distanceArr: any = [];
   index: any;
 
+  passlat: any;
+  passlong: any;
+  passmarker: any;
+
   constructor(public navCtrl: NavController, public http : HttpClient, public navParams: NavParams, public alertCtrl : AlertController, public http2 : Http, public loginService: LoginServiceProvider) {
     this.hcfMarkers = [];
+    
+    if (navParams.data.lat!=null && navParams.data.long!=null){
+      this.passlat = navParams.data.lat;
+      this.passlong = navParams.data.long;
+    }
   }
 
   ionViewDidLoad() {
@@ -217,6 +226,25 @@ export class HcfMappingPage {
         alert(err.message);
     })
     console.log(this.map);
+
+    
+    var grayIcon = new leaflet.Icon({
+      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-grey.png',
+      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      shadowSize: [41, 41]
+    }); 
+    
+    
+    if (this.passlat!=null && this.passlong!=null){
+      leaflet.marker([this.passlat,this.passlong], {icon: grayIcon}).bindTooltip("Your Report", 
+        {
+            permanent: true, 
+            direction: 'bottom'
+        }).addTo(this.map);
+    }
   }
   // 10.3502881,123.8988732
   // 10.361011,123.9070701

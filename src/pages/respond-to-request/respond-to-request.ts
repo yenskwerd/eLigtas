@@ -26,6 +26,7 @@ export class RespondToRequestPage {
   request_status_id;
   request_id;
 
+  option: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public http   : Http, public loading:LoadingController, public loginService: LoginServiceProvider) {
     this.event = navParams.data.event;
@@ -35,6 +36,7 @@ export class RespondToRequestPage {
     this.special = navParams.data.special_needs;
     this.request_status_id=navParams.data.request_status_id;
     this.request_id=navParams.data.request_id;
+    this.option = navParams.data.option;
   }
 
   ionViewDidLoad() {
@@ -85,10 +87,10 @@ export class RespondToRequestPage {
     
     let options = new RequestOptions({ headers: headers });
     let data = {
-    user_id: this.loginService.logged_in_user_id,
-    request_status_id: this.request_status_id,
-    request_id: this.request_id
-  
+      user_id: this.loginService.logged_in_user_id,
+      request_status_id: this.request_status_id,
+      request_id: this.request_id,
+      option: this.option
     }
     let loader = this.loading.create({
     });

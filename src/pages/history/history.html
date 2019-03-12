@@ -16,12 +16,16 @@
 
 
 <ion-content (root)="rootPage">
-  <ion-card padding *ngFor="let item of history">
+  <div *ngIf="history.length=='0'">
+    <h1 text-center>No Records</h1>
+  </div>
+  <ion-card *ngFor="let item of history">
       <ion-item>
           <h2>{{ item.action }}</h2>
           <h5>{{ item.action_datetime| date : 'longDate'  }}</h5>
           <h5>{{ item.action_datetime| date : 'shortTime'  }}</h5>
           <p>{{ item.request_id }}</p>
+          <ion-icon item-end  name="water" color="{{ item.color }}"></ion-icon>
           <!-- <ion-icon item-end name="more"></ion-icon> -->
           <!-- <div #map id="map">
               <button ion-button (click)="addMarker()"><ion-icon name="view"></ion-icon>View in Map</button>

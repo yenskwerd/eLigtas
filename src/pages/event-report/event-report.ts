@@ -19,6 +19,11 @@ import { asTextData } from '@angular/core/src/view';
   templateUrl: 'event-report.html',
 })
 export class EventReportPage {
+
+  @ViewChild('persons_injured') persons_injured;
+  @ViewChild('persons_trapped') persons_trapped;
+  @ViewChild('other_info') other_info;
+
   max_id: any;
   today: number = Date.now();
   event: any;
@@ -34,14 +39,13 @@ export class EventReportPage {
     this.lat = navParams.data.lat;
     this.long = navParams.data.long;
 
-    
     this.http
       .get('http://usc-dcis.com/eligtas.app/retrieve-max-request.php')
       .map(res => res.json())
       .subscribe((data : any) =>
       {
         // console.dir(data);
-        this.max_id = data.max_id + 1;
+        this.max_id = data.max_id + 2;
         console.log(this.max_id);
       },
       (error : any) =>
@@ -106,13 +110,11 @@ export class EventReportPage {
     console.log(this.mental);
   }
 
-  @ViewChild('persons_injured') persons_injured;
-  @ViewChild('persons_trapped') persons_trapped;
-  @ViewChild('other_info') other_info;
-
   ionViewDidLoad() {
     console.log('ionViewDidLoad EventReportPage');
     console.log(this.lat, this.long);
+    this.persons_injured.value = 0;
+    this.persons_trapped.value = 0;
   }
   
   eventfilter(){
@@ -138,31 +140,30 @@ export class EventReportPage {
     console.log(this.others);
 
     
-
-
-    console.log(this.lat);
-    console.log(this.report);
-    if(this.persons_injured.value==""){
+    // if (this.persons_injured.value==""){
         
-          let alert = this.alertCtrl.create({
-            message:"Persons injured field is empty!",
-            buttons: ['OK']
+    //       let alert = this.alertCtrl.create({
+    //         message:"Persons injured field is empty!",
+    //         buttons: ['OK']
           
-          });
+    //       });
           
-          alert.present();
+    //       alert.present();
+    //       this.persons_injured.value = 0;
         
-    } else if (this.persons_trapped.value==""){
+    // } else if (this.persons_trapped.value==""){
         
-          let alert = this.alertCtrl.create({
-            message:"Persons trapped field is empty!",
-            buttons: ['OK']
+    //       let alert = this.alertCtrl.create({
+    //         message:"Persons trapped field is empty!",
+    //         buttons: ['OK']
   
-          });
+    //       });
           
-          alert.present();
+    //       alert.present();
+    //       this.persons_trapped.value = 0;
          
-    } else {
+    // } else {
+
         var headers = new Headers();
       
         headers.append("Accept", 'application/json');
@@ -211,12 +212,13 @@ export class EventReportPage {
             message: "Report sent successfully!",
             buttons: ['OK']
             });
+            this.navCtrl.pop();
             // this.navCtrl.setRoot('HcfMappingPage');
             alert.present();
-            this.navCtrl.setRoot('HcfMappingPage', {
-              lat: this.lat,
-              long: this.long             
-            });
+            // this.navCtrl.setRoot('HcfMappingPage', {
+            //   lat: this.lat,
+            //   long: this.long             
+            // });
             //this.navCtrl.setRoot('PilgrimProfilePage'); 
             //this.log();
 
@@ -235,7 +237,7 @@ export class EventReportPage {
         });
 
 
-      }
+      // }
 
   }
 

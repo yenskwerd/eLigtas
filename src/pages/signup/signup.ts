@@ -81,8 +81,7 @@ export class SignupPage {
         let data = {
           user_email: this.user_email.value,
           user_name: this.user_name.value,
-          user_password: this.user_password.value,
-          regUser_id: 1,
+          user_password: this.user_password.value,  
           specUser_id: this.options2
         }
         console.log(data);
@@ -92,16 +91,36 @@ export class SignupPage {
         {
            // If the request was successful notify the user
            console.log(data);
-           let alert = this.alertCtrl.create({
-            message: "Account created successfully!",
-            buttons: ['OK']
-            }); 
-            this.navCtrl.setRoot('LoginPage');
-            alert.present();
-            //this.navCtrl.setRoot('PilgrimProfilePage'); 
+            if(data=="Username already exists."){
+              let alert = this.alertCtrl.create({
+                message: data,
+                buttons: ['OK']
+                }); 
+                
+                alert.present();
+            }else if(data=="Email already exists."){
+              let alert = this.alertCtrl.create({
+                message: data,
+                buttons: ['OK']
+                }); 
+                
+                alert.present();
+            }else{
+              let alert = this.alertCtrl.create({
+                message: data,
+                buttons: ['OK']
+                }); 
+                this.navCtrl.setRoot('LoginPage');
+                alert.present();
+                //this.navCtrl.setRoot('PilgrimProfilePage'); 
+            }
+             
+            
+           
         },
         (error : any) =>
         {
+          
           console.log(error);
           let alert2 = this.alertCtrl.create({
             title:"FAILED",

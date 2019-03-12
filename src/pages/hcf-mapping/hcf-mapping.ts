@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController, ModalController } from 'ionic-angular';
 import leaflet, { latLng } from 'leaflet';
 import {Http, Headers, RequestOptions}  from '@angular/http';
 import { HttpClient } from '@angular/common/http';  
@@ -7,6 +7,7 @@ import { LoginPage } from '../login/login';
 import { LoginServiceProvider } from '../../providers/login-service/login-service';
 import { dateValueRange } from 'ionic-angular/umd/util/datetime-util';
 import 'leaflet-routing-machine';
+import { UserHomePage } from '../user-home/user-home';
 /**
  * Generated class for the HcfMappingPage page.
  *
@@ -26,9 +27,13 @@ export class HcfMappingPage {
   currLong:any;
   lat: any;
   long: any;
+  marker: any;
+  markerGroup: any;
   // hcfshow: any;
-  HCFshow: any;
-  emergencyshow: any;
+  HCFshow: any = true;
+  HCFcolor: any = "assets/imgs/user/hcfi.png";
+  emergencycolor: any = "assets/imgs/user/emergency.png";
+  emergencyshow: any = true;
   request: any;
   hcfMarkers: any[];
   alert: any = false;
@@ -45,13 +50,33 @@ export class HcfMappingPage {
   passlong: any;
   passmarker: any;
 
-  constructor(public navCtrl: NavController, public http : HttpClient, public navParams: NavParams, public alertCtrl : AlertController, public http2 : Http, public loginService: LoginServiceProvider) {
+  constructor(public navCtrl: NavController, public modalCtrl: ModalController, public http : HttpClient, public navParams: NavParams, public alertCtrl : AlertController, public http2 : Http, public loginService: LoginServiceProvider) {
     this.hcfMarkers = [];
     
     if (navParams.data.lat!=null && navParams.data.long!=null){
       this.passlat = navParams.data.lat;
       this.passlong = navParams.data.long;
     }
+  }
+
+  showModal() {
+    var modal = this.modalCtrl.create(UserHomePage, {
+      lat: this.map.getCenter().lat,
+      long: this.map.getCenter().lng
+    });
+    modal.present();
+    console.log(this.map.getCenter().lat +", "+ this.map.getCenter().lng)
+  }
+
+  recenter() {
+    this.map.locate({
+      setView: true,
+      maxZoom: 18
+    });
+    // this.map.locate({
+    //   center: [10.3540815,123.9093871],
+    //   maxZoom:18
+    // });
   }
 
   ionViewDidLoad() {
@@ -61,6 +86,7 @@ export class HcfMappingPage {
 
   ionViewDidEnter(){
     if(this.map != null){
+      this.map.off();
       this.map.remove();
       console.log("Entered != null");
     }
@@ -177,6 +203,27 @@ export class HcfMappingPage {
 
 
   loadmap(){
+    // document.getElementById('mapper').innerHTML = 
+    //   "<div id='map' style='width:100%; height: 100%;'></div>";
+      // "<div id='map' style='width: 100%; height: 100%;'>\
+      //   <ion-fab top><img *ngIf='looking==true' top src='assets/imgs/user/wfr.gif' class='loading'></ion-fab>\
+      //   <ion-fab left top>\
+      //     <button color='trans' ion-fab menuToggle><ion-icon color='primary' name='menu'></ion-icon></button>\
+      //     <button color='trans' (click)='showEmergency($event)' ion-fab><img src={{emergencycolor}} class='togglesht'></button>\
+      //     <button color='trans' (click)='showHCF($event)' ion-fab><img src={{HCFcolor}} class='togglesht'></button>\
+      //   </ion-fab>\
+      //   <ion-fab right top>\
+      //     <button color='light' class='fab-trans' (click)='recenter()' ion-fab><ion-icon name='locate'></ion-icon></button>\
+      //   </ion-fab>\
+      //   <ion-fab right bottom>\
+      //     <button color='secondary' (click)='showModal()' ion-fab><ion-icon name='apps'></ion-icon></button>\
+      //   </ion-fab>\
+      // </div>";
+    var circleIcon = new leaflet.Icon({
+      iconUrl: 'assets/imgs/current.png',
+      iconSize: [35, 35]
+    });
+
     // this.map = leaflet.map("map").fitWorld();
     // leaflet.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     //   attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
@@ -188,28 +235,33 @@ export class HcfMappingPage {
     // }).on('locationfound', (e) => {
     //   console.log('found you');
     //   })
-    var latlng = leaflet.latLng(10.3574632, 123.8343172);
+    // var latlng = leaflet.latLng(10.3574632, 123.8343172);
     // this.map = leaflet.map("map").setView(latlng, 16);
-    this.map = leaflet.map("map").fitWorld();
-    leaflet.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
-      maxZoom: 18
+    this.map = leaflet.map("map", { zoomControl:false }).fitWorld();
+    leaflet.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+      // attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+      maxZoom: 25
     }).addTo(this.map);
     this.map.locate({
       setView: true,
-      maxZoom: 15
+      maxZoom: 18
     }).on('locationfound', (e) => {
-      let markerGroup = leaflet.featureGroup();
-      let marker: any = leaflet.marker([e.latitude, e.longitude]).on('click', () => {
+      if(this.map.hasLayer(this.marker)){
+        this.markerGroup.clearLayers();
+        this.map.removeLayer(this.marker);
+        console.log("rmove")
+      }
+      this.markerGroup = leaflet.featureGroup();
+      this.marker = leaflet.marker([e.latitude, e.longitude], {icon: circleIcon}).on('click', () => {
         console.log(this.lat,this.long);
-      }).bindPopup("You are here!")
-      markerGroup.addLayer(marker);
-      this.map.addLayer(markerGroup);
+      }).bindPopup("You are here!");
+      this.markerGroup.addLayer(this.marker);
+      this.map.addLayer(this.markerGroup);
       // var circle = leaflet.circle([e.latitude, e.longitude], {
       //   color: 'Green',
       //       fillColor: '#81C784',
       //     fillOpacity: 0.5,
-      //     radius: 2000
+      //     radius: 20
       // }).addTo(this.map);
       this.lat = e.latitude;
       this.long = e.longitude;
@@ -239,11 +291,7 @@ export class HcfMappingPage {
     
     
     if (this.passlat!=null && this.passlong!=null){
-      leaflet.marker([this.passlat,this.passlong], {icon: grayIcon}).bindTooltip("Your Report", 
-        {
-            permanent: true, 
-            direction: 'bottom'
-        }).addTo(this.map);
+      leaflet.marker([this.passlat,this.passlong], {icon: grayIcon}).addTo(this.map);
     }
   }
   // 10.3502881,123.8988732
@@ -353,6 +401,11 @@ export class HcfMappingPage {
 
   showHCF(){
     // this.dataRefresher = setInterval(() =>{
+    this.map.locate({
+      setView: true,
+      maxZoom: 13
+    });
+
     this.http
        .get('http://usc-dcis.com/eligtas.app/retrieve-hcf.php')
        .subscribe((data : any) =>
@@ -360,6 +413,8 @@ export class HcfMappingPage {
           console.log(data);
           this.request = data;
           if(this.HCFshow == true){
+            this.HCFcolor = "assets/imgs/user/hcfa.png";
+            this.HCFshow = false;
             for(let i=0; i<data.length; i++){
               if(data[i].status==1) {
                 this.createMarker(data[i], i);
@@ -380,9 +435,11 @@ export class HcfMappingPage {
                 this.index = i;
               }
             }
-            this.route(this.distanceArr[this.index]);
+            // this.route(this.distanceArr[this.index]);
             console.log("true");
           }else{
+            this.HCFcolor = "assets/imgs/user/hcfi.png";
+            this.HCFshow = true;
             for(let i=0; i<this.hcfMarkers.length; i++){
               this.deleteMarker(i);
             }
@@ -398,6 +455,10 @@ export class HcfMappingPage {
   }
   
   showEmergency(){
+    this.map.locate({
+      setView: true,
+      maxZoom: 13
+    });
 
     var grayIcon = new leaflet.Icon({
       iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-grey.png',
@@ -415,6 +476,9 @@ export class HcfMappingPage {
           console.log(data);
           this.request = data;
           if(this.emergencyshow == true){
+            
+            this.emergencycolor = "assets/imgs/user/emergency2.png";
+            this.emergencyshow = false;
             for(let i=0; i<data.length; i++){
               if(data[i].status==1) {
                 this.hcfMarkers[i] = leaflet.marker([data[i].xloc,data[i].yloc], {icon: grayIcon}).bindTooltip(data[i].name, 
@@ -427,6 +491,8 @@ export class HcfMappingPage {
             }
             console.log("true");
           }else{
+            this.emergencycolor = "assets/imgs/user/emergency.png";
+            this.emergencyshow = true;
             for(let i=0; i<this.hcfMarkers.length; i++){
               this.deleteMarker(i);
             }

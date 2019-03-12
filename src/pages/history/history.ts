@@ -19,6 +19,7 @@ import { RequestVisualizationPage } from '../request-visualization/request-visua
 export class HistoryPage {
   public items : any = [];
   history: any = [];
+  color: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public http   : Http, public loginService: LoginServiceProvider) {
   }
@@ -71,10 +72,20 @@ export class HistoryPage {
   generateHistory(data) {
     console.log(data.request_id);
     for (let i=0; i < data.length; i++) {
+      if (data[i].request_status_id == null) {
+        this.color = "Purple"
+      } else if (data[i].request_status_id == 0) {
+        this.color = "light"
+      } else if (data[i].request_status_id == 1) {
+        this.color = "Yellow"
+      } else if (data[i].request_status_id == 2) {
+        this.color = "Gray"
+      }
       this.history.push(
         { request_id: data[i].request_id,
           action: data[i].action,
-          action_datetime: data[i].action_datetime
+          action_datetime: data[i].action_datetime,
+          color: this.color
         }
       );
     }

@@ -12,6 +12,7 @@ import { getOrCreateNodeInjectorForNode } from '@angular/core/src/render3/di';
 import { r } from '@angular/core/src/render3';
 import { GESTURE_PRIORITY_MENU_SWIPE } from 'ionic-angular/umd/gestures/gesture-controller';
 import { map } from 'rxjs/operator/map';
+import { on } from 'cluster';
 
 
 /**
@@ -37,8 +38,12 @@ export class RequestVisualizationPage {
   isenabled:boolean=false;
   alert: any = false ;
 
-  HCFshow: any;
-  emergencyshow: any;
+  
+  HCFshow: any = true;
+  HCFcolor: any = "assets/imgs/user/hcfi.png";
+  emergencycolor: any = "assets/imgs/user/emergency.png";
+  emergencyshow: any = true;
+
   stat_id: any;
   requestMarkers: any;
   map:any;
@@ -171,10 +176,10 @@ export class RequestVisualizationPage {
       });  
       var latlng = leaflet.latLng(10.3574632, 123.8343172);
       //this.map = leaflet.map("map").setView(latlng, 100);
-      this.map = leaflet.map("map").fitWorld();
+      this.map = leaflet.map("map", { zoomControl:false }).fitWorld();
       leaflet.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
-        maxZoom: 14,
+        // attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+        // maxZoom: 20,
         // minZoom:16
       }).addTo(this.map);
       this.map.locate({
@@ -224,11 +229,16 @@ export class RequestVisualizationPage {
         this.markerGroup2.addLayer(this.marker);
         this.markerGroup2.addLayer(this.circle);
         this.map.addLayer(this.markerGroup2);
+        this.map.locate({
+          //center:(this.currLat,this.currLong),
+          setView: true
+        })
         console.log(this.mapctr);
-        if(this.mapctr == 0) {
+        if(this.mapctr == 1) {
           this.initView(this.currLat, this.currLong);
+          this.mapctr++;
         }
-        this.mapctr++;
+          this.mapctr++;
       })
       
         .on('locationerror', (err) => {
@@ -254,11 +264,10 @@ export class RequestVisualizationPage {
 initView(lat, long) {
   console.log(lat,long);
       this.map.locate({
-        setView:(this.currLat,this.currLong),
-        // setView: false,
-        // center:this.LatLng1,
-        maxZoom: 16,
-        enableHighAccuracy: true
+        // setView:(this.currLat,this.currLong),
+        maxZoom: 18,
+        enableHighAccuracy: true,
+        stop
       })
 }
 
@@ -359,7 +368,13 @@ requestMarker(){
        .map(res=> res.json())
          .subscribe(
            res => {
-            this.callForBackUpMarker(res);
+            this.callForBackUpMarker(res, data);
+            if (this.stat_id == 0) {
+              this.rout(data);
+            } else if(this.stat_id == 1) {
+              this.rout(data);
+              this.trytry = this.LatLng1.distanceTo(leaflet.latLng(data.request_lat,data.request_long));
+            } 
        }); 
     }
 
@@ -417,9 +432,9 @@ requestMarker(){
 
     this.map.locate({
       // setView:this.LatLng1,
-       setView: true,
+      //  setView: true,
       // center:(this.currLat,this.currLong),
-      maxZoom: 14,
+      // maxZoom: 14,
       // minZoom:16,
       watch: true,
       enableHighAccuracy: true,
@@ -614,7 +629,9 @@ requestMarker(){
               other_info: data.other_info,
               special_needs: data.special_needs,
               request_lat: data.request_lat,
-              request_long: data.request_long
+              request_long: data.request_long,
+              
+              option: "respond"
             });
             console.log("request id: ");
             console.log(data.request_id);
@@ -626,7 +643,56 @@ requestMarker(){
     alert.present();
   }
 
+  cfbRespond(data) {
+    let alert = this.alertCtrl.create({
+      title: 'Response',
+      message: 'Do you want to backup?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+            this.change1();
+            // this.navCtrl.push('RespondToRequestPage');
+          }
+        },
+        {
+          text: 'See',
+          handler: () => {
+            console.log('Buy clicked');
+            //this.change(data.request_lat, data.request_long);
+            clearInterval(this.dataRefresher);
+            console.log('asdfasdf');
+            this.navCtrl.setRoot('RespondToRequestPage', {
+              request_id : data.request_id,
+              request_status_id : data.request_status_id, 
+              person_to_check: data.person_to_check,
+              event: data.event,
+              persons_injured: data.persons_injured,
+              persons_trapped: data.persons_trapped,
+              other_info: data.other_info,
+              special_needs: data.special_needs,
+              request_lat: data.request_lat,
+              request_long: data.request_long,
+
+              option: "CFB"
+            });
+            // console.log("request id: ");
+            // console.log(data.request_id);
+            // console.log(data.event);
+          }
+        }
+      ]
+    });
+    alert.present();
+  }
+
   showHCF(){
+    this.map.locate({
+      setView: true,
+      maxZoom: 13
+    });
     this.http
        .get('http://usc-dcis.com/eligtas.app/retrieve-hcf.php')
        .subscribe((data : any) =>
@@ -634,6 +700,8 @@ requestMarker(){
           console.log(data);
           this.request = data;
           if(this.HCFshow == true){
+            this.HCFcolor = "assets/imgs/user/hcfa.png";
+            this.HCFshow = false;
             for(let i=0; i<data.length; i++){
               if (data[i].status==1) {
                 this.createMarker(data[i], i);
@@ -641,6 +709,8 @@ requestMarker(){
             }
             console.log("true");
           }else{
+            this.HCFcolor = "assets/imgs/user/hcfi.png";
+            this.HCFshow = true;
             for(let i=0; i<this.requestMarkers.length; i++){
               this.deleteMarker(i);
             }
@@ -655,6 +725,10 @@ requestMarker(){
   }
   
   showEmergency(){
+    this.map.locate({
+      setView: true,
+      maxZoom: 13
+    });
 
     var grayIcon = new leaflet.Icon({
       iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-grey.png',
@@ -672,6 +746,8 @@ requestMarker(){
           console.log(data);
           this.request = data;
           if(this.emergencyshow == true){
+            this.emergencycolor = "assets/imgs/user/emergency2.png";
+            this.emergencyshow = false;
             for(let i=0; i<data.length; i++){
               if(data[i].status==1) {
                 this.requestMarkers[i] = leaflet.marker([data[i].xloc,data[i].yloc], {icon: grayIcon}).bindTooltip(data[i].name, 
@@ -684,6 +760,8 @@ requestMarker(){
             }
             console.log("true");
           }else{
+            this.emergencycolor = "assets/imgs/user/emergency.png";
+            this.emergencyshow = true;
             for(let i=0; i<this.requestMarkers.length; i++){
               this.deleteMarker(i);
             }
@@ -721,6 +799,13 @@ requestMarker(){
        {
           console.dir(error);
        });  
+  }
+  
+  recenter() {
+    this.map.locate({
+      setView: true,
+      maxZoom: 18
+    });
   }
 
   /********** SHOW MARKERS ************/
@@ -1012,7 +1097,7 @@ requestMarker(){
        .map(res=> res.json())
          .subscribe(
            res => {
-            this.callForBackUpMarker(res);
+            this.callForBackUpMarker(res, data);
             console.log(res);
        }); 
        
@@ -1071,7 +1156,8 @@ requestMarker(){
     this.cfb = true;
   }
 
-  callForBackUpMarker(data:any){
+  callForBackUpMarker(data:any, data1:any){
+
     var numberOfResponders = data.count;
 
     var numIcon = new leaflet.DivIcon({
@@ -1084,7 +1170,7 @@ requestMarker(){
     leaflet.marker([data.request_lat,data.request_long],
       {
           icon: numIcon
-      }).addTo(this.map)
+      }).on('click', () => {this.cfbRespond(data1)}).addTo(this.map)
       // .on('click', () => {
       //   this.presentConfirm(data);
       // });

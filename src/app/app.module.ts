@@ -12,13 +12,15 @@ import { HomePage } from '../pages/home/home';
 import { LoginServiceProvider } from '../providers/login-service/login-service';
 import { IonTextAvatar } from 'ionic-text-avatar';
 import { HistoryPage } from '../pages/history/history';
+import { UserHomePage } from '../pages/user-home/user-home';
 
 @NgModule({
   declarations: [
     MyApp,
     HomePage,
     IonTextAvatar,
-    HistoryPage
+    HistoryPage,
+    UserHomePage
   ],
   imports: [
     BrowserModule,
@@ -30,7 +32,8 @@ import { HistoryPage } from '../pages/history/history';
   entryComponents: [
     MyApp,
     HomePage,
-    HistoryPage
+    HistoryPage,
+    UserHomePage
   ],
   providers: [
     StatusBar,

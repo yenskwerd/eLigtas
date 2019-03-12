@@ -24,10 +24,25 @@ export class HelpRequestPage {
   walk: any;
   mental: any;
   others: any;
+  max_id: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl:AlertController,private http: Http, public loginService: LoginServiceProvider) {
     this.lat = navParams.data.lat;
     this.long = navParams.data.long;
+
+    this.http
+      .get('http://usc-dcis.com/eligtas.app/retrieve-max-request.php')
+      .map(res => res.json())
+      .subscribe((data : any) =>
+      {
+        // console.dir(data);
+        this.max_id = data.max_id + 2;
+        console.log(this.max_id);
+      },
+      (error : any) =>
+      {
+         console.dir(error);
+      });
   }
 
   pushChangePin(){
@@ -84,6 +99,8 @@ export class HelpRequestPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad HelpRequestPage');
+    this.persons_injured.value = 0;
+    this.persons_trapped.value = 0;
   }
 
   eventfilter(){
@@ -108,27 +125,27 @@ export class HelpRequestPage {
     }
     console.log(this.others);
     
-    if(this.persons_injured.value==""){
+    // if(this.persons_injured.value==""){
         
-          let alert = this.alertCtrl.create({
-            message:"Persons injured field is empty!",
-            buttons: ['OK']
+    //       let alert = this.alertCtrl.create({
+    //         message:"Persons injured field is empty!",
+    //         buttons: ['OK']
           
-          });
+    //       });
           
-          alert.present();
+    //       alert.present();
         
-        } else if(this.persons_trapped.value==""){
+        // } else if(this.persons_trapped.value==""){
         
-          let alert = this.alertCtrl.create({
-            message:"Persons trapped field is empty!",
-            buttons: ['OK']
+        //   let alert = this.alertCtrl.create({
+        //     message:"Persons trapped field is empty!",
+        //     buttons: ['OK']
   
-          });
+        //   });
           
-          alert.present();
+        //   alert.present();
          
-      }else {
+      // }else {
         var headers = new Headers();
       
         headers.append("Accept", 'application/json');
@@ -150,6 +167,8 @@ export class HelpRequestPage {
           request_long: this.long,
           special_needs: this.others,
 
+          max_id: this.max_id,
+
           /********** LOG **********/
           user_id: this.loginService.logged_in_user_id,
           action: "Request",
@@ -167,10 +186,11 @@ export class HelpRequestPage {
             message: "Request sent successfully!",
             buttons: ['OK']
             }); 
-            this.navCtrl.setRoot('HcfMappingPage', {
-              lat: this.lat,
-              long: this.long             
-            });
+            // this.navCtrl.setRoot('HcfMappingPage', {
+            //   lat: this.lat,
+            //   long: this.long             
+            // });
+            this.navCtrl.pop();
             alert.present();
             //this.navCtrl.setRoot('PilgrimProfilePage'); 
         },
@@ -186,7 +206,7 @@ export class HelpRequestPage {
         alert2.present();
         });
 
-      }
+      // }
   }
   
 }

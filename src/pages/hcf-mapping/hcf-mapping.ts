@@ -59,14 +59,6 @@ export class HcfMappingPage {
     // }
   }
 
-  showModal() {
-    var modal = this.modalCtrl.create(UserHomePage, {
-      lat: this.map.getCenter().lat,
-      long: this.map.getCenter().lng
-    });
-    modal.present();
-    console.log(this.map.getCenter().lat +", "+ this.map.getCenter().lng)
-  }
 
   recenter() {
     this.map.locate({
@@ -81,6 +73,16 @@ export class HcfMappingPage {
     //   maxZoom:18
     // });
   }
+
+  showModal() {
+    var modal = this.modalCtrl.create(UserHomePage, {
+      lat: this.map.getCenter().lat,
+      long: this.map.getCenter().lng
+    });
+    modal.present();
+    console.log(this.map.getCenter().lat +", "+ this.map.getCenter().lng)
+  }
+
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad HcfMappingPage');

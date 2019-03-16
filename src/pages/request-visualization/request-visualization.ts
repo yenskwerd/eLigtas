@@ -2,7 +2,7 @@ import { Component, ViewChild, ElementRef } from '@angular/core';
 import { ModalController, IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { HttpClient } from '@angular/common/http';  
 import {Http, Headers, RequestOptions}  from '@angular/http';
-import leaflet, { Draggable, marker, LatLng } from 'leaflet';
+import leaflet, { Draggable, marker, LatLng, control } from 'leaflet';
 import { LoginServiceProvider } from '../../providers/login-service/login-service';
 import 'leaflet-routing-machine';
 import 'rxjs/add/operator/map';
@@ -12,7 +12,6 @@ import { getOrCreateNodeInjectorForNode } from '@angular/core/src/render3/di';
 import { r } from '@angular/core/src/render3';
 import { GESTURE_PRIORITY_MENU_SWIPE } from 'ionic-angular/umd/gestures/gesture-controller';
 import { map } from 'rxjs/operator/map';
-import { on } from 'cluster';
 
 
 /**
@@ -53,6 +52,7 @@ export class RequestVisualizationPage {
   circle2:any;
   currLat:any;
   currLong:any;
+  control:any;
   // marker: any;
   marker: any;
   marker2: any;
@@ -101,11 +101,12 @@ export class RequestVisualizationPage {
   }
 
   ionViewWillEnter(){
-  }
-
-  ionViewDidEnter(){
     this.loadmap();
   }
+
+  // ionViewDidEnter(){
+  //   this.loadmap();
+  // }
   
 
   ionViewDidLeave() {
@@ -249,7 +250,7 @@ export class RequestVisualizationPage {
         this.map.removeLayer(this.circle);
         console.log("rmove")
       }
-      console.log(this.LatLng1);
+      // console.log(this.LatLng1);
       this.requestMarker();
       
       // if(this.map.hasLayer(this.marker) && this.map.hasLayer(this.circle)){
@@ -264,8 +265,8 @@ export class RequestVisualizationPage {
 initView(lat, long) {
   console.log(lat,long);
       this.map.locate({
-        // setView:(this.currLat,this.currLong),
-        maxZoom: 18,
+        // setView:(this.currLat,this.currLong),f
+        maxZoom: 14,
         enableHighAccuracy: true,
         stop
       })
@@ -335,7 +336,16 @@ requestMarker(){
     });  
     if(data.request_status_id==null){
       this.marker2=leaflet.marker([data.request_lat,data.request_long], {icon: purpleIcon}).on('click', () => {
-        this.presentConfirm(data);
+        if(this.loginService.logged_in_user_request_id == null || this.loginService.logged_in_stat_id == 3) {
+          this.presentConfirm(data);
+        } else {
+          let alert = this.alertCtrl.create({
+            message: "You cannot respond to this report.",
+            buttons: ['OK']
+            });
+            // this.navCtrl.setRoot('HcfMappingPage');
+            alert.present();
+        }
       })
 
     } else if(data.request_status_id==1 && data.request_id == this.user_request_id){
@@ -369,7 +379,7 @@ requestMarker(){
          .subscribe(
            res => {
             this.callForBackUpMarker(res, data);
-            if (this.stat_id == 0) {
+            if (this.stat_id == 0 && this.loginService.logged_in_user_request_id == data.request_id) {
               this.rout(data);
             } else if(this.stat_id == 1) {
               this.rout(data);
@@ -417,6 +427,7 @@ requestMarker(){
 };
 
   rout(data){
+    // this.map.removeControl(this.control)
     clearInterval(this.dataRefresher);
     var redIcon = new leaflet.Icon({
       iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
@@ -445,30 +456,34 @@ requestMarker(){
       leaflet.latLng(data.request_lat, data.request_long),
       leaflet.latLng(this.currLat, this.currLong)
     ]
-
-    leaflet.Routing.control({
+    
+    this.control = leaflet.Routing.control({
       waypoints: waypoints,
-      plan: leaflet.Routing.plan(waypoints, {
+       plan: leaflet.Routing.plan(waypoints, {
         addWaypoints: false,
         draggableWaypoints: false,
         routeWhileDragging: false,
-        createMarker: function(i, wp) {
-          return leaflet.marker(wp.latLng, {
-            draggable: false,
+      //   createMarker: function(i, wp) {
+      //     return leaflet.marker(wp.latLng, {
+      //       draggable: false,
             
-          });
-        }
-      }),
+      //     });
+      //   }
+      // }),
       // waypoints: [null],
-       routeWhileDragging:false,
-       fitSelectedRoutes: false,
-       showAlternatives:true,
-       show: true,
-       autoRoute: true,
-      //  createMarker: function () {
-      //   return null;
-      // }
+      //  routeWhileDragging:false,
+      //  fitSelectedRoutes: false,
+      //  showAlternatives:true,
+      //  show: true,
+      //  autoRoute: true,
+       createMarker: function () {
+        return null;
+      }
     })
+    })
+    // .on('routingstart', showSpinner)
+    // .on('routesfound routingerror', hideSpinner)
+    // leaflet.Routing.errorControl(control).addTo(this.map)
   //   return r;
   // }
   // var control = getRoute();
@@ -477,6 +492,7 @@ requestMarker(){
     .addTo(this.map)
     
     .on('locationfound', (e) => {
+      console.log("test");
       this.currLat= e.latitude;
       this.currLong= e.longitude;
       this.LatLng1=leaflet.latLng(e.latitude,e.longitude);
@@ -633,6 +649,7 @@ requestMarker(){
               
               option: "respond"
             });
+            // this.requestMarker(); 
             console.log("request id: ");
             console.log(data.request_id);
             console.log(data.event);
@@ -693,6 +710,7 @@ requestMarker(){
       setView: true,
       maxZoom: 13
     });
+    
     this.http
        .get('http://usc-dcis.com/eligtas.app/retrieve-hcf.php')
        .subscribe((data : any) =>
@@ -985,6 +1003,7 @@ requestMarker(){
   }
 
   pushArrive() {
+    this.map.removeControl(this.control);
     this.stat_id=2;
 
 
@@ -1275,6 +1294,142 @@ requestMarker(){
 
   }
 
+  pushCancel() {
+    console.log("clicked cancel");
+    this.user_request_id = null;
+    this.stat_id=0;
+    // if(this.loginService.logged_in_user_request_id!= null){
+    //   this.status = true;
+    // }
+    var headers = new Headers();
+    
+    headers.append("Accept", 'application/json');
+    headers.append('Content-Type', 'application/x-www-form-urlencoded');
+    headers.append('Access-Control-Allow-Origin' , '*');
+    headers.append('Access-Control-Allow-Headers' , 'Content-Type');
+    headers.append('Access-Control-Allow-Methods', 'POST, GET, OPTIONS, PUT');
+    
+    let options = new RequestOptions({ headers: headers });
+
+     
+    /******** UPDATE REQUEST STATUS ID **********/
+    let data2 = {
+      request_id: this.request_id,
+      request_status_id: "NULL"
+    }
+
+    this.http2.post('http://usc-dcis.com/eligtas.app/update-request.php', data2, options)
+    .map(res=> res.json())
+    .subscribe((data2: any) =>
+    {
+      console.log(data2);
+      // If the request was successful notify the user
+      //  console.log(data2);
+      //  let alert = this.alertCtrl.create({
+      //   message: "You have started navigating(???)",
+      //   buttons: ['OK']
+      //   });
+      //   alert.present();
+    },
+    (error : any) =>
+    {
+      console.log(error);
+      let alert2 = this.alertCtrl.create({
+        title:"FAILED",
+        subTitle: "Request not updated. huhu!",
+        buttons: ['OK']
+        });
+
+      alert2.present();
+    });
+    
+    /********** LOG **********/
+    // let data3 = {
+    //   user_id: this.loginService.logged_in_user_id,
+    //   action: "Rescued",
+    //   action_datetime: new Date(),
+    //   request_id: this.request_id
+    // }
+    
+    // this.http2.post('http://usc-dcis.com/eligtas.app/log.php', data3, options)
+    
+    // .map(res=> res.json())
+    // .subscribe((data3: any) =>
+    // {
+    //   console.log(data3);
+    // },
+    // (error : any) =>
+    // {
+    //   console.log(error);
+    // });
+    /********** END OF LOG **********/
+
+    
+    let data4 = {
+      user_id: this.loginService.logged_in_user_id,
+      stat_id: 0
+    }
+    this.http2.post('http://usc-dcis.com/eligtas.app/update-stat.php', data4, options)
+    .map(res=> res.json())
+    .subscribe((data2: any) =>
+    {
+       // If the request was successful notify the user
+      //  console.log(data2);
+      //  let alert = this.alertCtrl.create({
+      //   message: "You have started navigating(???)",
+      //   buttons: ['OK']
+      //   });
+      //   alert.present();
+    },
+    (error : any) =>
+    {
+      console.log(error);
+      let alert2 = this.alertCtrl.create({
+        title:"FAILED",
+        subTitle: "Something went wrong!",
+        buttons: ['OK']
+        });
+
+      alert2.present();
+    });
+
+    let data5 = {
+      user_id: this.loginService.logged_in_user_id,
+      // request_id: "NULL"
+    }
+    this.http2.post('http://usc-dcis.com/eligtas.app/update-stat2.php', data5, options)
+    .map(res=> res.json())
+    .subscribe((data5: any) =>
+    {
+       // If the request was successful notify the user
+      //  console.log(data2);
+      //  let alert = this.alertCtrl.create({
+      //   message: "You have started navigating(???)",
+      //   buttons: ['OK']
+      //   });
+      //   alert.present();
+    },
+    (error : any) =>
+    {
+      console.log(error);
+      let alert2 = this.alertCtrl.create({
+        title:"FAILED",
+        subTitle: "Something went wrong!",
+        buttons: ['OK']
+        });
+
+      alert2.present();
+    });
+    // this.removeRoutingControl();
+    // if(this.map.hasLayer(this.marker) && this.map.hasLayer(this.circle)){
+    //   this.markerGroup2.clearLayers();
+    //   this.map.removeLayer(this.circle);
+    //   console.log("rmove")
+    // }
+    // console.log(this.LatLng1);
+    this.map.removeControl(this.control);
+    this.requestMarker();
+  }
   
 }
 

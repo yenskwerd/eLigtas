@@ -212,6 +212,7 @@ export class EventReportPage {
             message: "Report sent successfully!",
             buttons: ['OK']
             });
+            // this.navParams.get("HcfMappingPage").someFnToRefreshParent();
             this.navCtrl.pop();
             // this.navCtrl.setRoot('HcfMappingPage');
             alert.present();

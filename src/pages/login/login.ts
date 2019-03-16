@@ -114,6 +114,7 @@ export class LoginPage {
             this.loginService.logged_in_user_id = res.user_id;
             this.loginService.logged_in_user_request_id = res.request_id;
             this.loginService.logged_in_user_name = res.user_name;
+            this.loginService.logged_in_stat_id = res.stat_id;
             this.events.publish('user:sidebar');
             // this.events.publish('user:sidebar');
             let alert = this.alertCtrl.create({

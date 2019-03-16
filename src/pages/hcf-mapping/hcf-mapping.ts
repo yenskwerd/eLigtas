@@ -39,7 +39,7 @@ export class HcfMappingPage {
   alert: any = false;
   user_request_id: any;
   count: any;
-  looking: any;
+  looking: any=false;
   trytry:any;
   minimum:any;
   LatLng1: any;
@@ -53,10 +53,10 @@ export class HcfMappingPage {
   constructor(public navCtrl: NavController, public modalCtrl: ModalController, public http : HttpClient, public navParams: NavParams, public alertCtrl : AlertController, public http2 : Http, public loginService: LoginServiceProvider) {
     this.hcfMarkers = [];
     
-    if (navParams.data.lat!=null && navParams.data.long!=null){
-      this.passlat = navParams.data.lat;
-      this.passlong = navParams.data.long;
-    }
+    // if (navParams.data.lat!=null && navParams.data.long!=null){
+    //   this.passlat = navParams.data.lat;
+    //   this.passlong = navParams.data.long;
+    // }
   }
 
   showModal() {
@@ -73,6 +73,9 @@ export class HcfMappingPage {
       setView: true,
       maxZoom: 18
     });
+    if(this.loginService.logged_in_user_request_id != null) {
+      this.getUserRequest1();
+    }
     // this.map.locate({
     //   center: [10.3540815,123.9093871],
     //   maxZoom:18
@@ -81,10 +84,13 @@ export class HcfMappingPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad HcfMappingPage');
-    this.getCount();
+    // this.getCount();
+    if(this.loginService.logged_in_user_request_id != null) {
+      this.getUserRequest1();
+    }
   }
-
-  ionViewDidEnter(){
+  
+  ionViewWillEnter() {
     if(this.map != null){
       this.map.off();
       this.map.remove();
@@ -92,6 +98,15 @@ export class HcfMappingPage {
     }
     this.loadmap();
   }
+
+  // ionViewDidEnter(){
+  //   if(this.map != null){
+  //     this.map.off();
+  //     this.map.remove();
+  //     console.log("Entered != null");
+  //   }
+  //   this.loadmap();
+  // }
   
   ionViewDidLeave() {
     // this.map = null;
@@ -115,6 +130,7 @@ export class HcfMappingPage {
             handler: () => {
             this.check=1;
             console.log(this.check);
+            this.looking = false;
             }
           },
           {
@@ -164,6 +180,50 @@ export class HcfMappingPage {
    }); 
   }
 
+  getUserRequest1(){
+    var grayIcon = new leaflet.Icon({
+      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-grey.png',
+      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      shadowSize: [41, 41]
+    }); 
+    //gets user data
+    var headers = new Headers();
+      
+    headers.append("Accept", 'application/json');
+    headers.append('Content-Type', 'application/x-www-form-urlencoded');
+    headers.append('Access-Control-Allow-Origin' , '*');
+    headers.append('Access-Control-Allow-Headers' , 'Content-Type');
+    headers.append('Access-Control-Allow-Methods', 'POST, GET, OPTIONS, PUT');
+    
+    let options = new RequestOptions({ headers: headers });
+    let data = {
+      request_id: this.loginService.logged_in_user_request_id
+    }
+    console.log(data);
+
+   this.http2.post('http://usc-dcis.com/eligtas.app/retrieve-user-request1.php',data,options)
+   .map(res=> res.json())
+     .subscribe(
+       res => {
+      //    console.log(res.request_lat);
+      //  this.passlat = res.request_lat;
+      //  this.passlong = res.request_long;
+      leaflet.marker([res.request_lat,res.request_long], {icon: grayIcon}).bindTooltip(res.event, {direction: 'bottom'}).addTo(this.map);
+
+      
+      if (res.request_status_id == null) {
+        this.looking = true;
+        this.responseAlert();
+      } else {
+        this.looking = false;
+      }
+   }); 
+   
+  }
+
   getCount() {
 
     this.getUserRequest();
@@ -189,6 +249,7 @@ export class HcfMappingPage {
           console.log(res.count);
           this.count = res.count;
           if (res.count == 0) {
+            this.looking = true;
             this.responseAlert();
             console.log("0 ang value")
           } else {
@@ -238,7 +299,7 @@ export class HcfMappingPage {
     // var latlng = leaflet.latLng(10.3574632, 123.8343172);
     // this.map = leaflet.map("map").setView(latlng, 16);
     this.map = leaflet.map("map", { zoomControl:false }).fitWorld();
-    leaflet.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+    leaflet.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       // attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
       maxZoom: 25
     }).addTo(this.map);
@@ -280,19 +341,19 @@ export class HcfMappingPage {
     console.log(this.map);
 
     
-    var grayIcon = new leaflet.Icon({
-      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-grey.png',
-      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-      iconSize: [25, 41],
-      iconAnchor: [12, 41],
-      popupAnchor: [1, -34],
-      shadowSize: [41, 41]
-    }); 
+    // var grayIcon = new leaflet.Icon({
+    //   iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-grey.png',
+    //   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+    //   iconSize: [25, 41],
+    //   iconAnchor: [12, 41],
+    //   popupAnchor: [1, -34],
+    //   shadowSize: [41, 41]
+    // }); 
     
     
-    if (this.passlat!=null && this.passlong!=null){
-      leaflet.marker([this.passlat,this.passlong], {icon: grayIcon}).addTo(this.map);
-    }
+    // if (this.passlat!=null && this.passlong!=null){
+    //   leaflet.marker([this.passlat,this.passlong], {icon: grayIcon}).addTo(this.map);
+    // }
   }
   // 10.3502881,123.8988732
   // 10.361011,123.9070701
@@ -438,6 +499,10 @@ export class HcfMappingPage {
             // this.route(this.distanceArr[this.index]);
             console.log("true");
           }else{
+            this.map.locate({
+              setView: true,
+              maxZoom: 18
+            });
             this.HCFcolor = "assets/imgs/user/hcfi.png";
             this.HCFshow = true;
             for(let i=0; i<this.hcfMarkers.length; i++){
@@ -491,6 +556,10 @@ export class HcfMappingPage {
             }
             console.log("true");
           }else{
+            this.map.locate({
+              setView: true,
+              maxZoom: 18
+            });
             this.emergencycolor = "assets/imgs/user/emergency.png";
             this.emergencyshow = true;
             for(let i=0; i<this.hcfMarkers.length; i++){

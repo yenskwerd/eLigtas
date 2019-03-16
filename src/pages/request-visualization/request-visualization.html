@@ -59,8 +59,11 @@
     </ion-fab> -->
 
     <ion-fab *ngIf="stat_id==2" right top>
-    <!-- <ion-fab right top> -->
       <button color="secondary" (click)="pushDone()" ion-fab><ion-icon name="checkmark"></ion-icon></button>
+    </ion-fab>
+
+    <ion-fab *ngIf="stat_id==0 && user_request_id!=NULL || stat_id==1" right top>
+      <button color="danger" (click)="pushCancel()" ion-fab><ion-icon name="close"></ion-icon></button>
     </ion-fab>
   </div>
   

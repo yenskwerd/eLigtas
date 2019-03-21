@@ -213,13 +213,13 @@ export class EventReportPage {
             buttons: ['OK']
             });
             // this.navParams.get("HcfMappingPage").someFnToRefreshParent();
-            this.navCtrl.pop();
+            // this.navCtrl.pop();
             // this.navCtrl.setRoot('HcfMappingPage');
             alert.present();
-            // this.navCtrl.setRoot('HcfMappingPage', {
-            //   lat: this.lat,
-            //   long: this.long             
-            // });
+            this.navCtrl.setRoot('HcfMappingPage', {
+              lat: this.lat,
+              long: this.long             
+            });
             //this.navCtrl.setRoot('PilgrimProfilePage'); 
             //this.log();
 
@@ -240,6 +240,10 @@ export class EventReportPage {
 
       // }
 
+  }
+
+  pushBackToMap(){
+    this.navCtrl.setRoot('HcfMappingPage');
   }
 
 }

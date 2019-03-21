@@ -12,7 +12,7 @@ import { getOrCreateNodeInjectorForNode } from '@angular/core/src/render3/di';
 import { r } from '@angular/core/src/render3';
 import { GESTURE_PRIORITY_MENU_SWIPE } from 'ionic-angular/umd/gestures/gesture-controller';
 import { map } from 'rxjs/operator/map';
-import { on } from 'cluster';
+// import { on } from 'cluster';
 
 
 /**

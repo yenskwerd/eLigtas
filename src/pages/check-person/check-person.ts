@@ -188,11 +188,11 @@ export class CheckPersonPage {
             message: "Request sent successfully!",
             buttons: ['OK']
             }); 
-            this.navCtrl.pop();
-            // this.navCtrl.setRoot('HcfMappingPage', {
-            //   lat: this.lat,
-            //   long: this.long             
-            // });
+            // this.navCtrl.pop();
+            this.navCtrl.setRoot('HcfMappingPage', {
+              lat: this.lat,
+              long: this.long             
+            });
             alert.present();
             //this.navCtrl.setRoot('PilgrimProfilePage'); 
         },
@@ -209,6 +209,10 @@ export class CheckPersonPage {
         });
 
       }
+  }
+
+  pushBackToMap(){
+    this.navCtrl.setRoot('HcfMappingPage');
   }
 
 }

@@ -186,11 +186,11 @@ export class HelpRequestPage {
             message: "Request sent successfully!",
             buttons: ['OK']
             }); 
-            // this.navCtrl.setRoot('HcfMappingPage', {
-            //   lat: this.lat,
-            //   long: this.long             
-            // });
-            this.navCtrl.pop();
+            this.navCtrl.setRoot('HcfMappingPage', {
+              lat: this.lat,
+              long: this.long             
+            });
+            // this.navCtrl.pop();
             alert.present();
             //this.navCtrl.setRoot('PilgrimProfilePage'); 
         },
@@ -207,6 +207,10 @@ export class HelpRequestPage {
         });
 
       // }
+  }
+
+  pushBackToMap(){
+    this.navCtrl.setRoot('HcfMappingPage');
   }
   
 }

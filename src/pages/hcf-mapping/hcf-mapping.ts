@@ -50,13 +50,15 @@ export class HcfMappingPage {
   passlong: any;
   passmarker: any;
 
+  passPage: any;
+
   constructor(public navCtrl: NavController, public modalCtrl: ModalController, public http : HttpClient, public navParams: NavParams, public alertCtrl : AlertController, public http2 : Http, public loginService: LoginServiceProvider) {
     this.hcfMarkers = [];
     
-    // if (navParams.data.lat!=null && navParams.data.long!=null){
-    //   this.passlat = navParams.data.lat;
-    //   this.passlong = navParams.data.long;
-    // }
+    if (navParams.data.lat!=null && navParams.data.long!=null){
+      this.passlat = navParams.data.lat;
+      this.passlong = navParams.data.long;
+    }
   }
 
 
@@ -80,7 +82,14 @@ export class HcfMappingPage {
       long: this.map.getCenter().lng
     });
     modal.present();
-    console.log(this.map.getCenter().lat +", "+ this.map.getCenter().lng)
+    console.log(this.map.getCenter().lat +", "+ this.map.getCenter().lng);
+    
+    modal.onDidDismiss((result) =>{
+      if(result){
+        console.log(result);
+        this.passPage = result;
+      }
+    });
   }
 
 
@@ -343,19 +352,19 @@ export class HcfMappingPage {
     console.log(this.map);
 
     
-    // var grayIcon = new leaflet.Icon({
-    //   iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-grey.png',
-    //   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-    //   iconSize: [25, 41],
-    //   iconAnchor: [12, 41],
-    //   popupAnchor: [1, -34],
-    //   shadowSize: [41, 41]
-    // }); 
+    var grayIcon = new leaflet.Icon({
+      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-grey.png',
+      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      shadowSize: [41, 41]
+    }); 
     
     
-    // if (this.passlat!=null && this.passlong!=null){
-    //   leaflet.marker([this.passlat,this.passlong], {icon: grayIcon}).addTo(this.map);
-    // }
+    if (this.passlat!=null && this.passlong!=null){
+      leaflet.marker([this.passlat,this.passlong], {icon: grayIcon}).addTo(this.map);
+    }
   }
   // 10.3502881,123.8988732
   // 10.361011,123.9070701
@@ -415,24 +424,31 @@ export class HcfMappingPage {
     //   ]
     // }).addTo(this.map);
   }
-  PushReportEventPage(){
-    this.navCtrl.push('EventReportPage', {
-      lat: this.lat,
-      long: this.long
-    });
-  }
+  // PushReportEventPage(){
+  //   this.navCtrl.setRoot('EventReportPage', {
+  //     lat: this.map.getCenter().lat,
+  //     long: this.map.getCenter().lng
+  //   });
+  // }
 
-  PushCallForHelpPage(){
-    this.navCtrl.push('HelpRequestPage', {
-      lat: this.lat,
-      long: this.long
-    });
-  }
+  // PushCallForHelpPage(){
+  //   this.navCtrl.setRoot('HelpRequestPage', {
+  //     lat: this.map.getCenter().lat,
+  //     long: this.map.getCenter().lng
+  //   });
+  // }
 
-  PushCheckOnPage(){
-    this.navCtrl.push('CheckPersonPage', {
-      lat: this.lat,
-      long: this.long
+  // PushCheckOnPage(){
+  //   this.navCtrl.setRoot('CheckPersonPage', {
+  //     lat: this.map.getCenter().lat,
+  //     long: this.map.getCenter().lng
+  //   });
+  // }
+
+  PushPage(){
+    this.navCtrl.setRoot(this.passPage, {
+      lat: this.map.getCenter().lat,
+      long: this.map.getCenter().lng
     });
   }
 

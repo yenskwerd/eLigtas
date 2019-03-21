@@ -66,12 +66,32 @@
     </ion-fab>
 
     <ion-fab right bottom>
-      <button color="secondary" (click)="showModal()" ion-fab><ion-icon name="apps"></ion-icon></button>
+      <button *ngIf="passPage==null" color="secondary" (click)="showModal()" ion-fab><ion-icon name="apps"></ion-icon></button>
     </ion-fab>
+
+    <!-- <div>
+      <button *ngIf="passPage!=null" (click)="pushArrive()" block>Drop Pin to Report Event</button>
+    </div> -->
+<!-- 
+    <div>
+      <button *ngIf='passPage!-' ion-button (click)="pushArrive()" class="reportBtn" disabled block>Drop Pin to Report Event</button> 
+    </div> -->
   </div>
 
   <img src="assets/imgs/eligtasMarker.png" class="map-marker-centered">
 </ion-content>
+
+<ion-footer text-center>
+  <div *ngIf="passPage!=null">
+    <button ion-button (click)="PushPage()" block>Make Report</button> 
+  </div>
+  <!-- <div *ngIf="stat_id==1 && trytry>100">
+    <button ion-button (click)="pushArrive()" class="reportBtn" disabled block>Arrive</button> 
+  </div>
+  <div *ngIf="stat_id==1 && trytry<=100">
+    <button ion-button (click)="pushArrive()" class="reportBtn" block>Arrive</button> 
+  </div> -->
+</ion-footer>
 
 <!-- <ion-footer text-center>
   <button ion-button class="reportBtn" (click)="PushReportEventPage()">Report Event</button>

@@ -51,6 +51,7 @@ export class HcfMappingPage {
   passmarker: any;
 
   passPage: any;
+  history: any = [];
 
   constructor(public navCtrl: NavController, public modalCtrl: ModalController, public http : HttpClient, public navParams: NavParams, public alertCtrl : AlertController, public http2 : Http, public loginService: LoginServiceProvider) {
     this.hcfMarkers = [];
@@ -232,6 +233,31 @@ export class HcfMappingPage {
         this.looking = false;
       }
    }); 
+
+   let data2 = {
+      user_id: this.loginService.logged_in_user_id
+    }
+
+     this.http2.post('http://usc-dcis.com/eligtas.app/retrieve-history.php',data2,options)
+    //  .map(res=> res.json())
+    //    .subscribe(
+    //      res => {
+    //       this.items = res;
+    //       this.generateHistory(res);
+    //       console.log(res);
+    //  });  
+    .map(res=> res.json())
+    .subscribe((data: any) =>
+    {
+      console.log(data);
+      for(let i=0; i<data.length; i++){
+        leaflet.marker([data[i].request_lat,data[i].request_long], {icon: grayIcon}).bindTooltip(data[i].event, {direction: 'bottom'}).addTo(this.map);
+      }
+    },
+    (error : any) =>
+    {
+      console.dir(error);
+    }); 
    
   }
 

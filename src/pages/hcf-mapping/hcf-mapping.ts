@@ -53,6 +53,15 @@ export class HcfMappingPage {
   passPage: any;
   history: any = [];
 
+  redIcon: any;
+  orangeIcon: any;
+  blueIcon: any;
+  purpleIcon: any;
+  yellowIcon: any;
+  grayIcon: any;
+  blackIcon: any;
+
+
   constructor(public navCtrl: NavController, public modalCtrl: ModalController, public http : HttpClient, public navParams: NavParams, public alertCtrl : AlertController, public http2 : Http, public loginService: LoginServiceProvider) {
     this.hcfMarkers = [];
     
@@ -60,6 +69,64 @@ export class HcfMappingPage {
       this.passlat = navParams.data.lat;
       this.passlong = navParams.data.long;
     }
+
+    
+    this.purpleIcon = new leaflet.Icon({
+      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-violet.png',
+      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      shadowSize: [41, 41]
+    });
+    this.yellowIcon = new leaflet.Icon({
+      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-yellow.png',
+      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      shadowSize: [41, 41]
+    });  
+    this.grayIcon = new leaflet.Icon({
+      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-grey.png',
+      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      shadowSize: [41, 41]
+    });  
+    this.blackIcon = new leaflet.Icon({
+      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-black.png',
+      shadowUrl:'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      shadowSize: [41, 41]
+    });  
+    this.redIcon = new leaflet.Icon({
+      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      shadowSize: [41, 41]
+    });  
+    this.orangeIcon = new leaflet.Icon({
+      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-orange.png',
+      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      shadowSize: [41, 41]
+    });  
+    this.blueIcon = new leaflet.Icon({
+      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png',
+      shadowUrl:'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      shadowSize: [41, 41]
+    });  
   }
 
 
@@ -193,14 +260,6 @@ export class HcfMappingPage {
   }
 
   getUserRequest1(){
-    var grayIcon = new leaflet.Icon({
-      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-grey.png',
-      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-      iconSize: [25, 41],
-      iconAnchor: [12, 41],
-      popupAnchor: [1, -34],
-      shadowSize: [41, 41]
-    }); 
     //gets user data
     var headers = new Headers();
       
@@ -223,7 +282,7 @@ export class HcfMappingPage {
       //    console.log(res.request_lat);
       //  this.passlat = res.request_lat;
       //  this.passlong = res.request_long;
-      leaflet.marker([res.request_lat,res.request_long], {icon: grayIcon}).bindTooltip(res.event, {direction: 'bottom'}).addTo(this.map);
+      leaflet.marker([res.request_lat,res.request_long], {icon: this.grayIcon}).bindTooltip(res.event, {direction: 'bottom'}).addTo(this.map);
 
       
       if (res.request_status_id == null) {
@@ -251,7 +310,21 @@ export class HcfMappingPage {
     {
       console.log(data);
       for(let i=0; i<data.length; i++){
-        leaflet.marker([data[i].request_lat,data[i].request_long], {icon: grayIcon}).bindTooltip(data[i].event, {direction: 'bottom'}).addTo(this.map);
+        if(data[i].request_status_id==null) {
+          if (data[i].event == "Fire") {
+            leaflet.marker([data[i].request_lat,data[i].request_long], {icon: this.redIcon}).bindTooltip(data[i].event, {direction: 'bottom'}).addTo(this.map);
+          } else if (data[i].event == "Earthquake") {
+            leaflet.marker([data[i].request_lat,data[i].request_long], {icon: this.orangeIcon}).bindTooltip(data[i].event, {direction: 'bottom'}).addTo(this.map);
+          } else if (data[i].event == "Crime") {
+            leaflet.marker([data[i].request_lat,data[i].request_long], {icon: this.blackIcon}).bindTooltip(data[i].event, {direction: 'bottom'}).addTo(this.map);
+          } else if (data[i].event == "Typhoon") {
+            leaflet.marker([data[i].request_lat,data[i].request_long], {icon: this.blueIcon}).bindTooltip(data[i].event, {direction: 'bottom'}).addTo(this.map);
+          } else if (data[i].event == "Landslide") {
+            leaflet.marker([data[i].request_lat,data[i].request_long], {icon: this.yellowIcon}).bindTooltip(data[i].event, {direction: 'bottom'}).addTo(this.map);
+          } else if (data[i].event == "Accident") {
+            leaflet.marker([data[i].request_lat,data[i].request_long], {icon: this.grayIcon}).bindTooltip(data[i].event, {direction: 'bottom'}).addTo(this.map);
+          } 
+        }        
       }
     },
     (error : any) =>
@@ -376,20 +449,10 @@ export class HcfMappingPage {
         alert(err.message);
     })
     console.log(this.map);
-
-    
-    var grayIcon = new leaflet.Icon({
-      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-grey.png',
-      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-      iconSize: [25, 41],
-      iconAnchor: [12, 41],
-      popupAnchor: [1, -34],
-      shadowSize: [41, 41]
-    }); 
     
     
     if (this.passlat!=null && this.passlong!=null){
-      leaflet.marker([this.passlat,this.passlong], {icon: grayIcon}).addTo(this.map);
+      leaflet.marker([this.passlat,this.passlong], {icon: this.grayIcon}).addTo(this.map);
     }
   }
   // 10.3502881,123.8988732
@@ -568,15 +631,6 @@ export class HcfMappingPage {
       setView: true,
       maxZoom: 13
     });
-
-    var grayIcon = new leaflet.Icon({
-      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-grey.png',
-      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-      iconSize: [25, 41],
-      iconAnchor: [12, 41],
-      popupAnchor: [1, -34],
-      shadowSize: [41, 41]
-    }); 
     
     this.http
        .get('http://usc-dcis.com/eligtas.app/retrieve-emergencies.php')
@@ -590,7 +644,7 @@ export class HcfMappingPage {
             this.emergencyshow = false;
             for(let i=0; i<data.length; i++){
               if(data[i].status==1) {
-                this.hcfMarkers[i] = leaflet.marker([data[i].xloc,data[i].yloc], {icon: grayIcon}).bindTooltip(data[i].name, 
+                this.hcfMarkers[i] = leaflet.marker([data[i].xloc,data[i].yloc], {icon: this.grayIcon}).bindTooltip(data[i].name, 
                   {
                       permanent: true, 
                       direction: 'bottom'
@@ -621,63 +675,31 @@ export class HcfMappingPage {
 
   /********** SHOW MARKERS ************/
   createMarker(data:any, i:any){
-    var purpleIcon = new leaflet.Icon({
-      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-violet.png',
-      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-      iconSize: [25, 41],
-      iconAnchor: [12, 41],
-      popupAnchor: [1, -34],
-      shadowSize: [41, 41]
-    });
-    var yellowIcon = new leaflet.Icon({
-      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-yellow.png',
-      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-      iconSize: [25, 41],
-      iconAnchor: [12, 41],
-      popupAnchor: [1, -34],
-      shadowSize: [41, 41]
-    });  
-    var grayIcon = new leaflet.Icon({
-      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-grey.png',
-      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-      iconSize: [25, 41],
-      iconAnchor: [12, 41],
-      popupAnchor: [1, -34],
-      shadowSize: [41, 41]
-    });  
-    var blackIcon = new leaflet.Icon({
-      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-black.png',
-      shadowUrl:'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-      iconSize: [25, 41],
-      iconAnchor: [12, 41],
-      popupAnchor: [1, -34],
-      shadowSize: [41, 41]
-    });  
 
     //in db, there is a column "type" which contains the type of emergency facility
     if(data.hcf_type == 1){
-      this.hcfMarkers[i] = leaflet.marker([data.xloc,data.yloc], {icon: purpleIcon}).bindTooltip(data.name, 
+      this.hcfMarkers[i] = leaflet.marker([data.xloc,data.yloc], {icon: this.purpleIcon}).bindTooltip(data.name, 
       {
           permanent: true, 
           direction: 'bottom'
       }
   ).addTo(this.map);
     }else if(data.hcf_type == 3){
-      this.hcfMarkers[i] = leaflet.marker([data.xloc,data.yloc], {icon: yellowIcon}).bindTooltip(data.name, 
+      this.hcfMarkers[i] = leaflet.marker([data.xloc,data.yloc], {icon: this.yellowIcon}).bindTooltip(data.name, 
         {
             permanent: true, 
             direction: 'bottom'
         }
     ).addTo(this.map);
     }else if(data.hcf_type == 2){
-      this.hcfMarkers[i] = leaflet.marker([data.xloc,data.yloc], {icon: grayIcon}).bindTooltip(data.name, 
+      this.hcfMarkers[i] = leaflet.marker([data.xloc,data.yloc], {icon: this.grayIcon}).bindTooltip(data.name, 
         {
             permanent: true, 
             direction: 'bottom'
         }
     ).addTo(this.map);
     }else{
-      this.hcfMarkers[i] = leaflet.marker([data.xloc,data.yloc], {icon: blackIcon}).bindTooltip(data.name, 
+      this.hcfMarkers[i] = leaflet.marker([data.xloc,data.yloc], {icon: this.blackIcon}).bindTooltip(data.name, 
         {
             permanent: true, 
             direction: 'bottom'

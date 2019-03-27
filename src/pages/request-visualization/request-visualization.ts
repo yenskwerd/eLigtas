@@ -72,6 +72,12 @@ export class RequestVisualizationPage {
   mapctr: any = 0;
 
   trytry: any;
+  purpleIcon: any;
+  yellowIcon: any;
+  grayIcon: any;
+  blackIcon: any;
+  redIcon: any;
+
   constructor(public modalCtrl: ModalController, public navCtrl: NavController, public http : HttpClient, public http2 : Http, public navParams: NavParams, public alertCtrl : AlertController,
     public loginService: LoginServiceProvider, public platform : Platform) {
       this.requestMarkers = [];
@@ -94,6 +100,48 @@ export class RequestVisualizationPage {
             })
         }
       });
+
+    
+      this.purpleIcon = new leaflet.Icon({
+        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-violet.png',
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+      });
+      this.yellowIcon = new leaflet.Icon({
+        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-yellow.png',
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+      });  
+      this.grayIcon = new leaflet.Icon({
+        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-grey.png',
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+      });  
+      this.blackIcon = new leaflet.Icon({
+        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-black.png',
+        shadowUrl:'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+      });  
+      this.redIcon = new leaflet.Icon({
+        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+      });  
   }
 
   ionViewDidLoad() {
@@ -166,16 +214,7 @@ export class RequestVisualizationPage {
        this.user_request_id = res.request_id;
        console.log(res.stat_id);
        this.stat_id = res.stat_id;
-
-
-       var redIcon = new leaflet.Icon({
-        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
-        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-        iconSize: [25, 41],
-        iconAnchor: [12, 41],
-        popupAnchor: [1, -34],
-        shadowSize: [41, 41]
-      });  
+ 
       var latlng = leaflet.latLng(10.3574632, 123.8343172);
       //this.map = leaflet.map("map").setView(latlng, 100);
       this.map = leaflet.map("map", { zoomControl:false }).fitWorld();
@@ -190,7 +229,7 @@ export class RequestVisualizationPage {
         // maxZoom: 14,
         // minZoom:16,
         // zoomOut:5,
-        watch: true,
+        // watch: true,
         enableHighAccuracy: true,
         maximumAge:10000,
         timeout: 20000
@@ -218,7 +257,7 @@ export class RequestVisualizationPage {
         this.currLong= e.longitude;
         this.LatLng1=leaflet.latLng(this.currLat,this.currLong);
         // this.map.locate({setView:this.LatLng1});
-        this.marker=leaflet.marker([e.latitude,e.longitude], {icon: redIcon,draggable:false})
+        this.marker=leaflet.marker([e.latitude,e.longitude], {icon: this.redIcon,draggable:false})
         .on('click', () => {
           alert('You are here!');
         }).addTo(this.map)
@@ -303,40 +342,8 @@ requestMarker(){
 
   createMarker2(data:any){
     // console.log("createmarker2");
-    var purpleIcon = new leaflet.Icon({
-      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-violet.png',
-      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-      iconSize: [25, 41],
-      iconAnchor: [12, 41],
-      popupAnchor: [1, -34],
-      shadowSize: [41, 41]
-    });
-    var yellowIcon = new leaflet.Icon({
-      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-yellow.png',
-      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-      iconSize: [25, 41],
-      iconAnchor: [12, 41],
-      popupAnchor: [1, -34],
-      shadowSize: [41, 41]
-    });  
-    var grayIcon = new leaflet.Icon({
-      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-grey.png',
-      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-      iconSize: [25, 41],
-      iconAnchor: [12, 41],
-      popupAnchor: [1, -34],
-      shadowSize: [41,   41]
-    });  
-    var blackIcon = new leaflet.Icon({
-      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-black.png',
-      shadowUrl:'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-      iconSize: [25, 41],
-      iconAnchor: [12, 41],
-      popupAnchor: [1, -34],
-      shadowSize: [41, 41]
-    });  
     if(data.request_status_id==null){
-      this.marker2=leaflet.marker([data.request_lat,data.request_long], {icon: purpleIcon}).on('click', () => {
+      this.marker2=leaflet.marker([data.request_lat,data.request_long], {icon: this.purpleIcon}).on('click', () => {
         if(this.loginService.logged_in_user_request_id == null || this.loginService.logged_in_stat_id == 3) {
           this.presentConfirm(data);
         } else {
@@ -354,12 +361,12 @@ requestMarker(){
       //this.startroute=true;
       this.eventForReport = data.event;
       this.request_id = data.request_id;
-      this.marker2=leaflet.marker([data.request_lat,data.request_long], {icon: yellowIcon});
+      this.marker2=leaflet.marker([data.request_lat,data.request_long], {icon: this.yellowIcon});
       this.trytry = this.LatLng1.distanceTo(leaflet.latLng(data.request_lat,data.request_long));
 
     } else if( data.request_status_id==2 ){
       this.eventForReport = data.event;
-      this.marker2=leaflet.marker([data.request_lat,data.request_long], {icon: grayIcon});
+      this.marker2=leaflet.marker([data.request_lat,data.request_long], {icon: this.grayIcon});
     } else if (data.request_status_id == 0) {
       var headers = new Headers();
       
@@ -430,14 +437,6 @@ requestMarker(){
   rout(data){
     // this.map.removeControl(this.control)
     clearInterval(this.dataRefresher);
-    var redIcon = new leaflet.Icon({
-      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
-      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-      iconSize: [25, 41],
-      iconAnchor: [12, 41],
-      popupAnchor: [1, -34],
-      shadowSize: [41, 41]
-    });  
     this.markerGroup2.clearLayers();
 
     // //mugana pero ang marker waypoint madrag niya dimusunod sa current loac
@@ -498,7 +497,7 @@ requestMarker(){
       this.currLong= e.longitude;
       this.LatLng1=leaflet.latLng(e.latitude,e.longitude);
       console.log(this.LatLng1);
-      this.marker3=leaflet.marker([e.latitude,e.longitude], {icon: redIcon,draggable:false})
+      this.marker3=leaflet.marker([e.latitude,e.longitude], {icon: this.redIcon,draggable:false})
       //leaflet.marker([e.latitude,e.longitude], {icon: redIcon,draggable:false})
       this.circle2 = leaflet.circle([e.latitude, e.longitude], {
         color: 'Green',
@@ -522,7 +521,7 @@ requestMarker(){
     // .addTo(this.map);
       this.addRoutingControl({
         watch: true,
-      enableHighAccuracy: true,
+        enableHighAccuracy: true,
         waypoints: [
           leaflet.latLng(data.request_lat, data.request_long,),
           leaflet.latLng(this.currLat, this.currLong),
@@ -602,15 +601,7 @@ requestMarker(){
   }
 
   change1(){
-    var redIcon = new leaflet.Icon({
-      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
-      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-      iconSize: [25, 41],
-      iconAnchor: [12, 41],
-      popupAnchor: [1, -34],
-      shadowSize: [41, 41]
-    }); 
-    leaflet.marker([this.currLat, this.currLong], {icon: redIcon,draggable:false,}).addTo(this.map).on('click', () => {
+    leaflet.marker([this.currLat, this.currLong], {icon: this.redIcon,draggable:false,}).addTo(this.map).on('click', () => {
       alert('You are here');
       // this.presentConfirm();
     });
@@ -748,15 +739,6 @@ requestMarker(){
       setView: true,
       maxZoom: 13
     });
-
-    var grayIcon = new leaflet.Icon({
-      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-grey.png',
-      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-      iconSize: [25, 41],
-      iconAnchor: [12, 41],
-      popupAnchor: [1, -34],
-      shadowSize: [41, 41]
-    }); 
     
     this.http
        .get('http://usc-dcis.com/eligtas.app/retrieve-emergencies.php')
@@ -769,7 +751,7 @@ requestMarker(){
             this.emergencyshow = false;
             for(let i=0; i<data.length; i++){
               if(data[i].status==1) {
-                this.requestMarkers[i] = leaflet.marker([data[i].xloc,data[i].yloc], {icon: grayIcon}).bindTooltip(data[i].name, 
+                this.requestMarkers[i] = leaflet.marker([data[i].xloc,data[i].yloc], {icon: this.grayIcon}).bindTooltip(data[i].name, 
                   {
                       permanent: true, 
                       direction: 'bottom'
@@ -829,63 +811,30 @@ requestMarker(){
 
   /********** SHOW MARKERS ************/
   createMarker(data:any, i:any){
-    var purpleIcon = new leaflet.Icon({
-      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-violet.png',
-      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-      iconSize: [25, 41],
-      iconAnchor: [12, 41],
-      popupAnchor: [1, -34],
-      shadowSize: [41, 41]
-    });
-    var yellowIcon = new leaflet.Icon({
-      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-yellow.png',
-      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-      iconSize: [25, 41],
-      iconAnchor: [12, 41],
-      popupAnchor: [1, -34],
-      shadowSize: [41, 41]
-    });  
-    var grayIcon = new leaflet.Icon({
-      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-grey.png',
-      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-      iconSize: [25, 41],
-      iconAnchor: [12, 41],
-      popupAnchor: [1, -34],
-      shadowSize: [41, 41]
-    });  
-    var blackIcon = new leaflet.Icon({
-      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-black.png',
-      shadowUrl:'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-      iconSize: [25, 41],
-      iconAnchor: [12, 41],
-      popupAnchor: [1, -34],
-      shadowSize: [41, 41]
-    });  
-
     //in db, there is a column "hcf_type" which contains the type of emergency facility
     if(data.hcf_type == 1){
-      this.requestMarkers[i] = leaflet.marker([data.xloc,data.yloc], {icon: purpleIcon}).bindTooltip(data.name, 
+      this.requestMarkers[i] = leaflet.marker([data.xloc,data.yloc], {icon: this.purpleIcon}).bindTooltip(data.name, 
         {
             permanent: true, 
             direction: 'bottom'
         }
       ).addTo(this.map);
     }else if(data.hcf_type == 3){
-      this.requestMarkers[i] = leaflet.marker([data.xloc,data.yloc], {icon: yellowIcon}).bindTooltip(data.name, 
+      this.requestMarkers[i] = leaflet.marker([data.xloc,data.yloc], {icon: this.yellowIcon}).bindTooltip(data.name, 
         {
             permanent: true, 
             direction: 'bottom'
         }
     ).addTo(this.map);
     }else if(data.hcf_type == 2){
-      this.requestMarkers[i] = leaflet.marker([data.xloc,data.yloc], {icon: grayIcon}).bindTooltip(data.name, 
+      this.requestMarkers[i] = leaflet.marker([data.xloc,data.yloc], {icon: this.grayIcon}).bindTooltip(data.name, 
         {
             permanent: true, 
             direction: 'bottom'
         }
     ).addTo(this.map);
     }else{
-      this.requestMarkers[i] = leaflet.marker([data.xloc,data.yloc], {icon: blackIcon}).bindTooltip(data.name, 
+      this.requestMarkers[i] = leaflet.marker([data.xloc,data.yloc], {icon: this.blackIcon}).bindTooltip(data.name, 
         {
             permanent: true, 
             direction: 'bottom'

@@ -62,6 +62,7 @@ export class RequestVisualizationPage {
   index: any;
   user_request_id: any;
   dataRefresher: any;
+  watchrefresher: any;
   LatLng1:any;
   markerGroup = leaflet.featureGroup();
   markerGroup2 = leaflet.featureGroup();
@@ -72,6 +73,9 @@ export class RequestVisualizationPage {
   mapctr: any = 0;
 
   trytry: any;
+  trylat: any;
+  trylong: any;
+
   purpleIcon: any;
   yellowIcon: any;
   grayIcon: any;
@@ -229,7 +233,7 @@ export class RequestVisualizationPage {
         // maxZoom: 14,
         // minZoom:16,
         // zoomOut:5,
-        // watch: true,
+        watch: true,
         enableHighAccuracy: true,
         maximumAge:10000,
         timeout: 20000
@@ -270,28 +274,38 @@ export class RequestVisualizationPage {
         this.markerGroup2.addLayer(this.marker);
         this.markerGroup2.addLayer(this.circle);
         this.map.addLayer(this.markerGroup2);
-        this.map.locate({
-          //center:(this.currLat,this.currLong),
-          setView: true
-        })
-        console.log(this.mapctr);
+        // this.map.locate({
+        //   //center:(this.currLat,this.currLong),
+        //   setView: true
+        // })
+        // console.log(this.mapctr);
         if(this.mapctr == 1) {
           this.initView(this.currLat, this.currLong);
           this.mapctr++;
         }
-          this.mapctr++;
+        this.mapctr++;
+        if(this.trylat!=null) {
+          this.trytry = this.LatLng1.distanceTo(leaflet.latLng(this.trylat,this.trylong));
+          console.log(this.trytry);
+        }
       })
       
         .on('locationerror', (err) => {
           // alert(err.message);
       })
+      this.initView(this.currLat, this.currLong);
+      // this.map.locate({
+      //   setView:true
+      // })
+
+
       if(this.map.hasLayer(this.marker) && this.map.hasLayer(this.circle)){
         this.markerGroup2.clearLayers();
         this.map.removeLayer(this.circle);
         console.log("rmove")
       }
-      // console.log(this.LatLng1);
       this.requestMarker();
+      // console.log(this.LatLng1);
       
       // if(this.map.hasLayer(this.marker) && this.map.hasLayer(this.circle)){
       //   this.markerGroup2.clearLayers();
@@ -300,12 +314,20 @@ export class RequestVisualizationPage {
       // }
       
   }); 
+  // this.watchrefresher=setInterval(() =>{
+  //   this.map.locationerror({
+  //     watch:false
+  //   })
+  //    },9000);
+  // console.log("request id:" + this.loginService.logged_in_user_request_id);
+  // console.log("stat id: " + this.stat_id);
 }
 
 initView(lat, long) {
   console.log(lat,long);
       this.map.locate({
-        // setView:(this.currLat,this.currLong),f
+        // setView:(this.currLat,this.currLong),
+        setView: true,
         maxZoom: 14,
         enableHighAccuracy: true,
         stop
@@ -342,6 +364,7 @@ requestMarker(){
 
   createMarker2(data:any){
     // console.log("createmarker2");
+
     if(data.request_status_id==null){
       this.marker2=leaflet.marker([data.request_lat,data.request_long], {icon: this.purpleIcon}).on('click', () => {
         if(this.loginService.logged_in_user_request_id == null || this.loginService.logged_in_stat_id == 3) {
@@ -357,12 +380,15 @@ requestMarker(){
       })
 
     } else if(data.request_status_id==1 && data.request_id == this.user_request_id){
+      this.trylat = data.request_lat;
+      this.trylong = data.request_long;
+      console.log(this.trylat, this.trylong);
       this.rout(data);
       //this.startroute=true;
       this.eventForReport = data.event;
       this.request_id = data.request_id;
       this.marker2=leaflet.marker([data.request_lat,data.request_long], {icon: this.yellowIcon});
-      this.trytry = this.LatLng1.distanceTo(leaflet.latLng(data.request_lat,data.request_long));
+      // this.trytry = this.LatLng1.distanceTo(leaflet.latLng(data.request_lat,data.request_long));
 
     } else if( data.request_status_id==2 ){
       this.eventForReport = data.event;
@@ -626,6 +652,10 @@ requestMarker(){
             console.log('Buy clicked');
             //this.change(data.request_lat, data.request_long);
             clearInterval(this.dataRefresher);
+            clearInterval(this.watchrefresher);
+            // this.map.locate({
+            //   watch:true
+            // })
             console.log('asdfasdf');
             this.navCtrl.setRoot('RespondToRequestPage', {
               request_id : data.request_id,
